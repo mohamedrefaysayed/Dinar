@@ -26,6 +26,7 @@ class CodeBuilder extends StatelessWidget {
           style: TextStyles.textStyle16.copyWith(
             fontWeight: FontWeight.w900,
             fontSize: 16.w,
+            overflow: TextOverflow.visible,
           ),
         ),
         SizedBox(

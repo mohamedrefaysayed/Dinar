@@ -8,8 +8,8 @@ import 'package:dinar_store/features/home/presentation/view/widgets/rows/search_
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class ProductsSearchListView extends StatelessWidget {
-  const ProductsSearchListView({super.key, required this.products});
+class ProductsSearchGridView extends StatelessWidget {
+  const ProductsSearchGridView({super.key, required this.products});
 
   final List<SearchProduct> products;
   @override
@@ -30,11 +30,11 @@ class ProductsSearchListView extends StatelessWidget {
           ],
         ),
         const GeneralDivider(),
-        ListView.builder(
+        GridView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           itemCount: products.length,
-          itemBuilder: (context, index) => SearchItemRow(
+          itemBuilder: (context, index) => SearchItem(
             imag: products[index].image!,
             name: products[index].productName!,
             onTap: () {
@@ -44,6 +44,11 @@ class ProductsSearchListView extends StatelessWidget {
                   RightSlideTransition(
                       page: ProductView(product: Products.fromJson(data))));
             },
+          ),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: 15.w,
+            childAspectRatio: 115.h / 135.w,
           ),
         ),
       ],

@@ -39,7 +39,8 @@ class LocationCubit extends Cubit<LocationState> {
       // When we reach here, permissions are granted and we can
       // continue accessing the position of the device.
 
-      currentPosition = await Geolocator.getCurrentPosition();
+      currentPosition = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high);
       emit(LocationSuccess(position: currentPosition!));
     } catch (error) {
       emit(LocationFailuer());
@@ -74,5 +75,20 @@ class LocationCubit extends Cubit<LocationState> {
         );
       },
     );
+  }
+
+  String getAddressString(currentLocationData) {
+    List<String> components = [
+      currentLocationData['address'].name ?? '',
+      currentLocationData['address'].thoroughfare ?? '',
+      currentLocationData['address'].locality ?? '',
+      currentLocationData['address'].administrativeArea ?? '',
+      currentLocationData['address'].country ?? '',
+    ];
+
+    // Filter out empty strings and join with commas
+    String address =
+        components.where((component) => component.isNotEmpty).join(', ');
+    return address;
   }
 }

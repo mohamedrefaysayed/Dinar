@@ -1,6 +1,5 @@
 import 'package:dinar_store/core/utils/app_colors.dart';
 import 'package:dinar_store/core/utils/text_styles.dart';
-import 'package:dinar_store/core/widgets/app_default_button.dart';
 import 'package:dinar_store/features/home/data/models/cart_items_model.dart';
 import 'package:dinar_store/features/home/presentation/view/widgets/cachedNetworkImage/my_cached_nework_Image.dart';
 import 'package:dinar_store/features/home/presentation/view/widgets/dividers/ginerall_divider.dart';
@@ -59,7 +58,14 @@ class CartItemRow extends StatelessWidget {
                                 ));
                           }
                         } else {
-                          return const SizedBox();
+                          return Text(
+                            'فرض',
+                            style: TextStyles.textStyle16.copyWith(
+                              fontWeight: FontWeight.w200,
+                              color: AppColors.kGrey,
+                              fontSize: 16.w,
+                            ),
+                          );
                         }
                       },
                     ),
@@ -69,33 +75,38 @@ class CartItemRow extends StatelessWidget {
                     cartItem.isRequired == '0'
                         ? Row(
                             children: [
-                              AppDefaultButton(
-                                color: AppColors.kLightGrey,
-                                width: 27.w,
-                                height: 27.w,
-                                onPressed: () async {
-                                  cartItem.updating = true;
-                                  await context.read<CartCubit>().updateItem(
-                                        itemId: cartItem.id!,
-                                        productId:
-                                            int.parse(cartItem.productId!),
-                                        quantity:
-                                            double.parse(cartItem.quantity!)
-                                                    .toInt() -
-                                                1,
-                                        unitId: int.parse(cartItem.unitId!),
-                                        price: double.parse(cartItem.price!),
-                                        isRequired: cartItem.isRequired!,
-                                      );
-                                },
-                                title: '',
-                                icon: Icon(
-                                  Icons.remove,
-                                  size: 20.w,
-                                ),
-                              ),
+                              // AppDefaultButton(
+                              //   color: AppColors.kLightGrey,
+                              //   width: 27.w,
+                              //   height: 27.w,
+                              //   onPressed: () async {
+                              //     if (double.parse(cartItem.quantity!).toInt() -
+                              //             1 >
+                              //         0) {
+                              //       cartItem.updating = true;
+                              //       await context.read<CartCubit>().updateItem(
+                              //             itemId: cartItem.id!,
+                              //             productId:
+                              //                 int.parse(cartItem.productId!),
+                              //             quantity:
+                              //                 double.parse(cartItem.quantity!)
+                              //                         .toInt() -
+                              //                     1,
+                              //             unitId: int.parse(cartItem.unitId!),
+                              //             price: double.parse(cartItem.price!),
+                              //             isRequired: cartItem.isRequired!,
+                              //           );
+                              //     }
+                              //   },
+                              //   title: '',
+                              //   icon: Icon(
+                              //     Icons.remove,
+                              //     size: 20.w,
+                              //   ),
+                              // ),
+
                               Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 10.w),
+                                padding: EdgeInsets.symmetric(horizontal: 37.w),
                                 child: BlocConsumer<CartCubit, CartState>(
                                   listener: (context, state) {
                                     if (state is UpdateItemLoading) {
@@ -125,32 +136,32 @@ class CartItemRow extends StatelessWidget {
                                   },
                                 ),
                               ),
-                              AppDefaultButton(
-                                color: AppColors.kLightRed,
-                                width: 27.w,
-                                height: 27.w,
-                                onPressed: () async {
-                                  cartItem.updating = true;
-                                  await context.read<CartCubit>().updateItem(
-                                        itemId: cartItem.id!,
-                                        productId:
-                                            int.parse(cartItem.productId!),
-                                        quantity:
-                                            double.parse(cartItem.quantity!)
-                                                    .toInt() +
-                                                1,
-                                        unitId: int.parse(cartItem.unitId!),
-                                        price: double.parse(cartItem.price!),
-                                        isRequired: cartItem.isRequired!,
-                                      );
-                                },
-                                title: '',
-                                icon: Icon(
-                                  Icons.add,
-                                  size: 20.w,
-                                  color: AppColors.kRed,
-                                ),
-                              ),
+                              // AppDefaultButton(
+                              //   color: AppColors.kLightRed,
+                              //   width: 27.w,
+                              //   height: 27.w,
+                              //   onPressed: () async {
+                              //     cartItem.updating = true;
+                              //     await context.read<CartCubit>().updateItem(
+                              //           itemId: cartItem.id!,
+                              //           productId:
+                              //               int.parse(cartItem.productId!),
+                              //           quantity:
+                              //               double.parse(cartItem.quantity!)
+                              //                       .toInt() +
+                              //                   1,
+                              //           unitId: int.parse(cartItem.unitId!),
+                              //           price: double.parse(cartItem.price!),
+                              //           isRequired: cartItem.isRequired!,
+                              //         );
+                              //   },
+                              //   title: '',
+                              //   icon: Icon(
+                              //     Icons.add,
+                              //     size: 20.w,
+                              //     color: AppColors.kRed,
+                              //   ),
+                              // ),
                             ],
                           )
                         : Row(

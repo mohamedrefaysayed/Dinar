@@ -14,8 +14,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class CategoriesSearchListView extends StatelessWidget {
-  const CategoriesSearchListView({super.key, required this.categories});
+class CategoriesSearchGridView extends StatelessWidget {
+  const CategoriesSearchGridView({super.key, required this.categories});
 
   final List<SearchCategory> categories;
   @override
@@ -36,11 +36,11 @@ class CategoriesSearchListView extends StatelessWidget {
           ],
         ),
         const GeneralDivider(),
-        ListView.builder(
+        GridView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           itemCount: categories.length,
-          itemBuilder: (context, index) => SearchItemRow(
+          itemBuilder: (context, index) => SearchItem(
             imag: categories[index].image!,
             name: categories[index].categoryName!,
             onTap: () async {
@@ -78,6 +78,11 @@ class CategoriesSearchListView extends StatelessWidget {
                     )));
               }
             },
+          ),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: 15.w,
+            childAspectRatio: 115.h / 135.w,
           ),
         ),
       ],

@@ -3,6 +3,8 @@ class SendOrderModel {
   int? discount;
   int? tax;
   int? addressId;
+  String? location;
+  String? deliveryDate;
   List<SendOrderDetails>? orderDetails;
 
   SendOrderModel({
@@ -11,6 +13,8 @@ class SendOrderModel {
     this.tax,
     this.addressId,
     this.orderDetails,
+    this.location,
+    this.deliveryDate,
   });
 
   SendOrderModel.fromJson(Map<String, dynamic> json) {
@@ -18,6 +22,8 @@ class SendOrderModel {
     discount = json['discount'];
     tax = json['tax'];
     addressId = json['address_id'];
+    location = json['location'];
+    deliveryDate = json['delivery_date'];
     if (json['order_details'] != null) {
       orderDetails = <SendOrderDetails>[];
       json['order_details'].forEach((v) {
@@ -32,6 +38,8 @@ class SendOrderModel {
     data['discount'] = discount;
     data['tax'] = tax;
     data['address_id'] = addressId;
+    data['location'] = location;
+    data['delivery_date'] = deliveryDate;
     if (orderDetails != null) {
       data['order_details'] = orderDetails!.map((v) => v.toJson()).toList();
     }
@@ -45,7 +53,12 @@ class SendOrderDetails {
   int? qty;
   int? price;
 
-  SendOrderDetails({this.productId, this.unitId, this.qty, this.price});
+  SendOrderDetails({
+    this.productId,
+    this.unitId,
+    this.qty,
+    this.price,
+  });
 
   SendOrderDetails.fromJson(Map<String, dynamic> json) {
     productId = json['product_id'];

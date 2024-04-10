@@ -2,9 +2,9 @@
 
 import 'package:dinar_store/core/utils/app_colors.dart';
 import 'package:dinar_store/core/utils/text_styles.dart';
-import 'package:dinar_store/features/home/presentation/view/widgets/listviews/categories_search_list_view.dart';
-import 'package:dinar_store/features/home/presentation/view/widgets/listviews/companies_search_list_view.dart';
-import 'package:dinar_store/features/home/presentation/view/widgets/listviews/products_search_list_view.dart';
+import 'package:dinar_store/features/home/presentation/view/widgets/grid_views/categories_search_grid_view.dart';
+import 'package:dinar_store/features/home/presentation/view/widgets/grid_views/companies_search_grid_view.dart';
+import 'package:dinar_store/features/home/presentation/view/widgets/grid_views/products_search_grid_view.dart';
 import 'package:dinar_store/features/home/presentation/view/widgets/search_rows/search_row.dart';
 import 'package:dinar_store/features/home/presentation/view_model/search_cubit/cubit/search_cubit.dart';
 import 'package:flutter/material.dart';
@@ -234,17 +234,17 @@ class _SearchViewState extends State<SearchView> {
                             children: [
                               if (state.searchModel.companies!.isNotEmpty &&
                                   SearchCubit.filter.value["companies"]!)
-                                CompaniesSearchListView(
+                                CompaniesSearchGridView(
                                   companies: state.searchModel.companies!,
                                 ),
                               if (state.searchModel.categories!.isNotEmpty &&
                                   SearchCubit.filter.value["categories"]!)
-                                CategoriesSearchListView(
+                                CategoriesSearchGridView(
                                   categories: state.searchModel.categories!,
                                 ),
                               if (state.searchModel.products!.isNotEmpty &&
                                   SearchCubit.filter.value["products"]!)
-                                ProductsSearchListView(
+                                ProductsSearchGridView(
                                   products: state.searchModel.products!,
                                 ),
                             ],

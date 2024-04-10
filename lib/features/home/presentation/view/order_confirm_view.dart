@@ -3,9 +3,11 @@
 import 'package:dinar_store/core/animations/right_slide_transition.dart';
 import 'package:dinar_store/core/utils/app_colors.dart';
 import 'package:dinar_store/core/utils/text_styles.dart';
+import 'package:dinar_store/core/utils/time_date_handler.dart';
 import 'package:dinar_store/core/widgets/app_default_button.dart';
 import 'package:dinar_store/core/widgets/app_loading_button.dart';
 import 'package:dinar_store/core/widgets/message_snack_bar.dart';
+import 'package:dinar_store/features/auth/presentation/view_model/location_cubit/cubit/location_cubit.dart';
 import 'package:dinar_store/features/home/presentation/view/bottom_nav_view.dart';
 import 'package:dinar_store/features/home/presentation/view/widgets/dividers/ginerall_divider.dart';
 import 'package:dinar_store/features/home/presentation/view/widgets/maps/order_location_map.dart';
@@ -15,6 +17,7 @@ import 'package:dinar_store/features/home/presentation/view_model/order_cubit/cu
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class OrderConfirmView extends StatefulWidget {
   const OrderConfirmView({super.key});
@@ -26,9 +29,9 @@ class OrderConfirmView extends StatefulWidget {
 class _OrderConfirmViewState extends State<OrderConfirmView> {
   @override
   void initState() {
-    OrderCubit.pickedTime = null;
-    OrderCubit.initialTime = TimeOfDay.now();
-    OrderCubit.initialTime.replacing(minute: 30);
+    OrderCubit.initialTime = context.read<OrderCubit>().add24Hours();
+    context.read<LocationCubit>().getCurrentLocation(context: context);
+
     super.initState();
   }
 
@@ -37,6 +40,12 @@ class _OrderConfirmViewState extends State<OrderConfirmView> {
     return Scaffold(
       body: RefreshIndicator(onRefresh: () async {
         await context.read<CartCubit>().getAllItems();
+        context.read<LocationCubit>().getCurrentLocation(context: context);
+        OrderCubit.pickedTime = null;
+        OrderCubit.initialTime = DateTime.now();
+        OrderCubit.initialTime = context.read<OrderCubit>().add24Hours();
+
+        context.read<OrderCubit>().emit(OrderInitial());
       }, child: BlocBuilder<OrderCubit, OrderState>(
         builder: (context, state) {
           return Column(
@@ -61,10 +70,31 @@ class _OrderConfirmViewState extends State<OrderConfirmView> {
                     children: [
                       OrderConfirmActionRow(
                         onTap: () async {
-                          OrderCubit.pickedTime = await showTimePicker(
+                          DateTime? date = await showDatePicker(
                             context: context,
-                            initialTime:
-                                OrderCubit.pickedTime ?? OrderCubit.initialTime,
+                            firstDate: context.read<OrderCubit>().add24Hours(),
+                            lastDate: OrderCubit.initialTime!
+                                .add(const Duration(days: 9)),
+                          );
+                          TimeOfDay? time = await showTimePicker(
+                            context: context,
+                            initialTime: OrderCubit.pickedTime != null
+                                ? TimeOfDay(
+                                    hour: OrderCubit.pickedTime!.hour,
+                                    minute: OrderCubit.pickedTime!.minute,
+                                  )
+                                : TimeOfDay(
+                                    hour: OrderCubit.initialTime!.hour,
+                                    minute: OrderCubit.initialTime!.minute,
+                                  ),
+                          );
+
+                          OrderCubit.pickedTime = DateTime(
+                            date!.year,
+                            date.month,
+                            date.day,
+                            time!.hour,
+                            time.minute,
                           );
                           context.read<OrderCubit>().emit(OrderInitial());
                         },
@@ -72,22 +102,48 @@ class _OrderConfirmViewState extends State<OrderConfirmView> {
                         buttonTitle: 'تغيير',
                         buttonWidth: 70.w,
                         subTitle: OrderCubit.pickedTime != null
-                            ? "${OrderCubit.pickedTime!.minute} : ${OrderCubit.pickedTime!.hour}"
-                            : "${OrderCubit.initialTime.minute} : ${OrderCubit.initialTime.hour}",
+                            ? "${MyTimeDate.getLastMessageTime(context: context, time: OrderCubit.pickedTime!.millisecondsSinceEpoch.toString())} , ${MyTimeDate.getMessageTime(context: context, time: OrderCubit.pickedTime!.millisecondsSinceEpoch.toString())}"
+                            : "${MyTimeDate.getLastMessageTime(context: context, time: OrderCubit.initialTime!.millisecondsSinceEpoch.toString())} , ${MyTimeDate.getMessageTime(context: context, time: OrderCubit.initialTime!.millisecondsSinceEpoch.toString())}",
+                        icon: Icons.calendar_month_rounded,
                       ),
                       const GeneralDivider(),
-                      OrderConfirmActionRow(
-                        onTap: () async {
-                          Navigator.push(
-                              context,
-                              RightSlideTransition(
-                                page: const OrderLocationMap(),
-                              ));
+                      BlocConsumer<LocationCubit, LocationState>(
+                        listener: (context, state) {
+                          if (state is LocationSuccess) {
+                            OrderCubit.markerPosition = LatLng(
+                              state.position.latitude,
+                              state.position.longitude,
+                            );
+                            context.read<LocationCubit>().getAddress(
+                                  state.position.latitude,
+                                  state.position.longitude,
+                                );
+                          }
+                          if (state is AddressSuccess) {
+                            OrderCubit.currentAddress = context
+                                .read<LocationCubit>()
+                                .getAddressString(state.locationData);
+                          }
                         },
-                        title: "التوصيل إلى",
-                        buttonTitle: 'أختر الموقع',
-                        buttonWidth: 100.w,
-                        subTitle: OrderCubit.currentAddress,
+                        builder: (context, state) {
+                          if (state is AddressSuccess) {
+                            return OrderConfirmActionRow(
+                              onTap: () async {
+                                Navigator.push(
+                                    context,
+                                    RightSlideTransition(
+                                      page: const OrderLocationMap(),
+                                    ));
+                              },
+                              title: "التوصيل إلى",
+                              buttonTitle: 'تغيير',
+                              buttonWidth: 100.w,
+                              subTitle: OrderCubit.currentAddress,
+                              icon: Icons.location_on,
+                            );
+                          }
+                          return const AppLoadingButton();
+                        },
                       ),
                       const GeneralDivider(),
                       Column(
@@ -109,7 +165,6 @@ class _OrderConfirmViewState extends State<OrderConfirmView> {
                             height: 10.h,
                           ),
                           TextField(
-                            minLines: 4,
                             maxLines: null,
                             textDirection: TextDirection.rtl,
                             onTapOutside: (event) {
@@ -146,7 +201,7 @@ class _OrderConfirmViewState extends State<OrderConfirmView> {
                             height: 10.h,
                           ),
                           RadioListTile(
-                            value: "عند التوصيل",
+                            value: "الدفع عند الاستلام",
                             groupValue: OrderCubit.payment,
                             onChanged: (newValue) {
                               OrderCubit.payment = newValue!;
@@ -163,7 +218,7 @@ class _OrderConfirmViewState extends State<OrderConfirmView> {
                             ),
                           ),
                           RadioListTile(
-                            value: "الدفع عند الاستلام",
+                            value: "عند التوصيل",
                             groupValue: OrderCubit.payment,
                             onChanged: (newValue) {
                               OrderCubit.payment = newValue!;
@@ -212,7 +267,11 @@ class _OrderConfirmViewState extends State<OrderConfirmView> {
                                 messageSnackBar(message: "تم إرسال الطلب"));
                             Navigator.of(context).popUntil(
                                 ModalRoute.withName(BottomNavBarView.id));
+                            context.read<CartCubit>().getAllItems();
                             context.read<OrderCubit>().getAllOrders();
+                            OrderCubit.markerPosition = null;
+                            OrderCubit.pickedTime = null;
+                            OrderCubit.currentAddress = "أختر عنوان";
                           }
                         },
                         builder: (context, state) {
@@ -221,13 +280,30 @@ class _OrderConfirmViewState extends State<OrderConfirmView> {
                           }
                           return AppDefaultButton(
                             onPressed: () async {
-                              await context.read<OrderCubit>().storeOrder(
-                                    status: 0,
-                                    discount: CartCubit.totalDiscount,
-                                    tax: 14,
-                                    price: CartCubit.totalPrice,
-                                    addressId: 1,
-                                  );
+                              if (OrderCubit.markerPosition != null) {
+                                if (OrderCubit.pickedTime != null &&
+                                    context
+                                        .read<OrderCubit>()
+                                        .isTimeGreaterBy24Hour(
+                                            OrderCubit.pickedTime!)) {
+                                  await context.read<OrderCubit>().storeOrder(
+                                        status: 0,
+                                        discount: CartCubit.totalDiscount,
+                                        tax: 14,
+                                        price: CartCubit.totalPrice,
+                                        addressId: 1,
+                                        paymentMethod: 'عند الاستلام',
+                                      );
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      messageSnackBar(
+                                          message:
+                                              "اختر وقت التوصيل بطريقة صحيحة, يجب أن يكون الوقت على الأقل 30 دقيقة من الأن"));
+                                }
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    messageSnackBar(message: "اختر الموقع"));
+                              }
                             },
                             color: AppColors.kASDCPrimaryColor,
                             title: "إتمام الطلب",

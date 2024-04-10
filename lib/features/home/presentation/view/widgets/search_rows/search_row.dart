@@ -14,6 +14,8 @@ class SearchRow extends StatelessWidget {
     required this.haveFilter,
     this.onFilter,
     required this.onChanged,
+    this.autofocus,
+    this.onDismiss,
   });
 
   final TextEditingController textEditingController;
@@ -23,6 +25,8 @@ class SearchRow extends StatelessWidget {
   final bool haveFilter;
   final void Function()? onFilter;
   final void Function(String) onChanged;
+  final bool? autofocus;
+  final Function()? onDismiss;
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +47,14 @@ class SearchRow extends StatelessWidget {
         Expanded(
           child: SizedBox(
             child: TextField(
+              onTapOutside: (_) {
+                if (onDismiss != null) {
+                  onDismiss!();
+                }
+                FocusManager.instance.primaryFocus?.unfocus();
+              },
+              
+              autofocus: autofocus ?? false,
               controller: textEditingController,
               textDirection: TextDirection.rtl,
               decoration: InputDecoration(

@@ -12,6 +12,7 @@ class OrderConfirmActionRow extends StatelessWidget {
     required this.subTitle,
     required this.buttonTitle,
     required this.buttonWidth,
+    required this.icon,
   });
 
   final void Function() onTap;
@@ -19,6 +20,7 @@ class OrderConfirmActionRow extends StatelessWidget {
   final String subTitle;
   final String buttonTitle;
   final double buttonWidth;
+  final IconData icon;
 
   @override
   Widget build(BuildContext context) {
@@ -29,10 +31,15 @@ class OrderConfirmActionRow extends StatelessWidget {
           onPressed: onTap,
           title: buttonTitle,
           width: buttonWidth,
-          color: AppColors.kASDCPrimaryColor,
+          color: AppColors.kWhite,
           textStyle: TextStyles.textStyle12.copyWith(
             fontWeight: FontWeight.w400,
-            color: AppColors.kWhite,
+            color: AppColors.kASDCPrimaryColor,
+          ),
+          icon: Icon(
+            icon,
+            size: 25.w,
+            color: AppColors.kASDCPrimaryColor,
           ),
         ),
         Column(
@@ -59,7 +66,6 @@ class OrderConfirmActionRow extends StatelessWidget {
                     color: AppColors.kASDCPrimaryColor,
                     fontWeight: FontWeight.bold),
                 overflow: TextOverflow.ellipsis,
-                textDirection: TextDirection.rtl,
               ),
             ),
           ],

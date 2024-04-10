@@ -53,6 +53,8 @@ SnackBar messageSnackBar({
             message,
             style: TextStyles.textStyle14,
             textAlign: TextAlign.center,
+            overflow: TextOverflow.visible,
+            softWrap: true,
           ),
         ),
         SizedBox(

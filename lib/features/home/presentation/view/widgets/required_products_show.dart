@@ -49,50 +49,68 @@ class RequiredProductsShow extends StatelessWidget {
           SizedBox(
             height: 20.h,
           ),
-          BlocProvider(
-            create: (context) =>
-                CartCubit(cartServices: CartServices(dioHelper: DioHelper())),
-            child: BlocConsumer<CartCubit, CartState>(
-              listener: (context, state) {
-                if (state is AddToCartFailuer) {
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              AppDefaultButton(
+                color: AppColors.kASDCPrimaryColor,
+                textStyle: TextStyles.textStyle16.copyWith(
+                  color: AppColors.kWhite,
+                  fontSize: 16.w,
+                ),
+                width: 100.w,
+                onPressed: () async {
                   Navigator.pop(context);
-                  ScaffoldMessenger.of(context)
-                      .showSnackBar(messageSnackBar(message: state.errMessage));
-                }
-                if (state is AddToCartSuccess) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                      messageSnackBar(message: "تمت الإضافة الى العربة"));
-                  Navigator.pop(context);
-                  Navigator.pop(context);
-                }
-              },
-              builder: (context, state) {
-                if (state is AddToCartLoading) {
-                  return AppLoadingButton(
-                    width: 100.w,
-                  );
-                }
-                return AppDefaultButton(
-                    color: AppColors.kASDCPrimaryColor,
-                    textStyle: TextStyles.textStyle16.copyWith(
-                      color: AppColors.kWhite,
-                      fontSize: 16.w,
-                    ),
-                    width: 100.w,
-                    onPressed: () async {
-                      await context.read<CartCubit>().storeItem(
-                            productId: product.id!,
-                            quantity: retailCount.value,
-                            unitId: int.parse(product.retailUnitId!),
-                            price: totalRetailPrice.value,
-                            isRequired: '0',
-                            isLast: false,
-                            requiredProducts: product.requiredProducts!,
-                          );
-                    },
-                    title: 'موافق');
-              },
-            ),
+                },
+                title: 'الغاء',
+              ),
+              BlocProvider(
+                create: (context) => CartCubit(
+                    cartServices: CartServices(dioHelper: DioHelper())),
+                child: BlocConsumer<CartCubit, CartState>(
+                  listener: (context, state) {
+                    if (state is AddToCartFailuer) {
+                      Navigator.pop(context);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          messageSnackBar(message: state.errMessage));
+                    }
+                    if (state is AddToCartSuccess) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          messageSnackBar(message: "تمت الإضافة الى العربة"));
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                    }
+                  },
+                  builder: (context, state) {
+                    if (state is AddToCartLoading) {
+                      return AppLoadingButton(
+                        width: 100.w,
+                      );
+                    }
+                    return AppDefaultButton(
+                      color: AppColors.kASDCPrimaryColor,
+                      textStyle: TextStyles.textStyle16.copyWith(
+                        color: AppColors.kWhite,
+                        fontSize: 16.w,
+                      ),
+                      width: 100.w,
+                      onPressed: () async {
+                        await context.read<CartCubit>().storeItem(
+                              productId: product.id!,
+                              quantity: retailCount.value,
+                              unitId: int.parse(product.retailUnitId!),
+                              price: totalRetailPrice.value,
+                              isRequired: '0',
+                              isLast: false,
+                              requiredProducts: product.requiredProducts!,
+                            );
+                      },
+                      title: 'موافق',
+                    );
+                  },
+                ),
+              ),
+            ],
           ),
           SizedBox(
             height: 20.h,

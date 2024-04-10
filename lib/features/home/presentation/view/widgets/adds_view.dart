@@ -40,43 +40,54 @@ class _AddsViewState extends State<AddsView> {
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(15.w),
                 ),
-                child: CarouselSlider.builder(
-                  itemCount: state.adsModel.ads!.length,
-                  carouselController: _controller,
-                  itemBuilder: (BuildContext context, int itemIndex,
-                          int pageViewIndex) =>
-                      ClipRRect(
-                          borderRadius: BorderRadius.circular(15.w),
-                          child: MyCachedNetworkImage(
-                            width: double.infinity,
-                            url: state.adsModel.ads![itemIndex].image!,
-                            errorIcon: Icon(
-                              Icons.image,
-                              size: 100.w,
-                              color: AppColors.kASDCPrimaryColor,
-                            ),
-                            loadingWidth: 30.w,
-                          )),
-                  options: CarouselOptions(
-                      aspectRatio: 16 / 9,
-                      viewportFraction: 0.95,
-                      initialPage: 0,
-                      enableInfiniteScroll: true,
-                      reverse: false,
-                      autoPlay: true,
-                      autoPlayInterval: const Duration(seconds: 5),
-                      autoPlayAnimationDuration:
-                          const Duration(milliseconds: 800),
-                      autoPlayCurve: Curves.fastOutSlowIn,
-                      enlargeCenterPage: true,
-                      enlargeFactor: 0.2,
-                      scrollDirection: Axis.horizontal,
-                      onPageChanged: (index, reason) {
-                        setState(() {
-                          _current = index;
-                        });
-                      }),
-                ),
+                child: state.adsModel.ads!.isNotEmpty
+                    ? CarouselSlider.builder(
+                        itemCount: state.adsModel.ads!.length,
+                        carouselController: _controller,
+                        itemBuilder: (BuildContext context, int itemIndex,
+                                int pageViewIndex) =>
+                            ClipRRect(
+                                borderRadius: BorderRadius.circular(15.w),
+                                child: MyCachedNetworkImage(
+                                  width: double.infinity,
+                                  url: state.adsModel.ads![itemIndex].image!,
+                                  errorIcon: Icon(
+                                    Icons.image,
+                                    size: 100.w,
+                                    color: AppColors.kASDCPrimaryColor,
+                                  ),
+                                  loadingWidth: 30.w,
+                                )),
+                        options: CarouselOptions(
+                            aspectRatio: 16 / 9,
+                            viewportFraction: 0.95,
+                            initialPage: 0,
+                            enableInfiniteScroll: true,
+                            reverse: false,
+                            autoPlay: true,
+                            autoPlayInterval: const Duration(seconds: 5),
+                            autoPlayAnimationDuration:
+                                const Duration(milliseconds: 800),
+                            autoPlayCurve: Curves.fastOutSlowIn,
+                            enlargeCenterPage: true,
+                            enlargeFactor: 0.2,
+                            scrollDirection: Axis.horizontal,
+                            onPageChanged: (index, reason) {
+                              setState(() {
+                                _current = index;
+                              });
+                            }),
+                      )
+                    : Center(
+                        child: Text(
+                          "لا توجد إعلانات حالياً",
+                          style: TextStyle(
+                            fontSize: 20.sp,
+                            color: AppColors.kGrey,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
               ),
               Positioned.fill(
                 bottom: 0.h,

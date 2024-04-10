@@ -28,7 +28,9 @@ class WholeSubCategoryView extends StatefulWidget {
 
 class _WholeSubCategoryViewState extends State<WholeSubCategoryView>
     with SingleTickerProviderStateMixin {
-  ValueNotifier<double> imageHight = ValueNotifier(350.h);
+  ValueNotifier<double> imageHight = ValueNotifier(250.h);
+  ValueNotifier<bool> searching = ValueNotifier(false);
+
   ValueNotifier<ScrollController> scrollController = ValueNotifier(
     ScrollController(initialScrollOffset: 0.0, keepScrollOffset: true),
   );
@@ -58,7 +60,7 @@ class _WholeSubCategoryViewState extends State<WholeSubCategoryView>
           imageHight.value = 0;
         }
         if (scrollController.value.offset == 0) {
-          imageHight.value = 350.h;
+          imageHight.value = 250.h;
         }
       }
     });
@@ -69,14 +71,14 @@ class _WholeSubCategoryViewState extends State<WholeSubCategoryView>
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
       valueListenable: imageHight,
-      builder: (BuildContext context, double imgHeight, Widget? child) {
+      builder: (BuildContext context, double imgHeightValue, Widget? child) {
         return PopScope(
-          canPop: imgHeight == 0 ? false : true,
+          canPop: imgHeightValue == 0 ? false : true,
           onPopInvoked: (didPop) {
-            if (imgHeight == 0) {
+            if (imgHeightValue == 0) {
               tabController.index = initialIndex;
               SubCategoryProductCubit.subCategoriesController.clear();
-              imageHight.value = 350.h;
+              imageHight.value = 250.h;
               context
                   .read<SubCategoryProductCubit>()
                   .getSubCategoryWithProduct(catId: widget.subCategory.id!);
@@ -96,21 +98,134 @@ class _WholeSubCategoryViewState extends State<WholeSubCategoryView>
                     AnimatedContainer(
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(15.w)),
-                      height: imgHeight,
+                      height: imgHeightValue,
                       duration: const Duration(milliseconds: 800),
-                      child: Hero(
-                        tag: 'SubCat${widget.subCategory.id}',
-                        child: MyCachedNetworkImage(
-                          url: widget.subCategory.image!,
-                          height: imgHeight,
-                          width: double.infinity,
-                          errorIcon: Icon(
-                            Icons.image,
-                            size: 150.w,
-                            color: AppColors.kASDCPrimaryColor,
+                      child: Stack(
+                        children: [
+                          Hero(
+                            tag: 'SubCat${widget.subCategory.id}',
+                            child: MyCachedNetworkImage(
+                              url: widget.subCategory.image!,
+                              height: imgHeightValue,
+                              width: double.infinity,
+                              errorIcon: Icon(
+                                Icons.image,
+                                size: 150.w,
+                                color: AppColors.kASDCPrimaryColor,
+                              ),
+                              loadingWidth: 13.w,
+                            ),
                           ),
-                          loadingWidth: 13.w,
-                        ),
+                          if (imgHeightValue != 0)
+                            Positioned(
+                              left: 20.w,
+                              bottom: 10.h,
+                              child: Row(
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      color: AppColors.kWhite.withOpacity(0.7),
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: IconButton(
+                                      onPressed: () {},
+                                      icon: Icon(
+                                        Icons.favorite,
+                                        color: AppColors.kRed,
+                                        size: 25.w,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 10.w,
+                                  ),
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      color: AppColors.kWhite.withOpacity(0.7),
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: IconButton(
+                                      onPressed: () {
+                                        if (!searching.value) {
+                                          searching.value = true;
+                                        } else {
+                                          searching.value = false;
+                                          SubCategoryProductCubit
+                                              .subCategoriesController
+                                              .clear();
+                                          context
+                                              .read<SubCategoryProductCubit>()
+                                              .searchInProducts();
+                                        }
+                                      },
+                                      icon: ValueListenableBuilder(
+                                        valueListenable: searching,
+                                        builder: (BuildContext context,
+                                                bool value, Widget? child) =>
+                                            Icon(
+                                          value ? Icons.close : Icons.search,
+                                          color: AppColors.kASDCPrimaryColor,
+                                          size: 25.w,
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ValueListenableBuilder(
+                            valueListenable: searching,
+                            builder: (BuildContext context, bool value,
+                                    Widget? child) =>
+                                value
+                                    ? Positioned(
+                                        child: Column(
+                                          children: [
+                                            SizedBox(
+                                              height: 50.h,
+                                            ),
+                                            SizedBox(
+                                              child: Container(
+                                                margin: EdgeInsets.symmetric(
+                                                    horizontal: 20.w),
+                                                decoration: BoxDecoration(
+                                                  color: AppColors.kWhite,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          15.w),
+                                                ),
+                                                child: SearchRow(
+                                                    autofocus: true,
+                                                    onDismiss: () {
+                                                      // searching.value = false;
+                                                      // SubCategoryProductCubit
+                                                      //     .subCategoriesController
+                                                      //     .clear();
+                                                      // context
+                                                      //     .read<
+                                                      //         SubCategoryProductCubit>()
+                                                      //     .searchInProducts();
+                                                    },
+                                                    textEditingController:
+                                                        SubCategoryProductCubit
+                                                            .subCategoriesController,
+                                                    hintText: 'ابحث عن المنتج',
+                                                    canGoBack: false,
+                                                    haveFilter: false,
+                                                    onChanged: (_) {
+                                                      context
+                                                          .read<
+                                                              SubCategoryProductCubit>()
+                                                          .searchInProducts();
+                                                    }),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                    : const SizedBox(),
+                          ),
+                        ],
                       ),
                     ),
                     Expanded(
@@ -121,68 +236,79 @@ class _WholeSubCategoryViewState extends State<WholeSubCategoryView>
                           children: [
                             AnimatedContainer(
                               duration: const Duration(seconds: 2),
-                              height: imgHeight == 0 ? null : 0,
+                              height: imgHeightValue == 0 ? null : 0,
                               child: Column(
                                 children: [
                                   SizedBox(
-                                    height: 50.h,
-                                    child: TabBar(
-                                        controller: tabController,
-                                        onTap: (index) {
-                                          context
-                                              .read<SubCategoryProductCubit>()
-                                              .getSubCategoryWithProduct(
-                                                  catId: widget
-                                                      .subCategories[index]
-                                                      .id!);
-                                        },
-                                        tabs: List.generate(
-                                            widget.subCategories.length,
-                                            (index) => Tab(
-                                                  height: 60.h,
-                                                  child: Text(
-                                                    widget.subCategories[index]
-                                                        .categoryName!,
-                                                    style:
-                                                        TextStyles.textStyle14,
-                                                  ),
-                                                ))),
+                                    height: 10.h,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: SizedBox(
+                                          height: 50.h,
+                                          child: TabBar(
+                                              controller: tabController,
+                                              onTap: (index) {
+                                                context
+                                                    .read<
+                                                        SubCategoryProductCubit>()
+                                                    .getSubCategoryWithProduct(
+                                                        catId: widget
+                                                            .subCategories[
+                                                                index]
+                                                            .id!);
+                                              },
+                                              tabs: List.generate(
+                                                  widget.subCategories.length,
+                                                  (index) => Tab(
+                                                        height: 60.h,
+                                                        child: Text(
+                                                          widget
+                                                              .subCategories[
+                                                                  index]
+                                                              .categoryName!,
+                                                          style: TextStyles
+                                                              .textStyle14,
+                                                        ),
+                                                      ))),
+                                        ),
+                                      ),
+                                      Transform.flip(
+                                        flipX: true,
+                                        child: IconButton(
+                                            onPressed: () {
+                                              tabController.index =
+                                                  initialIndex;
+                                              SubCategoryProductCubit
+                                                  .subCategoriesController
+                                                  .clear();
+                                              imageHight.value = 250.h;
+                                              context
+                                                  .read<
+                                                      SubCategoryProductCubit>()
+                                                  .getSubCategoryWithProduct(
+                                                      catId: widget
+                                                          .subCategory.id!);
+                                            },
+                                            icon: Icon(
+                                              Icons.arrow_back,
+                                              color:
+                                                  AppColors.kASDCPrimaryColor,
+                                              size: 25.w,
+                                            )),
+                                      )
+                                    ],
                                   ),
                                   SizedBox(
                                     height: 10.h,
-                                  ),
-                                  SearchRow(
-                                      textEditingController:
-                                          SubCategoryProductCubit
-                                              .subCategoriesController,
-                                      hintText: 'ابحث عن المنتج',
-                                      canGoBack: true,
-                                      whenBack: () {
-                                        tabController.index = initialIndex;
-                                        SubCategoryProductCubit
-                                            .subCategoriesController
-                                            .clear();
-                                        imageHight.value = 350.h;
-                                        context
-                                            .read<SubCategoryProductCubit>()
-                                            .getSubCategoryWithProduct(
-                                                catId: widget.subCategory.id!);
-                                      },
-                                      haveFilter: false,
-                                      onChanged: (_) {
-                                        context
-                                            .read<SubCategoryProductCubit>()
-                                            .searchInProducts();
-                                      }),
-                                  SizedBox(
-                                    height: 20.h,
                                   ),
                                 ],
                               ),
                             ),
                             AnimatedContainer(
                               duration: const Duration(seconds: 2),
-                              height: imgHeight != 0 ? null : 0,
+                              height: imgHeightValue != 0 ? null : 0,
                               child: SizedBox(
                                 width: double.infinity,
                                 child: Column(

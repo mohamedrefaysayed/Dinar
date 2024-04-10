@@ -43,7 +43,7 @@ class _ProductViewState extends State<ProductView> {
           children: [
             Container(
               constraints: BoxConstraints(
-                maxHeight: 300.h,
+                maxHeight: 250.h,
               ),
               child: Hero(
                 tag: 'Product${widget.product.id}',
@@ -193,7 +193,6 @@ class _ProductViewState extends State<ProductView> {
                     height: 10.h,
                   ),
                   TextField(
-                    minLines: 4,
                     maxLines: null,
                     textDirection: TextDirection.rtl,
                     onTapOutside: (event) {

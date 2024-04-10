@@ -6,7 +6,6 @@ import 'package:dinar_store/features/home/data/models/orders_model.dart';
 import 'package:dinar_store/features/home/data/models/send_order_model.dart';
 import 'package:dinar_store/features/home/data/services/orders_services.dart';
 import 'package:dinar_store/features/home/presentation/view_model/cart_cubit/cubit/cart_cubit.dart';
-import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -19,9 +18,10 @@ class OrderCubit extends Cubit<OrderState> {
 
   late OrdersServices _ordersServices;
 
-  static String payment = 'الدفع عند الاستلام';
-  static TimeOfDay initialTime = TimeOfDay.now();
-  static TimeOfDay? pickedTime;
+  static String payment = "الدفع عند الاستلام";
+
+  static DateTime? initialTime;
+  static DateTime? pickedTime;
   static LatLng? markerPosition;
   static String currentAddress = "أختر عنوان";
   static Marker? marker;
@@ -56,12 +56,22 @@ class OrderCubit extends Cubit<OrderState> {
     required double tax,
     required double price,
     required int addressId,
+    required String paymentMethod,
   }) async {
     emit(AddToOrdersLoading());
 
     SendOrderModel sendOrderModel = SendOrderModel();
 
     List<Map<String, dynamic>> orderDetails = [];
+    final now = DateTime.now();
+
+    String date = DateTime(
+      now.year,
+      now.month,
+      now.day,
+      pickedTime!.hour,
+      pickedTime!.minute,
+    ).toString();
 
     for (var cartItem in CartCubit.cartItemsModel!.cart!) {
       orderDetails.add(
@@ -74,11 +84,14 @@ class OrderCubit extends Cubit<OrderState> {
       );
     }
     sendOrderModel = SendOrderModel.fromJson({
-      'status': status,
       'discount': discount.toInt(),
       'tax': tax.toInt(),
       'address_id': addressId,
       'order_details': orderDetails,
+      'payment_method': "الدفع عند الاستلام",
+      'location':
+          "https://www.google.com/maps?q=${markerPosition!.latitude},${markerPosition!.longitude}",
+      'delivery_time': date,
     });
 
     Either<ServerFailure, void> result = await _ordersServices.storeOrder(
@@ -121,5 +134,47 @@ class OrderCubit extends Cubit<OrderState> {
       currentAddress = '${place.street}';
       emit(OrderInitial());
     });
+  }
+
+  DateTime add24Hours() {
+    // TimeOfDay currentTime = TimeOfDay.now();
+    // DateTime currentDateTime = DateTime(
+    //     DateTime.now().year,
+    //     DateTime.now().month,
+    //     DateTime.now().day,
+    //     currentTime.hour,
+    //     currentTime.minute);
+    // DateTime newDateTime = currentDateTime.add(const Duration(hours: 24));
+    // newDateTime = newDateTime.add(const Duration(minutes: 30));
+    // TimeOfDay newTime =
+    //     TimeOfDay(hour: newDateTime.hour, minute: newDateTime.minute);
+    // return newTime;
+
+    DateTime baseTime = DateTime.now();
+
+    DateTime newDateTime = baseTime.add(const Duration(hours: 24, minutes: 30));
+    return newDateTime;
+  }
+
+  bool isTimeGreaterBy24Hour(DateTime timeToCompare) {
+    // TimeOfDay currentTime = TimeOfDay.now();
+    // DateTime currentDateTime = DateTime(
+    //     DateTime.now().year,
+    //     DateTime.now().month,
+    //     DateTime.now().day,
+    //     currentTime.hour,
+    //     currentTime.minute);
+    // DateTime compareDateTime = DateTime(
+    //     DateTime.now().year,
+    //     DateTime.now().month,
+    //     DateTime.now().day,
+    //     timeToCompare.hour,
+    //     timeToCompare.minute);
+    // Duration difference = compareDateTime.difference(currentDateTime);
+    // return difference.inHours >= 24;
+
+    DateTime currentTime = DateTime.now();
+    Duration difference = timeToCompare.difference(currentTime);
+    return difference.inHours >= 24;
   }
 }

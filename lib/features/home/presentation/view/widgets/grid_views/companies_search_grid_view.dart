@@ -8,8 +8,8 @@ import 'package:dinar_store/features/home/presentation/view/widgets/rows/search_
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class CompaniesSearchListView extends StatelessWidget {
-  const CompaniesSearchListView({super.key, required this.companies});
+class CompaniesSearchGridView extends StatelessWidget {
+  const CompaniesSearchGridView({super.key, required this.companies});
 
   final List<SearchCompany> companies;
   @override
@@ -30,11 +30,11 @@ class CompaniesSearchListView extends StatelessWidget {
           ],
         ),
         const GeneralDivider(),
-        ListView.builder(
+        GridView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           itemCount: companies.length,
-          itemBuilder: (context, index) => SearchItemRow(
+          itemBuilder: (context, index) => SearchItem(
             imag: companies[index].logo!,
             name: companies[index].companyName!,
             onTap: () {
@@ -47,6 +47,11 @@ class CompaniesSearchListView extends StatelessWidget {
                     company: Companies.fromJson(data),
                   )));
             },
+          ),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: 15.w,
+            childAspectRatio: 115.h / 135.w,
           ),
         ),
       ],

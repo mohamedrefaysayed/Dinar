@@ -4,8 +4,8 @@ import 'package:dinar_store/features/home/presentation/view/widgets/cachedNetwor
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class SearchItemRow extends StatelessWidget {
-  const SearchItemRow({
+class SearchItem extends StatelessWidget {
+  const SearchItem({
     super.key,
     required this.imag,
     required this.name,
@@ -24,11 +24,27 @@ class SearchItemRow extends StatelessWidget {
         children: [
           Column(
             children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(15.w),
+                child: MyCachedNetworkImage(
+                    fit: BoxFit.contain,
+                    height: 100.w,
+                    width: 150.w,
+                    url: imag,
+                    errorIcon: const Icon(
+                      Icons.image,
+                      color: AppColors.kASDCPrimaryColor,
+                    ),
+                    loadingWidth: 13.w),
+              ),
+              SizedBox(
+                height: 10.h,
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   SizedBox(
-                    width: 250.w,
+                    width: 100.w,
                     child: Text(
                       name,
                       style: TextStyles.textStyle14,
@@ -36,24 +52,8 @@ class SearchItemRow extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                  SizedBox(
-                    width: 10.w,
-                  ),
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(15.w),
-                    child: MyCachedNetworkImage(
-                        height: 40.w,
-                        width: 40.w,
-                        url: imag,
-                        errorIcon: const Icon(
-                          Icons.image,
-                          color: AppColors.kASDCPrimaryColor,
-                        ),
-                        loadingWidth: 13.w),
-                  ),
                 ],
               ),
-              const Divider(),
             ],
           ),
           Positioned.fill(

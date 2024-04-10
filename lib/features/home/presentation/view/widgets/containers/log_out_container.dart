@@ -1,3 +1,6 @@
+import 'package:dinar_store/core/functions/show_alert_dialog.dart';
+import 'package:dinar_store/core/utils/text_styles.dart';
+import 'package:dinar_store/core/widgets/app_default_button.dart';
 import 'package:dinar_store/core/widgets/app_loading_button.dart';
 import 'package:dinar_store/core/widgets/message_snack_bar.dart';
 import 'package:dinar_store/features/auth/presentation/view/login_view.dart';
@@ -37,7 +40,42 @@ class LogOutContainer extends StatelessWidget {
         return ProfileSettingsRow(
           title: 'تسجيل الخروج',
           onTap: () {
-            context.read<LogOutCubit>().logOut();
+            showAlertDialog(
+              canDismiss: true,
+              context,
+              child: AlertDialog(
+                title: Text(
+                  "متأكد أنك تريد تسجيل الخروج ؟",
+                  style: TextStyles.textStyle16.copyWith(
+                    fontSize: 16.w,
+                  ),
+                  textDirection: TextDirection.rtl,
+                ),
+                actions: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      AppDefaultButton(
+                        width: 100.w,
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        title: 'الغاء',
+                      ),
+                      AppDefaultButton(
+                        width: 100.w,
+                        onPressed: () {
+                          Navigator.pop(context);
+
+                          context.read<LogOutCubit>().logOut();
+                        },
+                        title: 'نعم',
+                      )
+                    ],
+                  ),
+                ],
+              ),
+            );
           },
           icon: Icons.logout_outlined,
         );

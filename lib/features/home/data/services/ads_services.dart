@@ -26,6 +26,9 @@ class AdsServices implements AdsRepo {
         endPoint: 'ads',
       );
       adsModel = AdsModel.fromJson(data);
+      if (adsModel.ads == null) {
+        return right(AdsModel(ads: []));
+      }
       return right(adsModel);
     } on DioException catch (error) {
       return left(
