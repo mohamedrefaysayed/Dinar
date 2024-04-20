@@ -381,20 +381,37 @@ class _ProductViewState extends State<ProductView> {
                                           product: widget.product,
                                           retailCount: retailCount,
                                           totalRetailPrice: totalRetailPrice,
+                                          wholeCount: wholeCount,
+                                          totalWholePrice: totalWholePrice,
                                         );
                                       },
                                     );
                                   } else {
-                                    await context.read<CartCubit>().storeItem(
-                                      productId: widget.product.id!,
-                                      quantity: retailCount.value,
-                                      unitId: int.parse(
-                                          widget.product.retailUnitId!),
-                                      price: totalRetailPrice.value,
-                                      isRequired: '0',
-                                      isLast: true,
-                                      requiredProducts: [],
-                                    );
+                                    if (retailCount.value > 0) {
+                                      await context.read<CartCubit>().storeItem(
+                                        productId: widget.product.id!,
+                                        quantity: retailCount.value,
+                                        unitId: int.parse(
+                                            widget.product.retailUnitId!),
+                                        price: totalRetailPrice.value,
+                                        isRequired: '0',
+                                        isLast: true,
+                                        requiredProducts: [],
+                                      );
+                                    }
+
+                                    if (wholeCount.value > 0) {
+                                      await context.read<CartCubit>().storeItem(
+                                        productId: widget.product.id!,
+                                        quantity: wholeCount.value,
+                                        unitId: int.parse(
+                                            widget.product.wholeUnitId!),
+                                        price: totalWholePrice.value,
+                                        isRequired: '0',
+                                        isLast: true,
+                                        requiredProducts: [],
+                                      );
+                                    }
                                   }
                                   context.read<CartCubit>().getAllItems();
                                 } else {

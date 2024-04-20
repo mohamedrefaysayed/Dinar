@@ -14,17 +14,41 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class RequiredProductsShow extends StatelessWidget {
+class RequiredProductsShow extends StatefulWidget {
   const RequiredProductsShow({
     super.key,
     required this.product,
     required this.retailCount,
     required this.totalRetailPrice,
+    required this.wholeCount,
+    required this.totalWholePrice,
   });
 
   final Products product;
   final ValueNotifier<int> retailCount;
   final ValueNotifier<double> totalRetailPrice;
+  final ValueNotifier<int> wholeCount;
+  final ValueNotifier<double> totalWholePrice;
+
+  @override
+  State<RequiredProductsShow> createState() => _RequiredProductsShowState();
+}
+
+class _RequiredProductsShowState extends State<RequiredProductsShow> {
+  List<RequiredProducts> retailRequiredProducts = [];
+  List<RequiredProducts> wholeRequiredProducts = [];
+
+  @override
+  void initState() {
+    for (var element in widget.product.requiredProducts!) {
+      if (element.pivot!.unitId == widget.product.retailUnitId) {
+        retailRequiredProducts.add(element);
+      } else {
+        wholeRequiredProducts.add(element);
+      }
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,18 +58,64 @@ class RequiredProductsShow extends StatelessWidget {
         children: [
           Text(
             "الفرض",
-            style: TextStyles.textStyle18,
-          ),
-          Expanded(
-            child: ListView.builder(
-              shrinkWrap: true,
-              itemCount: product.requiredProducts!.length,
-              itemBuilder: (context, index) {
-                return RequierdProductContainer(
-                    product: product.requiredProducts![index]);
-              },
+            style: TextStyles.textStyle18.copyWith(
+              fontWeight: FontWeight.bold,
             ),
           ),
+          if (widget.retailCount.value > 0)
+            Expanded(
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: 20.h,
+                  ),
+                  Text(
+                    "المفرد",
+                    style: TextStyles.textStyle14,
+                  ),
+                  Expanded(
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: retailRequiredProducts.length,
+                      itemBuilder: (context, index) {
+                        return RequierdProductContainer(
+                          product: retailRequiredProducts[index],
+                          retailUnitName: widget.product.retailUnit!.unitName!,
+                          wholeUnitName: widget.product.wholeUnit!.unitName!,
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          if (widget.wholeCount.value > 0)
+            Expanded(
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: 20.h,
+                  ),
+                  Text(
+                    "الجملة",
+                    style: TextStyles.textStyle14,
+                  ),
+                  Expanded(
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: wholeRequiredProducts.length,
+                      itemBuilder: (context, index) {
+                        return RequierdProductContainer(
+                          product: wholeRequiredProducts[index],
+                          retailUnitName: widget.product.retailUnit!.unitName!,
+                          wholeUnitName: widget.product.wholeUnit!.unitName!,
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
           SizedBox(
             height: 20.h,
           ),
@@ -95,15 +165,29 @@ class RequiredProductsShow extends StatelessWidget {
                       ),
                       width: 100.w,
                       onPressed: () async {
-                        await context.read<CartCubit>().storeItem(
-                              productId: product.id!,
-                              quantity: retailCount.value,
-                              unitId: int.parse(product.retailUnitId!),
-                              price: totalRetailPrice.value,
-                              isRequired: '0',
-                              isLast: false,
-                              requiredProducts: product.requiredProducts!,
-                            );
+                        if (widget.retailCount.value > 0) {
+                          await context.read<CartCubit>().storeItem(
+                                productId: widget.product.id!,
+                                quantity: widget.retailCount.value,
+                                unitId: int.parse(widget.product.retailUnitId!),
+                                price: widget.totalRetailPrice.value,
+                                isRequired: '0',
+                                isLast: false,
+                                requiredProducts: retailRequiredProducts,
+                              );
+                        }
+
+                        if (widget.wholeCount.value > 0) {
+                          await context.read<CartCubit>().storeItem(
+                                productId: widget.product.id!,
+                                quantity: widget.wholeCount.value,
+                                unitId: int.parse(widget.product.wholeUnitId!),
+                                price: widget.totalWholePrice.value,
+                                isRequired: '0',
+                                isLast: false,
+                                requiredProducts: wholeRequiredProducts,
+                              );
+                        }
                       },
                       title: 'موافق',
                     );

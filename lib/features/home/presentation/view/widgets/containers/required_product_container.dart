@@ -9,9 +9,14 @@ class RequierdProductContainer extends StatelessWidget {
   const RequierdProductContainer({
     super.key,
     required this.product,
+    required this.retailUnitName,
+    required this.wholeUnitName,
   });
 
   final RequiredProducts product;
+
+  final String retailUnitName;
+  final String wholeUnitName;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +32,8 @@ class RequierdProductContainer extends StatelessWidget {
           children: [
             Row(
               children: [
-                Text("${double.parse(product.pivot!.quantity!).toInt()} X"),
+                Text(
+                    "${double.parse(product.pivot!.requiredQuantiy!).toInt()} X"),
                 Hero(
                   tag: "Product${product.id}",
                   child: ClipRRect(
@@ -50,15 +56,19 @@ class RequierdProductContainer extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      SizedBox(
-                        width: 200.w,
-                        child: Text(
-                          product.productName!,
-                          style: TextStyles.textStyle12
-                              .copyWith(fontWeight: FontWeight.w400),
-                          overflow: TextOverflow.ellipsis,
-                          textDirection: TextDirection.rtl,
-                        ),
+                      Row(
+                        children: [
+                          SizedBox(
+                            width: 200.w,
+                            child: Text(
+                              product.productName!,
+                              style: TextStyles.textStyle12
+                                  .copyWith(fontWeight: FontWeight.w400),
+                              overflow: TextOverflow.ellipsis,
+                              textDirection: TextDirection.rtl,
+                            ),
+                          ),
+                        ],
                       ),
                       SizedBox(
                         width: 200.w,

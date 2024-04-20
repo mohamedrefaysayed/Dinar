@@ -298,7 +298,7 @@ class _OrderConfirmViewState extends State<OrderConfirmView> {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                       messageSnackBar(
                                           message:
-                                              "اختر وقت التوصيل بطريقة صحيحة, يجب أن يكون الوقت على الأقل 30 دقيقة من الأن"));
+                                              "اختر وقت التوصيل بطريقة صحيحة, يجب أن يكون الوقت على الأقل 24 ساعة من الأن"));
                                 }
                               } else {
                                 ScaffoldMessenger.of(context).showSnackBar(

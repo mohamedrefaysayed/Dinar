@@ -69,6 +69,14 @@ class CartItemRow extends StatelessWidget {
                         }
                       },
                     ),
+                    Text(
+                      cartItem.unit!.unitName!,
+                      style: TextStyles.textStyle16.copyWith(
+                        fontWeight: FontWeight.w200,
+                        color: AppColors.kGrey,
+                        fontSize: 16.w,
+                      ),
+                    ),
                     SizedBox(
                       height: 15.h,
                     ),
