@@ -23,7 +23,6 @@ class ProfileServices implements ProfileRepo {
         token: token,
         endPoint: 'get-user',
       );
-      print(data);
       profileModel = ProfileModel.fromJson(data);
       return right(profileModel);
     } on DioException catch (error) {
