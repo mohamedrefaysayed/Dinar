@@ -28,7 +28,7 @@ The **Dinar App** is an all-encompassing Online Wholesaling Solution that revolu
 
 1. **Clone the Repository:** Download the project from the GitHub repository.
    ```bash
-   git clone https://github.com/yourusername/dinar-app.git
+   git clone https://github.com/mohamedrefaysayed/Dinar
    ```
 2. **Navigate to the Project Directory:**
    ```bash
