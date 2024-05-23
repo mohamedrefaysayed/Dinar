@@ -31,7 +31,7 @@ The **Dinar App** is an all-encompassing Online Wholesaling Solution that revolu
    ```
 2. **Navigate to the Project Directory:**
    ```bash
-   cd dinar-app
+   cd Dinar
    ```
 3. **Install Dependencies:**
    ```bash
