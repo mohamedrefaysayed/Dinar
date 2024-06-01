@@ -6,7 +6,9 @@ import 'package:dinar_store/features/home/data/models/orders_model.dart';
 import 'package:dinar_store/features/home/presentation/view/widgets/dividers/ginerall_divider.dart';
 import 'package:dinar_store/features/home/presentation/view/widgets/rows/order_product_row.dart';
 import 'package:dinar_store/features/home/presentation/view/widgets/whole_order_view.dart';
+import 'package:dinar_store/features/home/presentation/view_model/order_cubit/cubit/order_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class OrderRow extends StatelessWidget {
@@ -23,17 +25,7 @@ class OrderRow extends StatelessWidget {
           children: [
             Center(
               child: Text(
-                order.status == "1"
-                    ? "تم اسنلام الطلب"
-                    : order.status == "2"
-                        ? "قيد التحضير"
-                        : order.status == "3"
-                            ? "قيد التوصيل"
-                            : order.status == "4"
-                                ? "تم التوصيل"
-                                : order.status == "5"
-                                    ? "تم الغاء الطلب"
-                                    : "تم الإراجاع",
+                context.read<OrderCubit>().getStatusMessage(order.status!),
               ),
             ),
             Padding(
@@ -68,7 +60,7 @@ class OrderRow extends StatelessWidget {
                   ),
                   Text(
                     order.address != null
-                        ? "${order.address!.country!}/${order.address!.city!}/${order.address!.street!}/${order.address!.building!}"
+                        ? "${order.address}"
                         : "لا يوجد عنوان",
                     style:
                         TextStyles.textStyle14.copyWith(color: AppColors.kGrey),
@@ -109,8 +101,8 @@ class OrderRow extends StatelessWidget {
                         context,
                         RightSlideTransition(
                             page: WholeOrderView(
-                          order: order,
-                        )));
+                          order: ValueNotifier(order),
+                        ),),);
                   },
                 ),
               ),

@@ -1,5 +1,4 @@
 import 'package:dinar_store/core/utils/app_images.dart';
-import 'package:dinar_store/core/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -33,7 +32,7 @@ class _LogoAnimatedOpacityState extends State<LogoAnimatedOpacity> {
           child: Image.asset(
             color: Colors.white,
             AppImages.dinarLogo,
-            height: kIsTablet ? 150.h : 90.h,
+            height: 190.w,
             width: 190.w,
             fit: BoxFit.fill,
           ),

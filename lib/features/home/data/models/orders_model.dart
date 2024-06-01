@@ -45,23 +45,26 @@ class DinarOrder {
   String? createdAt;
   String? updatedAt;
   List<OrderDetails>? orderDetails;
-  Address? address;
+  String? address;
+  String? location;
 
-  DinarOrder(
-      {this.id,
-      this.userId,
-      this.addressId,
-      this.orderDate,
-      this.status,
-      this.tax,
-      this.discount,
-      this.subTotal,
-      this.total,
-      this.deletedAt,
-      this.createdAt,
-      this.updatedAt,
-      this.orderDetails,
-      this.address});
+  DinarOrder({
+    this.id,
+    this.userId,
+    this.addressId,
+    this.orderDate,
+    this.status,
+    this.tax,
+    this.discount,
+    this.subTotal,
+    this.total,
+    this.deletedAt,
+    this.createdAt,
+    this.updatedAt,
+    this.orderDetails,
+    this.address,
+    this.location,
+  });
 
   DinarOrder.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -76,14 +79,15 @@ class DinarOrder {
     deletedAt = json['deleted_at'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
+    address = json['address'];
+    location = json['location'];
+
     if (json['order_details'] != null) {
       orderDetails = <OrderDetails>[];
       json['order_details'].forEach((v) {
         orderDetails!.add(OrderDetails.fromJson(v));
       });
     }
-    address =
-        json['address'] != null ? Address.fromJson(json['address']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -100,11 +104,11 @@ class DinarOrder {
     data['deleted_at'] = deletedAt;
     data['created_at'] = createdAt;
     data['updated_at'] = updatedAt;
+    data['address'] = address;
+    data['location'] = location;
+
     if (orderDetails != null) {
       data['order_details'] = orderDetails!.map((v) => v.toJson()).toList();
-    }
-    if (address != null) {
-      data['address'] = address!.toJson();
     }
     return data;
   }
@@ -319,79 +323,6 @@ class Units {
     data['eq'] = eq;
     data['unit_group_id'] = unitGroupId;
     data['status'] = status;
-    data['deleted_at'] = deletedAt;
-    data['created_at'] = createdAt;
-    data['updated_at'] = updatedAt;
-    return data;
-  }
-}
-
-class Address {
-  int? id;
-  String? userId;
-  String? city;
-  String? country;
-  String? postcode;
-  String? street;
-  String? building;
-  String? floor;
-  String? phone;
-  String? lng;
-  String? lat;
-  String? notes;
-  String? deletedAt;
-  String? createdAt;
-  String? updatedAt;
-
-  Address(
-      {this.id,
-      this.userId,
-      this.city,
-      this.country,
-      this.postcode,
-      this.street,
-      this.building,
-      this.floor,
-      this.phone,
-      this.lng,
-      this.lat,
-      this.notes,
-      this.deletedAt,
-      this.createdAt,
-      this.updatedAt});
-
-  Address.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    userId = json['user_id'];
-    city = json['city'];
-    country = json['country'];
-    postcode = json['postcode'];
-    street = json['street'];
-    building = json['building'];
-    floor = json['floor'];
-    phone = json['phone'];
-    lng = json['lng'];
-    lat = json['lat'];
-    notes = json['notes'];
-    deletedAt = json['deleted_at'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
-    data['user_id'] = userId;
-    data['city'] = city;
-    data['country'] = country;
-    data['postcode'] = postcode;
-    data['street'] = street;
-    data['building'] = building;
-    data['floor'] = floor;
-    data['phone'] = phone;
-    data['lng'] = lng;
-    data['lat'] = lat;
-    data['notes'] = notes;
     data['deleted_at'] = deletedAt;
     data['created_at'] = createdAt;
     data['updated_at'] = updatedAt;

@@ -21,6 +21,7 @@ abstract class LogInRepo {
     required Position position,
     required String token,
   });
+  Future<Either<ServerFailure, void>> deleteAccount();
 
   ///use flutter secure storage to store the token
   Future<void> storeTokenInSecureStorage({

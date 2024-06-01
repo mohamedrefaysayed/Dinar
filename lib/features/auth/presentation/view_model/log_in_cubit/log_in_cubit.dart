@@ -23,6 +23,7 @@ class LogInCubit extends Cubit<LogInState> {
   Future<void> register() async {
     emit(SendCodeLoading());
 
+
     Either<ServerFailure, Map<String, dynamic>> result =
         await _logInServices.register(
       countryCode: phoneNumber!.countryCode,

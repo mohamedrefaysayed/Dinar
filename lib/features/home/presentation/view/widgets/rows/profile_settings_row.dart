@@ -11,12 +11,14 @@ class ProfileSettingsRow extends StatelessWidget {
     required this.onTap,
     required this.icon,
     this.wDevider,
+    this.iconColor,
   });
 
   final String title;
   final void Function() onTap;
   final IconData icon;
   final bool? wDevider;
+  final Color? iconColor;
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +49,7 @@ class ProfileSettingsRow extends StatelessWidget {
                   Icon(
                     icon,
                     size: 20.w,
-                    color: AppColors.kASDCPrimaryColor,
+                    color: iconColor ?? AppColors.kASDCPrimaryColor,
                   ),
                 ],
               ),

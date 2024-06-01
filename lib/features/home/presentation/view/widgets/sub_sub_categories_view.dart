@@ -7,7 +7,6 @@ import 'package:dinar_store/features/home/presentation/view/widgets/containers/s
 import 'package:dinar_store/features/home/presentation/view/widgets/place_holders/categories_place_holder_home.dart';
 import 'package:dinar_store/features/home/presentation/view/widgets/search_rows/search_row.dart';
 import 'package:dinar_store/features/home/presentation/view/widgets/whole_sub_category_view.dart';
-import 'package:dinar_store/features/home/presentation/view/widgets/whole_sub_category_view_new.dart';
 import 'package:dinar_store/features/home/presentation/view_model/sub_sub_categories_cubit/sub_sub_categories_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -191,7 +190,7 @@ class _SubSubCategoryViewState extends State<SubSubCategoryView> {
                                                       context,
                                                       RightSlideTransition(
                                                           page:
-                                                              WholeSubCategoryViewNew(
+                                                              WholeSubCategoryView(
                                                         subCategory: state
                                                             .categories[index],
                                                         subCategories:

@@ -82,16 +82,18 @@ class ProductContainer extends StatelessWidget {
                               child: Text.rich(
                                 TextSpan(children: [
                                   TextSpan(
-                                    text: "\$${product.retailPrice}, ",
-                                    style: TextStyles.textStyle12.copyWith(
-                                        fontWeight: FontWeight.w400,
-                                        color: Colors.green),
-                                  ),
-                                  TextSpan(
-                                    text: "\$${product.vipPrice}",
+                                    text:
+                                        "\$${double.parse(product.retailPrice!).toInt()}, ",
                                     style: TextStyles.textStyle12.copyWith(
                                         fontWeight: FontWeight.w400,
                                         color: Colors.grey),
+                                  ),
+                                  TextSpan(
+                                    text:
+                                        "\$${double.parse(product.wholeSalePrice!).toInt()}",
+                                    style: TextStyles.textStyle12.copyWith(
+                                        fontWeight: FontWeight.w400,
+                                        color: Colors.green),
                                   ),
                                 ]),
                                 overflow: TextOverflow.ellipsis,
@@ -146,14 +148,18 @@ class ProductContainer extends StatelessWidget {
             color: AppColors.kTransparent,
             child: InkWell(
               onTap: () {
-                futureDelayedNavigator(() {
-                  Navigator.push(
+                futureDelayedNavigator(
+                  () {
+                    Navigator.push(
                       context,
                       RightSlideTransition(
-                          page: ProductView(
-                        product: product,
-                      )));
-                });
+                        page: ProductView(
+                          product: product,
+                        ),
+                      ),
+                    );
+                  },
+                );
               },
               borderRadius: BorderRadius.circular(15.w),
               child: SizedBox(

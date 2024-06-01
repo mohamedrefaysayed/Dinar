@@ -36,10 +36,15 @@ class OrderProductRow extends StatelessWidget {
                 ),
                 loadingWidth: 10.w,
               ),
-              Text(
-                "${index + 1} - ${order.orderDetails![index].products!.productName}",
-                textDirection: TextDirection.rtl,
-                style: TextStyles.textStyle14,
+              SizedBox(
+                width: 250.w,
+                child: Text(
+                  "${index + 1} - ${order.orderDetails![index].products!.productName} - ${order.orderDetails![index].units!.unitName} - * ${order.orderDetails![index].qty}",
+                  textDirection: TextDirection.rtl,
+                  style: TextStyles.textStyle14,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 3,
+                ),
               ),
             ],
           ),

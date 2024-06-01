@@ -128,6 +128,7 @@ class _WholeSubCategoryViewNewState extends State<WholeSubCategoryViewNew>
                           widget.subCategories.length,
                           (index) => WholeSubCategoryListView(
                             scrollController: scrollController,
+                            subCategory: widget.subCategories[index],
                           ),
                         )),
                   ),

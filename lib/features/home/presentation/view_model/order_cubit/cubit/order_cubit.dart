@@ -44,7 +44,10 @@ class OrderCubit extends Cubit<OrderState> {
       },
       //success
       (orders) async {
-        ordersModel = orders;
+        ordersModel = OrdersModel(
+          currentOrders: orders.currentOrders!.reversed.toList(),
+          oldOrders: orders.oldOrders!.reversed.toList(),
+        );
         emit(OrderSuccess(ordersModel: orders));
       },
     );
@@ -63,15 +66,8 @@ class OrderCubit extends Cubit<OrderState> {
     SendOrderModel sendOrderModel = SendOrderModel();
 
     List<Map<String, dynamic>> orderDetails = [];
-    final now = DateTime.now();
 
-    String date = DateTime(
-      now.year,
-      now.month,
-      now.day,
-      pickedTime!.hour,
-      pickedTime!.minute,
-    ).toString();
+    String date = pickedTime.toString().substring(0, 18);
 
     for (var cartItem in CartCubit.cartItemsModel!.cart!) {
       orderDetails.add(
@@ -92,6 +88,7 @@ class OrderCubit extends Cubit<OrderState> {
       'location':
           "https://www.google.com/maps?q=${markerPosition!.latitude},${markerPosition!.longitude}",
       'delivery_time': date,
+      'address': "عنوان",
     });
 
     Either<ServerFailure, void> result = await _ordersServices.storeOrder(
@@ -177,4 +174,66 @@ class OrderCubit extends Cubit<OrderState> {
     Duration difference = timeToCompare.difference(currentTime);
     return difference.inHours >= 24;
   }
+
+// Function to get status message
+  String getStatusMessage(String statusNumber) {
+    OrderStatus status;
+    switch (statusNumber) {
+      case "1":
+        status = OrderStatus.underReview;
+        break;
+      case "2":
+        status = OrderStatus.preparing;
+        break;
+      case "3":
+        status = OrderStatus.delivering;
+        break;
+      case "4":
+        status = OrderStatus.delivered;
+        break;
+      case "5":
+        status = OrderStatus.cancelled;
+        break;
+      default:
+        status = OrderStatus.returned;
+    }
+
+    switch (status) {
+      case OrderStatus.underReview:
+        return "طلبك قيد المراجعة";
+      case OrderStatus.preparing:
+        return "قيد التحضير";
+      case OrderStatus.delivering:
+        return "قيد التوصيل";
+      case OrderStatus.delivered:
+        return "تم التوصيل";
+      case OrderStatus.cancelled:
+        return "تم الغاء الطلب";
+      case OrderStatus.returned:
+      default:
+        return "تم الإراجاع";
+    }
+  }
+
+  List<double> extractLatLng(String url) {
+    Uri uri = Uri.parse(url);
+    List<String> latLng = uri.queryParameters['q']?.split(',') ?? [];
+    if (latLng.length == 2) {
+      double lat = double.parse(latLng[0]);
+      double lng = double.parse(latLng[1]);
+      return [lat, lng];
+    }
+    return [28.8993468, 76.6250249];
+  }
+
+// Usage
+}
+
+enum OrderStatus {
+  underReview, // corresponds to "1"
+  preparing, // corresponds to "2"
+  delivering, // corresponds to "3"
+  delivered, // corresponds to "4"
+  cancelled, // corresponds to "5"
+  returned, // corresponds to any other value
 }

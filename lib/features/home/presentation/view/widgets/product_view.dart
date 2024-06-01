@@ -87,13 +87,15 @@ class _ProductViewState extends State<ProductView> {
                       child: Text.rich(
                         TextSpan(children: [
                           TextSpan(
-                            text: "\$${widget.product.retailPrice}, ",
-                            style: TextStyles.textStyle10.copyWith(
+                            text:
+                                "\$ ${double.parse(widget.product.retailPrice!).toInt()} , ",
+                            style: TextStyles.textStyle12.copyWith(
                                 fontWeight: FontWeight.w400,
                                 color: Colors.grey),
                           ),
                           TextSpan(
-                            text: "\$${widget.product.wholeSalePrice}",
+                            text:
+                                "\$ ${double.parse(widget.product.wholeSalePrice!).toInt()}",
                             style: TextStyles.textStyle16.copyWith(
                               fontWeight: FontWeight.w400,
                               color: Colors.green,
@@ -130,7 +132,6 @@ class _ProductViewState extends State<ProductView> {
                 ProductAmountRow(
                   retailPrice: widget.product.retailPrice!,
                   wholeSalePrice: widget.product.wholeSalePrice!,
-                  title: 'برتقال , جزر',
                   retailCount: retailCount,
                   wholeCount: wholeCount,
                   totalRetailPrice: totalRetailPrice,
@@ -145,30 +146,6 @@ class _ProductViewState extends State<ProductView> {
                       double.parse(widget.product.maxWholeQuantity!).toInt(),
                   itemImage: widget.product.image!,
                 ),
-                // SizedBox(
-                //   height: 20.h,
-                // ),
-                // const ProductAmountRow(
-                //   retailPrice: '14.25',
-                //   wholeSalePrice: '13.90',
-                //   title: 'برتقال',
-                // ),
-                // SizedBox(
-                //   height: 20.h,
-                // ),
-                // const ProductAmountRow(
-                //   retailPrice: '14.25',
-                //   wholeSalePrice: '13.90',
-                //   title: 'جزر',
-                // ),
-                // SizedBox(
-                //   height: 20.h,
-                // ),
-                // const ProductAmountRow(
-                //   retailPrice: '14.25',
-                //   wholeSalePrice: '13.90',
-                //   title: 'كوسة',
-                // ),
               ],
             ),
             const GeneralDivider(),

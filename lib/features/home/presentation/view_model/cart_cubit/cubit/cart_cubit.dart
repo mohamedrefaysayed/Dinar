@@ -5,7 +5,6 @@ import 'package:dinar_store/core/errors/server_failure.dart';
 import 'package:dinar_store/features/home/data/models/cart_items_model.dart';
 import 'package:dinar_store/features/home/data/models/sub_category_products_model.dart';
 import 'package:dinar_store/features/home/data/services/cart_services.dart';
-
 part 'cart_state.dart';
 
 class CartCubit extends Cubit<CartState> {
@@ -22,7 +21,10 @@ class CartCubit extends Cubit<CartState> {
 
   static double finalPrice = 0;
 
-  getAllItems() async {
+  static bool retailIsDone = true;
+  static bool wholeIsDone = true;
+
+  Future<void> getAllItems() async {
     cartItemsModel == null ? emit(GetCartLoading()) : null;
     Either<ServerFailure, CartItemsModel> result =
         await _cartServices.getAllItems(
@@ -38,14 +40,14 @@ class CartCubit extends Cubit<CartState> {
       },
       //success
       (cartItems) async {
-        countTotal(items: cartItems.cart!);
+        await countTotal(items: cartItems.cart!);
         cartItemsModel = cartItems;
         emit(GetCartSuccess(cartItemsModel: cartItems));
       },
     );
   }
 
-  storeItem({
+  Future<void> storeItem({
     required int productId,
     required int quantity,
     required int unitId,
@@ -75,17 +77,24 @@ class CartCubit extends Cubit<CartState> {
       },
       //success
       (refId) async {
-        if (isLast) {
+        if (isLast && retailIsDone && wholeIsDone) {
           emit(AddToCartSuccess());
         }
         if (isRequired == '0') {
           for (int i = 0; i < requiredProducts.length; i++) {
-            storeItem(
+            double productCount = ((quantity /
+                        (double.parse(requiredProducts[i].pivot!.quantity!)))
+                    .floor() *
+                double.parse(requiredProducts[i].pivot!.requiredQuantiy!));
+
+            await storeItem(
               productId: requiredProducts[i].id!,
-              quantity:
-                  double.parse(requiredProducts[i].pivot!.quantity!).toInt(),
-              unitId: int.parse(requiredProducts[i].pivot!.unitId!),
-              price: double.parse(requiredProducts[i].retailPrice!),
+              quantity: productCount.toInt(),
+              unitId: int.parse(requiredProducts[i].pivot!.requiredUnitId!),
+              price: requiredProducts[i].pivot!.requiredUnitId! ==
+                      requiredProducts[i].retailUnit!.id.toString()
+                  ? double.parse(requiredProducts[i].retailPrice!)
+                  : double.parse(requiredProducts[i].wholeSalePrice!),
               isRequired: '1',
               isLast: requiredProducts.length - 1 == i,
               requiredProducts: [],
@@ -172,5 +181,21 @@ class CartCubit extends Cubit<CartState> {
               double.parse(element.quantity!));
     }
     finalPrice = totalPrice - totalDiscount;
+  }
+
+  Future<void> mergeSameProducts({
+    required List<CartItem> items,
+  }) async {
+    Map<CartItem, int> uniqeItems = {};
+
+    for (var element in items) {
+      uniqeItems[element] = uniqeItems.containsKey(element)
+          ? uniqeItems[element]! + double.parse(element.quantity!).toInt()
+          : double.parse(element.quantity!).toInt();
+    }
+    uniqeItems.forEach((key, value) {
+      key.quantity = value.toString();
+    });
+    cartItemsModel = CartItemsModel(cart: uniqeItems.keys.toList());
   }
 }

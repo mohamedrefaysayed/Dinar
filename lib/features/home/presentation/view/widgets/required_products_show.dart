@@ -70,7 +70,7 @@ class _RequiredProductsShowState extends State<RequiredProductsShow> {
                     height: 20.h,
                   ),
                   Text(
-                    "المفرد",
+                    "المفرد ${widget.retailCount.value}",
                     style: TextStyles.textStyle14,
                   ),
                   Expanded(
@@ -82,6 +82,9 @@ class _RequiredProductsShowState extends State<RequiredProductsShow> {
                           product: retailRequiredProducts[index],
                           retailUnitName: widget.product.retailUnit!.unitName!,
                           wholeUnitName: widget.product.wholeUnit!.unitName!,
+                          retailCount: widget.retailCount,
+                          wholeCount: widget.wholeCount,
+                          isRetail: true,
                         );
                       },
                     ),
@@ -97,7 +100,7 @@ class _RequiredProductsShowState extends State<RequiredProductsShow> {
                     height: 20.h,
                   ),
                   Text(
-                    "الجملة",
+                    "الجملة ${widget.wholeCount.value}",
                     style: TextStyles.textStyle14,
                   ),
                   Expanded(
@@ -109,6 +112,9 @@ class _RequiredProductsShowState extends State<RequiredProductsShow> {
                           product: wholeRequiredProducts[index],
                           retailUnitName: widget.product.retailUnit!.unitName!,
                           wholeUnitName: widget.product.wholeUnit!.unitName!,
+                          retailCount: widget.retailCount,
+                          wholeCount: widget.wholeCount,
+                          isRetail: false,
                         );
                       },
                     ),
@@ -166,6 +172,8 @@ class _RequiredProductsShowState extends State<RequiredProductsShow> {
                       width: 100.w,
                       onPressed: () async {
                         if (widget.retailCount.value > 0) {
+                          CartCubit.retailIsDone = false;
+
                           await context.read<CartCubit>().storeItem(
                                 productId: widget.product.id!,
                                 quantity: widget.retailCount.value,
@@ -175,9 +183,13 @@ class _RequiredProductsShowState extends State<RequiredProductsShow> {
                                 isLast: false,
                                 requiredProducts: retailRequiredProducts,
                               );
+
+                          CartCubit.retailIsDone = true;
                         }
 
                         if (widget.wholeCount.value > 0) {
+                          CartCubit.wholeIsDone = false;
+
                           await context.read<CartCubit>().storeItem(
                                 productId: widget.product.id!,
                                 quantity: widget.wholeCount.value,
@@ -187,6 +199,8 @@ class _RequiredProductsShowState extends State<RequiredProductsShow> {
                                 isLast: false,
                                 requiredProducts: wholeRequiredProducts,
                               );
+
+                          CartCubit.wholeIsDone = true;
                         }
                       },
                       title: 'موافق',

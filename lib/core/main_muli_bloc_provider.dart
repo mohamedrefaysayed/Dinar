@@ -100,14 +100,6 @@ class MainMultiBlocProvider extends StatelessWidget {
           )),
         ),
         BlocProvider(
-          create: (context) => LogOutCubit(
-              // logInServices: LogInServices(
-              //   dioHelper: DioHelper(),
-              //   secureStorage: const FlutterSecureStorage(),
-              // ),
-              ),
-        ),
-        BlocProvider(
           create: (context) => ProfileCubit(
             profileServices: ProfileServices(
               dioHelper: DioHelper(),
@@ -126,6 +118,12 @@ class MainMultiBlocProvider extends StatelessWidget {
         BlocProvider(
           create: (context) => SearchCubit(
               searchServices: SearchServices(dioHelper: DioHelper())),
+        ),
+        BlocProvider(
+          create: (context) => LogOutCubit(
+              logInServices: LogInServices(
+                  dioHelper: DioHelper(),
+                  secureStorage: const FlutterSecureStorage())),
         ),
       ],
       child: child,

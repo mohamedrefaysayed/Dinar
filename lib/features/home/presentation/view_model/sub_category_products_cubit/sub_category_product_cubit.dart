@@ -41,6 +41,7 @@ class SubCategoryProductCubit extends Cubit<SubCategoryProductState> {
       },
       //success
       (subCategoryProducts) async {
+        subCategoryProductsModel = subCategoryProducts;
         emit(SubCategoryProductSuccess(
             subCategoryProductsModel: subCategoryProducts));
       },

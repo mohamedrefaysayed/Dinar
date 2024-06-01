@@ -109,6 +109,25 @@ class LogInServices implements LogInRepo {
     }
   }
 
+    @override
+  Future<Either<ServerFailure, void>> deleteAccount() async {
+    try {
+       await _dioHelper.getRequest(
+        endPoint:'delete_agentt',
+        token: AppCubit.token,
+      );
+      return right(null);
+    } on DioException catch (error) {
+      return left(
+        ServerFailure.fromDioException(dioException: error),
+      );
+    } catch (error) {
+      return left(
+        ServerFailure(errMessage: error.toString()),
+      );
+    }
+  }
+
   @override
   Future<void> storeTokenInSecureStorage({required String token}) async {
     AppCubit.token = token;

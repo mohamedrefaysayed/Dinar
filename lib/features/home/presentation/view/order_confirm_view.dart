@@ -221,8 +221,8 @@ class _OrderConfirmViewState extends State<OrderConfirmView> {
                             value: "عند التوصيل",
                             groupValue: OrderCubit.payment,
                             onChanged: (newValue) {
-                              OrderCubit.payment = newValue!;
-                              context.read<OrderCubit>().emit(OrderInitial());
+                              // OrderCubit.payment = newValue!;
+                              // context.read<OrderCubit>().emit(OrderInitial());
                             },
                             title: Row(
                               children: [
@@ -280,6 +280,7 @@ class _OrderConfirmViewState extends State<OrderConfirmView> {
                           }
                           return AppDefaultButton(
                             onPressed: () async {
+                              OrderCubit.pickedTime = OrderCubit.initialTime;
                               if (OrderCubit.markerPosition != null) {
                                 if (OrderCubit.pickedTime != null &&
                                     context
@@ -287,9 +288,9 @@ class _OrderConfirmViewState extends State<OrderConfirmView> {
                                         .isTimeGreaterBy24Hour(
                                             OrderCubit.pickedTime!)) {
                                   await context.read<OrderCubit>().storeOrder(
-                                        status: 0,
+                                        status: 1,
                                         discount: CartCubit.totalDiscount,
-                                        tax: 14,
+                                        tax: 0,
                                         price: CartCubit.totalPrice,
                                         addressId: 1,
                                         paymentMethod: 'عند الاستلام',

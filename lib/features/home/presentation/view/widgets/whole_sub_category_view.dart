@@ -39,8 +39,10 @@ class _WholeSubCategoryViewState extends State<WholeSubCategoryView>
 
   @override
   void initState() {
+    super.initState();
+
     for (int index = 0; index < widget.subCategories.length; index++) {
-      if (widget.subCategories[index] == widget.subCategory) {
+      if (widget.subCategories[index].id == widget.subCategory.id) {
         initialIndex = index;
       }
     }
@@ -64,7 +66,6 @@ class _WholeSubCategoryViewState extends State<WholeSubCategoryView>
         }
       }
     });
-    super.initState();
   }
 
   @override
@@ -343,6 +344,7 @@ class _WholeSubCategoryViewState extends State<WholeSubCategoryView>
                                     widget.subCategories.length,
                                     (index) => WholeSubCategoryListView(
                                       scrollController: scrollController,
+                                      subCategory: widget.subCategories[index],
                                     ),
                                   )),
                             ),
