@@ -4,6 +4,7 @@ import 'dart:async';
 
 import 'package:awesome_bottom_bar/awesome_bottom_bar.dart';
 import 'package:dinar_store/core/helpers/internet_connection/InternetConnection.dart';
+import 'package:dinar_store/core/helpers/notifications.dart';
 import 'package:dinar_store/core/utils/app_colors.dart';
 import 'package:dinar_store/core/utils/text_styles.dart';
 import 'package:dinar_store/features/home/presentation/view/cart_view.dart';
@@ -12,8 +13,10 @@ import 'package:dinar_store/features/home/presentation/view/home_view.dart';
 import 'package:dinar_store/features/home/presentation/view/orders_view.dart';
 import 'package:dinar_store/features/home/presentation/view/profile_view.dart';
 import 'package:dinar_store/features/home/presentation/view_model/bottom_nav_cubit.dart/cubit/bottton_nav_bar_cubit.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class BottomNavBarView extends StatefulWidget {
@@ -31,6 +34,18 @@ class _BottomNavBarViewState extends State<BottomNavBarView>
 
   @override
   void initState() {
+    FirebaseMessaging.instance.requestPermission();
+
+    FirebaseMessaging.onMessage.listen(
+      (RemoteMessage message) async {
+        Notifications.showNotification(
+          id: DateTime.now().millisecondsSinceEpoch % 0x7FFFFFFF,
+          title: message.notification!.title!,
+          body: message.notification!.body!,
+          localNotifications: FlutterLocalNotificationsPlugin(),
+        );
+      },
+    );
     WidgetsBinding.instance.addObserver(this);
     internetTimer = Timer.periodic(const Duration(seconds: 2), (timer) {
       context.checkInternet();

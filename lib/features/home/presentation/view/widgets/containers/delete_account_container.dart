@@ -41,46 +41,47 @@ class DeleteAccountContainer extends StatelessWidget {
           title: 'حذف الحساب',
           iconColor: AppColors.kRed,
           onTap: () {
-            showAlertDialog(context,
-                child: AlertDialog(
-                  title: Center(
-                    child: Text(
-                      'هل تريد حذف الحساب؟',
-                      style: TextStyles.textStyle18,
-                    ),
+            showAlertDialog(
+              context,
+              child: AlertDialog(
+                title: Center(
+                  child: Text(
+                    'هل تريد حذف الحساب؟',
+                    style: TextStyles.textStyle18,
                   ),
-                  actions: [
-                    Row(
-                      children: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: Text(
-                            'إلغاء',
-                            style: TextStyles.textStyle14.copyWith(
-                              color: AppColors.kASDCPrimaryColor,
-                            ),
+                ),
+                actions: [
+                  Row(
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text(
+                          'إلغاء',
+                          style: TextStyles.textStyle14.copyWith(
+                            color: AppColors.kASDCPrimaryColor,
                           ),
                         ),
-                        const Spacer(),
-                        TextButton(
-                          onPressed: () {
-                            // BlocProvider.of<LogOutCubit>(context)
-                            //     .deleteAccount();
-                            Navigator.pop(context);
-                          },
-                          child: Text(
-                            'حذف',
-                            style: TextStyles.textStyle14.copyWith(
-                              color: AppColors.kASDCPrimaryColor,
-                            ),
+                      ),
+                      const Spacer(),
+                      TextButton(
+                        onPressed: () {
+                          BlocProvider.of<LogOutCubit>(context).deleteAccount();
+                          Navigator.pop(context);
+                        },
+                        child: Text(
+                          'حذف',
+                          style: TextStyles.textStyle14.copyWith(
+                            color: AppColors.kASDCPrimaryColor,
                           ),
                         ),
-                      ],
-                    )
-                  ],
-                ));
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            );
           },
           icon: Icons.delete_forever,
         );

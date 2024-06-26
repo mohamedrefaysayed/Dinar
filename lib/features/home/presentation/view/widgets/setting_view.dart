@@ -10,18 +10,19 @@ class SettingView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: RefreshIndicator(
-      onRefresh: () async {
-        await context.read<ProfileCubit>().getProfile();
-      },
-      child: ListView(
-        children: [
-          SizedBox(
-            height: 30.h,
-          ),
-          const ProfileContainer(),
-        ],
+      body: RefreshIndicator(
+        onRefresh: () async {
+          await context.read<ProfileCubit>().getProfile();
+        },
+        child: ListView(
+          children: [
+            SizedBox(
+              height: 30.h,
+            ),
+            const ProfileContainer(),
+          ],
+        ),
       ),
-    ));
+    );
   }
 }

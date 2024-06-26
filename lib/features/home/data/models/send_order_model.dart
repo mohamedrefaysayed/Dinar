@@ -2,28 +2,32 @@ class SendOrderModel {
   int? status;
   int? discount;
   int? tax;
-  int? addressId;
+  String? address;
   String? location;
-  String? deliveryDate;
+  String? deliveryTime;
+  String? paymentMethod;
+
   List<SendOrderDetails>? orderDetails;
 
   SendOrderModel({
     this.status,
     this.discount,
     this.tax,
-    this.addressId,
+    this.address,
     this.orderDetails,
     this.location,
-    this.deliveryDate,
+    this.deliveryTime,
+    this.paymentMethod,
   });
 
   SendOrderModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     discount = json['discount'];
     tax = json['tax'];
-    addressId = json['address_id'];
+    address = json['address'];
     location = json['location'];
-    deliveryDate = json['delivery_date'];
+    deliveryTime = json['delivery_time'];
+    paymentMethod = json['payment_method'];
     if (json['order_details'] != null) {
       orderDetails = <SendOrderDetails>[];
       json['order_details'].forEach((v) {
@@ -37,9 +41,10 @@ class SendOrderModel {
     data['status'] = status;
     data['discount'] = discount;
     data['tax'] = tax;
-    data['address_id'] = addressId;
+    data['address'] = address;
     data['location'] = location;
-    data['delivery_date'] = deliveryDate;
+    data['delivery_time'] = deliveryTime;
+    data['payment_method'] = paymentMethod;
     if (orderDetails != null) {
       data['order_details'] = orderDetails!.map((v) => v.toJson()).toList();
     }

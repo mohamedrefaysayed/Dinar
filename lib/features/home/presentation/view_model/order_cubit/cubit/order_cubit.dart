@@ -23,7 +23,7 @@ class OrderCubit extends Cubit<OrderState> {
   static DateTime? initialTime;
   static DateTime? pickedTime;
   static LatLng? markerPosition;
-  static String currentAddress = "أختر عنوان";
+  static String currentAddress = "لا يوجد عنوان";
   static Marker? marker;
 
   static OrdersModel? ordersModel;
@@ -58,7 +58,6 @@ class OrderCubit extends Cubit<OrderState> {
     required double discount,
     required double tax,
     required double price,
-    required int addressId,
     required String paymentMethod,
   }) async {
     emit(AddToOrdersLoading());
@@ -79,24 +78,22 @@ class OrderCubit extends Cubit<OrderState> {
         ).toJson(),
       );
     }
-    sendOrderModel = SendOrderModel.fromJson({
-      'discount': discount.toInt(),
-      'tax': tax.toInt(),
-      'address_id': addressId,
-      'order_details': orderDetails,
-      'payment_method': "الدفع عند الاستلام",
-      'location':
-          "https://www.google.com/maps?q=${markerPosition!.latitude},${markerPosition!.longitude}",
-      'delivery_time': date,
-      'address': "عنوان",
-    });
+
+    sendOrderModel = SendOrderModel.fromJson(
+      {
+        'discount': discount.toInt(),
+        'tax': tax.toInt(),
+        'order_details': orderDetails,
+        'payment_method': "عند الاستلام",
+        'location':
+            "https://www.google.com/maps?q=${markerPosition!.latitude},${markerPosition!.longitude}",
+        'delivery_time': date,
+        'address': currentAddress,
+      },
+    );
 
     Either<ServerFailure, void> result = await _ordersServices.storeOrder(
       token: AppCubit.token!,
-      status: status,
-      discount: discount,
-      tax: tax,
-      addressId: addressId,
       sendOrderModel: sendOrderModel,
     );
 

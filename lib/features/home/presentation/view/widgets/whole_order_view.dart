@@ -1,16 +1,14 @@
 import 'dart:async';
-
 import 'package:dinar_store/core/utils/app_colors.dart';
 import 'package:dinar_store/core/utils/text_styles.dart';
-import 'package:dinar_store/core/utils/time_date_handler.dart';
 import 'package:dinar_store/features/home/data/models/orders_model.dart';
-import 'package:dinar_store/features/home/presentation/view/widgets/rows/order_product_row.dart';
+import 'package:dinar_store/features/home/presentation/view/widgets/rows/order_row.dart';
 import 'package:dinar_store/features/home/presentation/view_model/order_cubit/cubit/order_cubit.dart';
+import 'package:easy_stepper/easy_stepper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:stepper_a/stepper_a.dart';
 
 class WholeOrderView extends StatefulWidget {
   const WholeOrderView({
@@ -24,17 +22,17 @@ class WholeOrderView extends StatefulWidget {
 }
 
 class _WholeOrderViewState extends State<WholeOrderView> {
-  StepperAController stepperAController = StepperAController();
+  int activeStep = 1;
   ValueNotifier<bool> idDetailed = ValueNotifier<bool>(false);
   Timer? timer;
   @override
   void initState() {
-    Future.delayed(const Duration(seconds: 1), () {
-      for (int i = 1; i < int.parse(widget.order.value.status!); i++) {
-        stepperAController.next(onTap: (int currentIndex) {});
-      }
-    });
     super.initState();
+    for (int i = 1; i < int.parse(widget.order.value.status!); ++i) {
+      Future.delayed(Duration(seconds: i), () {
+        activeStep++;
+      });
+    }
   }
 
   @override
@@ -58,19 +56,20 @@ class _WholeOrderViewState extends State<WholeOrderView> {
                       child: Container(
                         height: 250.h,
                         decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15.w),
-                            border: Border.all(
-                              color: AppColors.kASDCPrimaryColor,
-                              width: 2.w,
-                            ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: AppColors.kGrey.withOpacity(0.5),
-                                spreadRadius: 5,
-                                blurRadius: 7,
-                                offset: const Offset(0, 3),
-                              )
-                            ]),
+                          borderRadius: BorderRadius.circular(15.w),
+                          border: Border.all(
+                            color: AppColors.kASDCPrimaryColor,
+                            width: 2.w,
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppColors.kGrey.withOpacity(0.5),
+                              spreadRadius: 5,
+                              blurRadius: 7,
+                              offset: const Offset(0, 3),
+                            )
+                          ],
+                        ),
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(15.w),
                           child: GoogleMap(
@@ -182,46 +181,9 @@ class _WholeOrderViewState extends State<WholeOrderView> {
                             ],
                           ),
                           value
-                              ? Container(
-                                  padding: EdgeInsets.all(10.w),
-                                  decoration: BoxDecoration(
-                                    color: AppColors.kASDCPrimaryColor
-                                        .withOpacity(0.1),
-                                    borderRadius: BorderRadius.circular(15.w),
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      Text(
-                                        MyTimeDate.getLastMessageTime(
-                                            context: context,
-                                            time:
-                                                DateTime.parse(order.orderDate!)
-                                                    .millisecondsSinceEpoch
-                                                    .toString()),
-                                        style: TextStyles.textStyle18.copyWith(
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      Text(
-                                        order.address != null
-                                            ? "${order.address}"
-                                            : "لا يوجد عنوان",
-                                        style: TextStyles.textStyle14
-                                            .copyWith(color: AppColors.kGrey),
-                                      ),
-                                      ListView.builder(
-                                        shrinkWrap: true,
-                                        physics:
-                                            const NeverScrollableScrollPhysics(),
-                                        itemCount: order.orderDetails!.length,
-                                        itemBuilder: (context, index) =>
-                                            OrderProductRow(
-                                          order: order,
-                                          index: index,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+                              ? OrderRow(
+                                  order: widget.order.value,
+                                  isInDetails: true,
                                 )
                               : const SizedBox(),
                         ],
@@ -233,78 +195,87 @@ class _WholeOrderViewState extends State<WholeOrderView> {
                   textDirection: TextDirection.rtl,
                   child: SizedBox(
                     height: 400.h,
-                    child: StepperA(
-                      stepperSize: Size(150.w, 400.h),
-                      borderShape: BorderShape.rRect,
-                      borderType: BorderType.straight,
-                      stepperAxis: Axis.vertical,
-                      lineType: LineType.dotted,
-                      stepperBackgroundColor: Colors.transparent,
-                      stepperAController: stepperAController,
-                      stepHeight: 30,
-                      stepWidth: 30,
-                      stepBorder: true,
-                      pageSwipe: false,
-                      formValidation: true,
-                      customSteps: [
-                        CustomSteps(
-                          stepsIcon: Icons.done,
-                          title:
-                              context.read<OrderCubit>().getStatusMessage("1"),
+                    child: EasyStepper(
+                      activeStep: activeStep,
+                      stepShape: StepShape.rRectangle,
+                      stepBorderRadius: 15,
+                      borderThickness: 2,
+                      padding: EdgeInsets.all(10.w),
+                      stepRadius: 28,
+                      finishedStepBorderColor: Colors.deepOrange,
+                      finishedStepTextColor: Colors.deepOrange,
+                      finishedStepBackgroundColor: Colors.deepOrange,
+                      activeStepIconColor: Colors.deepOrange,
+                      showLoadingAnimation: false,
+                      steps: [
+                        EasyStep(
+                          customStep: ClipRRect(
+                            borderRadius: BorderRadius.circular(15),
+                            child: Opacity(
+                              opacity: activeStep >= 0 ? 1 : 0.3,
+                              child: Image.asset('assets/1.png'),
+                            ),
+                          ),
+                          customTitle: const Text(
+                            'Dash 1',
+                            textAlign: TextAlign.center,
+                          ),
                         ),
-                        CustomSteps(
-                          stepsIcon: Icons.menu,
-                          title:
-                              context.read<OrderCubit>().getStatusMessage("2"),
+                        EasyStep(
+                          customStep: ClipRRect(
+                            borderRadius: BorderRadius.circular(15),
+                            child: Opacity(
+                              opacity: activeStep >= 1 ? 1 : 0.3,
+                              child: Image.asset('assets/2.png'),
+                            ),
+                          ),
+                          customTitle: const Text(
+                            'Dash 2',
+                            textAlign: TextAlign.center,
+                          ),
                         ),
-                        CustomSteps(
-                          stepsIcon: Icons.motorcycle,
-                          title:
-                              context.read<OrderCubit>().getStatusMessage("3"),
+                        EasyStep(
+                          customStep: ClipRRect(
+                            borderRadius: BorderRadius.circular(15),
+                            child: Opacity(
+                              opacity: activeStep >= 2 ? 1 : 0.3,
+                              child: Image.asset('assets/3.png'),
+                            ),
+                          ),
+                          customTitle: const Text(
+                            'Dash 3',
+                            textAlign: TextAlign.center,
+                          ),
                         ),
-                        CustomSteps(
-                          stepsIcon: Icons.done_all_rounded,
-                          title:
-                              context.read<OrderCubit>().getStatusMessage("4"),
+                        EasyStep(
+                          customStep: ClipRRect(
+                            borderRadius: BorderRadius.circular(15),
+                            child: Opacity(
+                              opacity: activeStep >= 3 ? 1 : 0.3,
+                              child: Image.asset('assets/4.png'),
+                            ),
+                          ),
+                          customTitle: const Text(
+                            'Dash 4',
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        EasyStep(
+                          customStep: ClipRRect(
+                            borderRadius: BorderRadius.circular(15),
+                            child: Opacity(
+                              opacity: activeStep >= 4 ? 1 : 0.3,
+                              child: Image.asset('assets/5.png'),
+                            ),
+                          ),
+                          customTitle: const Text(
+                            'Dash 5',
+                            textAlign: TextAlign.center,
+                          ),
                         ),
                       ],
-                      step: StepA(
-                          currentStepColor: AppColors.kASDCPrimaryColor,
-                          completeStepColor:
-                              AppColors.kASDCPrimaryColor.withOpacity(0.5),
-                          inactiveStepColor: AppColors.kGrey,
-                          // loadingWidget: CircularProgressIndicator(color: Colors.green,),
-                          margin: const EdgeInsets.all(5)),
-                      stepperBodyWidget: [
-                        Text(
-                          context.read<OrderCubit>().getStatusMessage("1"),
-                          style: TextStyles.textStyle16.copyWith(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16.w,
-                          ),
-                        ),
-                        Text(
-                          context.read<OrderCubit>().getStatusMessage("2"),
-                          style: TextStyles.textStyle16.copyWith(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16.w,
-                          ),
-                        ),
-                        Text(
-                          context.read<OrderCubit>().getStatusMessage("3"),
-                          style: TextStyles.textStyle16.copyWith(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16.w,
-                          ),
-                        ),
-                        Text(
-                          context.read<OrderCubit>().getStatusMessage("4"),
-                          style: TextStyles.textStyle16.copyWith(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16.w,
-                          ),
-                        ),
-                      ],
+                      onStepReached: (index) =>
+                          setState(() => activeStep = index),
                     ),
                   ),
                 ),

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "438966612679",
+    "project_id": "dinar-store",
+    "storage_bucket": "dinar-store.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:438966612679:android:604fec8b9edede5fa6c4e2",
+        "android_client_info": {
+          "package_name": "com.example.dinar_store"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDBhuu4SDYhnWR9SkOLqfNRqbfxbHkJinE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

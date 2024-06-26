@@ -14,7 +14,10 @@ final class SendCodeSuccess extends LogInState {
   SendCodeSuccess({required this.message});
 }
 
-final class VerficationSuccess extends LogInState {}
+final class VerficationSuccess extends LogInState {
+  final bool firstTime;
+  VerficationSuccess({required this.firstTime });
+}
 
 final class LogInFailure extends LogInState {
   final String errMessage;

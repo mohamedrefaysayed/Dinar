@@ -28,3 +28,5 @@ final List<Color> comapniesBgColor = [
   const Color(0xffFEF1DB),
   const Color(0xffF5FCE9),
 ];
+
+String appDomain = "https://just.sd/dinar/public/index.php/api/";

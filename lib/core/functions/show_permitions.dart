@@ -1,11 +1,11 @@
 import 'package:permission_handler/permission_handler.dart';
 
 showPermissions() async {
-  /////Notifications
-  // bool notificationsIsGranted = await Permission.notification.status.isGranted;
-  // if (!notificationsIsGranted) {
-  //   notificationsIsGranted = await Permission.notification.request().isGranted;
-  // }
+  ///Notifications
+  bool notificationsIsGranted = await Permission.notification.status.isGranted;
+  if (!notificationsIsGranted) {
+    notificationsIsGranted = await Permission.notification.request().isGranted;
+  }
 
   /////locations
 

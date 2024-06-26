@@ -8,6 +8,7 @@ import 'package:dinar_store/core/widgets/app_loading_button.dart';
 import 'package:dinar_store/core/widgets/message_snack_bar.dart';
 import 'package:dinar_store/features/auth/presentation/view/login_data.dart';
 import 'package:dinar_store/features/auth/presentation/view_model/log_in_cubit/log_in_cubit.dart';
+import 'package:dinar_store/features/home/presentation/view/bottom_nav_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -22,6 +23,17 @@ class CodeBuilder extends StatelessWidget {
     return Column(
       children: [
         Text(
+          LogInCubit.phoneNumber!.completeNumber,
+          style: TextStyles.textStyle16.copyWith(
+            fontWeight: FontWeight.w900,
+            fontSize: 16.w,
+            overflow: TextOverflow.visible,
+          ),
+        ),
+        SizedBox(
+          height: 10.h,
+        ),
+        Text(
           "ستصلك رسالة الى الواتساب فيها رمز التأكيد",
           style: TextStyles.textStyle16.copyWith(
             fontWeight: FontWeight.w900,
@@ -32,13 +44,14 @@ class CodeBuilder extends StatelessWidget {
         SizedBox(
           height: 20.h,
         ),
-        Text(
-          LogInCubit.fakeCode ?? "no",
-          style: TextStyles.textStyle16.copyWith(
-            fontWeight: FontWeight.w900,
-            fontSize: 16.w,
+        if (LogInCubit.fakeCode != null)
+          Text(
+            LogInCubit.fakeCode!,
+            style: TextStyles.textStyle16.copyWith(
+              fontWeight: FontWeight.w900,
+              fontSize: 16.w,
+            ),
           ),
-        ),
         SizedBox(
           height: 50.h,
         ),
@@ -65,8 +78,18 @@ class CodeBuilder extends StatelessWidget {
         BlocConsumer<LogInCubit, LogInState>(
           listener: (context, state) {
             if (state is VerficationSuccess) {
-              Navigator.push(
-                  context, LeftSlideTransition(page: const LoginData()));
+              state.firstTime
+                  ? Navigator.push(
+                      context,
+                      LeftSlideTransition(
+                        page: const LoginData(),
+                      ),
+                    )
+                  : Navigator.pushNamedAndRemoveUntil(
+                      context,
+                      BottomNavBarView.id,
+                      (route) => false,
+                    );
             }
           },
           builder: (context, state) {

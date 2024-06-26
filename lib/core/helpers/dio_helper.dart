@@ -1,3 +1,4 @@
+import 'package:dinar_store/core/utils/constants.dart';
 import 'package:dio/dio.dart';
 
 class DioHelper {
@@ -5,7 +6,7 @@ class DioHelper {
     if (dio == null) {
       _dio = Dio(
         BaseOptions(
-          baseUrl: 'https://just.sd/dinar/public/index.php/api/',
+          baseUrl: appDomain,
         ),
       );
     } else {

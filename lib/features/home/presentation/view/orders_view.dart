@@ -144,6 +144,7 @@ class _OrdersViewState extends State<OrdersView>
                             return OrderRow(
                               order:
                                   OrderCubit.ordersModel!.currentOrders![index],
+                              isInDetails: false,
                             );
                           },
                         ),

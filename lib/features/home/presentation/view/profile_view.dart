@@ -34,7 +34,11 @@ class _ProfileViewState extends State<ProfileView>
               title: 'البيانات الشخصية',
               onTap: () {
                 Navigator.push(
-                    context, RightSlideTransition(page: const SettingView()));
+                  context,
+                  RightSlideTransition(
+                    page: const SettingView(),
+                  ),
+                );
               },
               icon: Icons.person_2_outlined,
               wDevider: true,
@@ -43,7 +47,11 @@ class _ProfileViewState extends State<ProfileView>
               title: 'معلومات عن التطبيق',
               onTap: () {
                 Navigator.push(
-                    context, RightSlideTransition(page: const AboutApp()));
+                  context,
+                  RightSlideTransition(
+                    page: const AboutApp(),
+                  ),
+                );
               },
               icon: Icons.data_object_outlined,
               wDevider: true,

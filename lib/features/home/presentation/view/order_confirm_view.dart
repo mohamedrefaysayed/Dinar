@@ -292,7 +292,6 @@ class _OrderConfirmViewState extends State<OrderConfirmView> {
                                         discount: CartCubit.totalDiscount,
                                         tax: 0,
                                         price: CartCubit.totalPrice,
-                                        addressId: 1,
                                         paymentMethod: 'عند الاستلام',
                                       );
                                 } else {

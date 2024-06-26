@@ -43,10 +43,6 @@ class OrdersServices implements OrdersRepo {
   @override
   Future<Either<ServerFailure, void>> storeOrder({
     required String token,
-    required int status,
-    required double discount,
-    required double tax,
-    required int addressId,
     required SendOrderModel sendOrderModel,
   }) async {
     try {

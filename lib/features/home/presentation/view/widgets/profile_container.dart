@@ -21,7 +21,6 @@ class _ProfileContainerState extends State<ProfileContainer> {
   @override
   void initState() {
     context.read<ProfileCubit>().getProfile();
-
     super.initState();
   }
 
@@ -57,9 +56,20 @@ class _ProfileContainerState extends State<ProfileContainer> {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Text(
-                      "${state.profileModel.user!.first.countryCode! + state.profileModel.user!.first.phone!} : رقم الهاتف",
-                      style: TextStyles.textStyle18,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(
+                          state.profileModel.user!.first.countryCode! +
+                              state.profileModel.user!.first.phone!,
+                          style: TextStyles.textStyle18,
+                        ),
+                        Text(
+                          "رقم الهاتف : ",
+                          style: TextStyles.textStyle18,
+                          textDirection: TextDirection.rtl,
+                        ),
+                      ],
                     ),
                     SizedBox(
                       height: 10.h,
@@ -67,8 +77,10 @@ class _ProfileContainerState extends State<ProfileContainer> {
                     const GeneralDivider(),
                     Text(
                       "بيانات المتجر",
-                      style: TextStyles.textStyle18
-                          .copyWith(fontWeight: FontWeight.bold),
+                      style: TextStyles.textStyle18.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textDirection: TextDirection.rtl,
                     ),
                     SizedBox(
                       height: 20.h,
@@ -78,15 +90,17 @@ class _ProfileContainerState extends State<ProfileContainer> {
                       style: TextStyles.textStyle16.copyWith(
                         fontSize: 16.w,
                       ),
+                      textDirection: TextDirection.rtl,
                     ),
                     SizedBox(
                       height: 10.h,
                     ),
                     Text(
-                      "${state.profileModel.user!.first.store!.storeName!} : اسم المتجر",
+                      "اسم المتجر : ${state.profileModel.user!.first.store!.storeName!}",
                       style: TextStyles.textStyle16.copyWith(
                         fontSize: 16.w,
                       ),
+                      textDirection: TextDirection.rtl,
                     ),
                     SizedBox(
                       height: 10.h,
@@ -96,6 +110,7 @@ class _ProfileContainerState extends State<ProfileContainer> {
                       style: TextStyles.textStyle16.copyWith(
                         fontSize: 16.w,
                       ),
+                      textDirection: TextDirection.rtl,
                     ),
                     SizedBox(
                       height: 10.h,
@@ -105,15 +120,17 @@ class _ProfileContainerState extends State<ProfileContainer> {
                       style: TextStyles.textStyle16.copyWith(
                         fontSize: 16.w,
                       ),
+                      textDirection: TextDirection.rtl,
                     ),
                     SizedBox(
                       height: 10.h,
                     ),
                     Text(
-                      "${state.profileModel.user!.first.store!.phone!} : رقم المتجر",
+                      "رقم المتجر : ${state.profileModel.user!.first.store!.phone!}",
                       style: TextStyles.textStyle16.copyWith(
                         fontSize: 16.w,
                       ),
+                      textDirection: TextDirection.rtl,
                     ),
                     SizedBox(
                       height: 20.h,

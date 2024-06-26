@@ -5,6 +5,7 @@ import 'package:dinar_store/core/helpers/dio_helper.dart';
 import 'package:dinar_store/core/utils/constants.dart';
 import 'package:dinar_store/features/auth/data/repos/log_in_repo.dart';
 import 'package:dio/dio.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:geolocator/geolocator.dart';
 
@@ -27,8 +28,6 @@ class LogInServices implements LogInRepo {
     required String phoneNumber,
   }) async {
     try {
-
-
       Map<String, dynamic> data = await _dioHelper.postRequest(
         body: {
           'country_code': countryCode,
@@ -54,13 +53,14 @@ class LogInServices implements LogInRepo {
     required String code,
   }) async {
     try {
-
+      fcmToken = await FirebaseMessaging.instance.getToken();
       Map<String, dynamic> data = await _dioHelper.postRequest(
         body: {
+          'fcm': fcmToken,
           'verification_code': code,
         },
         endPoint: 'verify',
-      );
+      ); 
       return right(data);
     } on DioException catch (error) {
       return left(
@@ -109,12 +109,13 @@ class LogInServices implements LogInRepo {
     }
   }
 
-    @override
+  @override
   Future<Either<ServerFailure, void>> deleteAccount() async {
     try {
-       await _dioHelper.getRequest(
-        endPoint:'delete_agentt',
+      await _dioHelper.postRequest(
+        endPoint: 'delete_account',
         token: AppCubit.token,
+        body: {},
       );
       return right(null);
     } on DioException catch (error) {

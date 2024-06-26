@@ -34,7 +34,6 @@ class OrdersModel {
 class DinarOrder {
   int? id;
   String? userId;
-  String? addressId;
   String? orderDate;
   String? status;
   String? tax;
@@ -44,32 +43,33 @@ class DinarOrder {
   String? deletedAt;
   String? createdAt;
   String? updatedAt;
-  List<OrderDetails>? orderDetails;
-  String? address;
+  String? deliveryTime;
+  String? paymentMethod;
   String? location;
+  String? address;
+  List<OrderDetails>? orderDetails;
 
-  DinarOrder({
-    this.id,
-    this.userId,
-    this.addressId,
-    this.orderDate,
-    this.status,
-    this.tax,
-    this.discount,
-    this.subTotal,
-    this.total,
-    this.deletedAt,
-    this.createdAt,
-    this.updatedAt,
-    this.orderDetails,
-    this.address,
-    this.location,
-  });
+  DinarOrder(
+      {this.id,
+      this.userId,
+      this.orderDate,
+      this.status,
+      this.tax,
+      this.discount,
+      this.subTotal,
+      this.total,
+      this.deletedAt,
+      this.createdAt,
+      this.updatedAt,
+      this.deliveryTime,
+      this.paymentMethod,
+      this.location,
+      this.address,
+      this.orderDetails});
 
   DinarOrder.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     userId = json['user_id'];
-    addressId = json['address_id'];
     orderDate = json['order_date'];
     status = json['status'];
     tax = json['tax'];
@@ -79,9 +79,10 @@ class DinarOrder {
     deletedAt = json['deleted_at'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
-    address = json['address'];
+    deliveryTime = json['delivery_time'];
+    paymentMethod = json['payment_method'];
     location = json['location'];
-
+    address = json['address'];
     if (json['order_details'] != null) {
       orderDetails = <OrderDetails>[];
       json['order_details'].forEach((v) {
@@ -94,7 +95,6 @@ class DinarOrder {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
     data['user_id'] = userId;
-    data['address_id'] = addressId;
     data['order_date'] = orderDate;
     data['status'] = status;
     data['tax'] = tax;
@@ -104,9 +104,10 @@ class DinarOrder {
     data['deleted_at'] = deletedAt;
     data['created_at'] = createdAt;
     data['updated_at'] = updatedAt;
-    data['address'] = address;
+    data['delivery_time'] = deliveryTime;
+    data['payment_method'] = paymentMethod;
     data['location'] = location;
-
+    data['address'] = address;
     if (orderDetails != null) {
       data['order_details'] = orderDetails!.map((v) => v.toJson()).toList();
     }
@@ -128,19 +129,20 @@ class OrderDetails {
   Products? products;
   Units? units;
 
-  OrderDetails(
-      {this.id,
-      this.orderId,
-      this.productId,
-      this.unitId,
-      this.qty,
-      this.price,
-      this.subTotal,
-      this.deletedAt,
-      this.createdAt,
-      this.updatedAt,
-      this.products,
-      this.units});
+  OrderDetails({
+    this.id,
+    this.orderId,
+    this.productId,
+    this.unitId,
+    this.qty,
+    this.price,
+    this.subTotal,
+    this.deletedAt,
+    this.createdAt,
+    this.updatedAt,
+    this.products,
+    this.units,
+  });
 
   OrderDetails.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -205,30 +207,31 @@ class Products {
   String? maxWholeQuantity;
   String? maxRetailQuantity;
 
-  Products(
-      {this.id,
-      this.productName,
-      this.description,
-      this.image,
-      this.wholeSalePrice,
-      this.retailPrice,
-      this.vipPrice,
-      this.categoryId,
-      this.companyId,
-      this.unitGroupId,
-      this.wholeUnitId,
-      this.retailUnitId,
-      this.vipUnitId,
-      this.discount,
-      this.status,
-      this.deletedAt,
-      this.createdAt,
-      this.updatedAt,
-      this.minWholeQuantity,
-      this.minRetailQuantity,
-      this.minVipQuantity,
-      this.maxWholeQuantity,
-      this.maxRetailQuantity});
+  Products({
+    this.id,
+    this.productName,
+    this.description,
+    this.image,
+    this.wholeSalePrice,
+    this.retailPrice,
+    this.vipPrice,
+    this.categoryId,
+    this.companyId,
+    this.unitGroupId,
+    this.wholeUnitId,
+    this.retailUnitId,
+    this.vipUnitId,
+    this.discount,
+    this.status,
+    this.deletedAt,
+    this.createdAt,
+    this.updatedAt,
+    this.minWholeQuantity,
+    this.minRetailQuantity,
+    this.minVipQuantity,
+    this.maxWholeQuantity,
+    this.maxRetailQuantity,
+  });
 
   Products.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -295,15 +298,16 @@ class Units {
   String? createdAt;
   String? updatedAt;
 
-  Units(
-      {this.id,
-      this.unitName,
-      this.eq,
-      this.unitGroupId,
-      this.status,
-      this.deletedAt,
-      this.createdAt,
-      this.updatedAt});
+  Units({
+    this.id,
+    this.unitName,
+    this.eq,
+    this.unitGroupId,
+    this.status,
+    this.deletedAt,
+    this.createdAt,
+    this.updatedAt,
+  });
 
   Units.fromJson(Map<String, dynamic> json) {
     id = json['id'];

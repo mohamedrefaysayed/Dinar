@@ -1,12 +1,25 @@
+import 'package:dinar_store/core/data/services/firebase_services.dart';
+import 'package:dinar_store/core/helpers/app_cache/cahch_helper.dart';
+import 'package:dinar_store/core/helpers/notifications.dart';
 import 'package:dinar_store/core/main_muli_bloc_provider.dart';
 import 'package:dinar_store/core/utils/app_colors.dart';
 import 'package:dinar_store/core/utils/app_routes.dart';
 import 'package:dinar_store/core/utils/constants.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  CahchHelper.init();
+  await FirebaseServices.init();
+
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+
+  Notifications.initilization(FlutterLocalNotificationsPlugin());
+
   runApp(
     // DevicePreview(
     //   enabled: !kReleaseMode,
@@ -50,6 +63,6 @@ class MyApp extends StatelessWidget {
           routes: AppRoutes.routes,
         ),
       ),
-    ));       
+    ));
   }
 }

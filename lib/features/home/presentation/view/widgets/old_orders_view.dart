@@ -31,7 +31,10 @@ class OldOrdersView extends StatelessWidget {
             shrinkWrap: true,
             itemCount: OrderCubit.ordersModel!.oldOrders!.length,
             itemBuilder: (context, index) {
-              return OrderRow(order: OrderCubit.ordersModel!.oldOrders![index]);
+              return OrderRow(
+                order: OrderCubit.ordersModel!.oldOrders![index],
+                isInDetails: false,
+              );
             },
           ),
         ),
