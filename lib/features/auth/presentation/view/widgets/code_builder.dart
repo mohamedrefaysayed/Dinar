@@ -44,7 +44,7 @@ class CodeBuilder extends StatelessWidget {
         SizedBox(
           height: 20.h,
         ),
-        if (LogInCubit.fakeCode != null)
+        if (LogInCubit.fakeCode != null && LogInCubit.fakeCode != "null")
           Text(
             LogInCubit.fakeCode!,
             style: TextStyles.textStyle16.copyWith(
