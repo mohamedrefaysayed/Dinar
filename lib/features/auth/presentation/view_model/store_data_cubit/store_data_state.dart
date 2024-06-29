@@ -13,3 +13,23 @@ final class StoreDataFailure extends StoreDataState {
 
   StoreDataFailure({required this.errMessage});
 }
+
+final class UpdateLocationLoading extends StoreDataState {}
+
+final class UpdateLocationSuccess extends StoreDataState {}
+
+final class UpdateLocationFailure extends StoreDataState {
+  final String errMessage;
+
+  UpdateLocationFailure({required this.errMessage});
+}
+
+final class UpdateDataLoading extends StoreDataState {}
+
+final class UpdateDataSuccess extends StoreDataState {}
+
+final class UpdateDataFailure extends StoreDataState {
+  final String errMessage;
+
+  UpdateDataFailure({required this.errMessage});
+}

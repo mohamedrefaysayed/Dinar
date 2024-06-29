@@ -20,3 +20,5 @@ final class ProfileFaliuer extends ProfileState {
   final String errMessage;
   ProfileFaliuer({required this.errMessage});
 }
+
+final class ProfileUpdate extends ProfileState {}

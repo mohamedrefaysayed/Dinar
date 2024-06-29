@@ -12,7 +12,7 @@ class SettingView extends StatelessWidget {
     return Scaffold(
       body: RefreshIndicator(
         onRefresh: () async {
-          await context.read<ProfileCubit>().getProfile();
+          await context.read<ProfileCubit>().getProfile(context: context);
         },
         child: ListView(
           children: [

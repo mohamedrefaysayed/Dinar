@@ -28,8 +28,8 @@ class _WholeOrderViewState extends State<WholeOrderView> {
   @override
   void initState() {
     super.initState();
-    for (int i = 1; i < int.parse(widget.order.value.status!); ++i) {
-      Future.delayed(Duration(seconds: i), () {
+    for (int i = 1; i < int.parse(widget.order.value.status!) - 1; ++i) {
+      setState(() {
         activeStep++;
       });
     }
@@ -47,7 +47,6 @@ class _WholeOrderViewState extends State<WholeOrderView> {
             valueListenable: widget.order,
             builder: (BuildContext context, DinarOrder order, Widget? child) =>
                 ListView(
-              shrinkWrap: true,
               children: [
                 Stack(
                   children: [
@@ -193,90 +192,100 @@ class _WholeOrderViewState extends State<WholeOrderView> {
                 ),
                 Directionality(
                   textDirection: TextDirection.rtl,
-                  child: SizedBox(
-                    height: 400.h,
-                    child: EasyStepper(
-                      activeStep: activeStep,
-                      stepShape: StepShape.rRectangle,
-                      stepBorderRadius: 15,
-                      borderThickness: 2,
-                      padding: EdgeInsets.all(10.w),
-                      stepRadius: 28,
-                      finishedStepBorderColor: Colors.deepOrange,
-                      finishedStepTextColor: Colors.deepOrange,
-                      finishedStepBackgroundColor: Colors.deepOrange,
-                      activeStepIconColor: Colors.deepOrange,
-                      showLoadingAnimation: false,
-                      steps: [
-                        EasyStep(
-                          customStep: ClipRRect(
-                            borderRadius: BorderRadius.circular(15),
-                            child: Opacity(
-                              opacity: activeStep >= 0 ? 1 : 0.3,
-                              child: Image.asset('assets/1.png'),
+                  child: EasyStepper(
+                    activeStep: activeStep,
+                    lineStyle: LineStyle(lineLength: 60.w),
+                    stepShape: StepShape.rRectangle,
+                    stepBorderRadius: 15,
+                    borderThickness: 2,
+                    stepRadius: 28,
+                    finishedStepBorderColor: AppColors.kRed,
+                    finishedStepTextColor: AppColors.kRed,
+                    finishedStepBackgroundColor: AppColors.kLightRed,
+                    activeStepIconColor: AppColors.kASDCPrimaryColor,
+                    showLoadingAnimation: false,
+                    steps: [
+                      EasyStep(
+                        customStep: ClipRRect(
+                          borderRadius: BorderRadius.circular(15),
+                          child: Opacity(
+                            opacity: activeStep >= 0 ? 1 : 0.3,
+                            child: Icon(
+                              Icons.watch_later_outlined,
+                              size: 40.sp,
                             ),
                           ),
-                          customTitle: const Text(
-                            'Dash 1',
-                            textAlign: TextAlign.center,
-                          ),
                         ),
-                        EasyStep(
-                          customStep: ClipRRect(
-                            borderRadius: BorderRadius.circular(15),
-                            child: Opacity(
-                              opacity: activeStep >= 1 ? 1 : 0.3,
-                              child: Image.asset('assets/2.png'),
+                        title: context.read<OrderCubit>().getStatusMessage('1'),
+                      ),
+                      EasyStep(
+                        customStep: ClipRRect(
+                          borderRadius: BorderRadius.circular(15),
+                          child: Opacity(
+                            opacity: activeStep >= 1 ? 1 : 0.3,
+                            child: Icon(
+                              Icons.food_bank_outlined,
+                              size: 40.sp,
                             ),
                           ),
-                          customTitle: const Text(
-                            'Dash 2',
-                            textAlign: TextAlign.center,
-                          ),
                         ),
-                        EasyStep(
-                          customStep: ClipRRect(
-                            borderRadius: BorderRadius.circular(15),
-                            child: Opacity(
-                              opacity: activeStep >= 2 ? 1 : 0.3,
-                              child: Image.asset('assets/3.png'),
+                        title: context.read<OrderCubit>().getStatusMessage('2'),
+                      ),
+                      EasyStep(
+                        customStep: ClipRRect(
+                          borderRadius: BorderRadius.circular(15),
+                          child: Opacity(
+                            opacity: activeStep >= 2 ? 1 : 0.3,
+                            child: Icon(
+                              Icons.delivery_dining_outlined,
+                              size: 40.sp,
                             ),
                           ),
-                          customTitle: const Text(
-                            'Dash 3',
-                            textAlign: TextAlign.center,
-                          ),
                         ),
-                        EasyStep(
-                          customStep: ClipRRect(
-                            borderRadius: BorderRadius.circular(15),
-                            child: Opacity(
-                              opacity: activeStep >= 3 ? 1 : 0.3,
-                              child: Image.asset('assets/4.png'),
+                        title: context.read<OrderCubit>().getStatusMessage('3'),
+                      ),
+                      EasyStep(
+                        customStep: ClipRRect(
+                          borderRadius: BorderRadius.circular(15),
+                          child: Opacity(
+                            opacity: activeStep >= 3 ? 1 : 0.3,
+                            child: Icon(
+                              Icons.done_all_rounded,
+                              size: 40.sp,
                             ),
                           ),
-                          customTitle: const Text(
-                            'Dash 4',
-                            textAlign: TextAlign.center,
-                          ),
                         ),
-                        EasyStep(
-                          customStep: ClipRRect(
-                            borderRadius: BorderRadius.circular(15),
-                            child: Opacity(
-                              opacity: activeStep >= 4 ? 1 : 0.3,
-                              child: Image.asset('assets/5.png'),
+                        title: context.read<OrderCubit>().getStatusMessage('4'),
+                      ),
+                      EasyStep(
+                        customStep: ClipRRect(
+                          borderRadius: BorderRadius.circular(15),
+                          child: Opacity(
+                            opacity: activeStep >= 3 ? 1 : 0.3,
+                            child: Icon(
+                              Icons.remove_done_rounded,
+                              size: 40.sp,
                             ),
                           ),
-                          customTitle: const Text(
-                            'Dash 5',
-                            textAlign: TextAlign.center,
+                        ),
+                        title: context.read<OrderCubit>().getStatusMessage('5'),
+                      ),
+                      EasyStep(
+                        customStep: ClipRRect(
+                          borderRadius: BorderRadius.circular(15),
+                          child: Opacity(
+                            opacity: activeStep >= 3 ? 1 : 0.3,
+                            child: Icon(
+                              Icons.running_with_errors_rounded,
+                              size: 40.sp,
+                            ),
                           ),
                         ),
-                      ],
-                      onStepReached: (index) =>
-                          setState(() => activeStep = index),
-                    ),
+                        title: context.read<OrderCubit>().getStatusMessage('6'),
+                      ),
+                    ],
+                    onStepReached: (index) =>
+                        setState(() => activeStep = index),
                   ),
                 ),
               ],

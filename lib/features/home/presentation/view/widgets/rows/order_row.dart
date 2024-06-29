@@ -141,18 +141,18 @@ class OrderRow extends StatelessWidget {
                 child: Material(
                   color: AppColors.kTransparent,
                   child: InkWell(
-                    onTap: () {
-                      if (!isInDetails) {
-                        Navigator.push(
-                          context,
-                          RightSlideTransition(
-                            page: WholeOrderView(
-                              order: ValueNotifier(order),
-                            ),
-                          ),
-                        );
-                      }
-                    },
+                    onTap: !isInDetails
+                        ? () {
+                            Navigator.push(
+                              context,
+                              RightSlideTransition(
+                                page: WholeOrderView(
+                                  order: ValueNotifier(order),
+                                ),
+                              ),
+                            );
+                          }
+                        : null,
                   ),
                 ),
               ),

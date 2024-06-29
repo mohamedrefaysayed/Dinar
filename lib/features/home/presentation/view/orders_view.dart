@@ -78,7 +78,8 @@ class _OrdersViewState extends State<OrdersView>
               );
             }
             return (OrderCubit.ordersModel != null &&
-                    OrderCubit.ordersModel!.currentOrders!.isNotEmpty)
+                    (OrderCubit.ordersModel!.currentOrders!.isNotEmpty ||
+                        OrderCubit.ordersModel!.oldOrders!.isNotEmpty))
                 ? Column(
                     children: [
                       Padding(
@@ -134,21 +135,37 @@ class _OrdersViewState extends State<OrdersView>
                         ),
                       ),
                       const GeneralDivider(),
-                      Expanded(
-                        child: ListView.builder(
-                          padding: EdgeInsets.zero,
-                          shrinkWrap: true,
-                          itemCount:
-                              OrderCubit.ordersModel!.currentOrders!.length,
-                          itemBuilder: (context, index) {
-                            return OrderRow(
-                              order:
-                                  OrderCubit.ordersModel!.currentOrders![index],
-                              isInDetails: false,
-                            );
-                          },
-                        ),
-                      ),
+                      OrderCubit.ordersModel!.currentOrders!.isNotEmpty
+                          ? Expanded(
+                              child: ListView.builder(
+                                padding: EdgeInsets.zero,
+                                shrinkWrap: true,
+                                itemCount: OrderCubit
+                                    .ordersModel!.currentOrders!.length,
+                                itemBuilder: (context, index) {
+                                  return OrderRow(
+                                    order: OrderCubit
+                                        .ordersModel!.currentOrders![index],
+                                    isInDetails: false,
+                                  );
+                                },
+                              ),
+                            )
+                          : Expanded(
+                              child: ListView(
+                                children: [
+                                  SizedBox(
+                                    height: 300.h,
+                                  ),
+                                  Center(
+                                    child: Text(
+                                      "لا توجد طلبات",
+                                      style: TextStyles.textStyle18,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                     ],
                   )
                 : ListView(

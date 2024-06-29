@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:dinar_store/core/errors/server_failure.dart';
-import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 abstract class LogInRepo {
   Future<Either<ServerFailure, dynamic>> register({
@@ -18,7 +18,7 @@ abstract class LogInRepo {
     required String district,
     required String address,
     required String phone,
-    required Position position,
+    required LatLng position,
     required String token,
   });
   Future<Either<ServerFailure, void>> deleteAccount();

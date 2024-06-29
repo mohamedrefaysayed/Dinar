@@ -197,7 +197,7 @@ class OrderCubit extends Cubit<OrderState> {
 
     switch (status) {
       case OrderStatus.underReview:
-        return "طلبك قيد المراجعة";
+        return "قيد المراجعة";
       case OrderStatus.preparing:
         return "قيد التحضير";
       case OrderStatus.delivering:
