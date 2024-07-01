@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:dinar_store/core/errors/server_failure.dart';
+import 'package:dinar_store/features/home/data/models/profile_model.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 abstract class LogInRepo {
@@ -12,7 +13,7 @@ abstract class LogInRepo {
     required String code,
   });
 
-  Future<Either<ServerFailure, dynamic>> storeData({
+  Future<Either<ServerFailure, Store>> storeData({
     required String ownerName,
     required String storeName,
     required String district,

@@ -37,21 +37,22 @@ class User {
   String? deletedAt;
   Store? store;
 
-  User(
-      {this.id,
-      this.name,
-      this.email,
-      this.phone,
-      this.emailVerifiedAt,
-      this.createdAt,
-      this.updatedAt,
-      this.countryCode,
-      this.expireAt,
-      this.phoneVerified,
-      this.tokenDevice,
-      this.currentDeviceId,
-      this.deletedAt,
-      this.store});
+  User({
+    this.id,
+    this.name,
+    this.email,
+    this.phone,
+    this.emailVerifiedAt,
+    this.createdAt,
+    this.updatedAt,
+    this.countryCode,
+    this.expireAt,
+    this.phoneVerified,
+    this.tokenDevice,
+    this.currentDeviceId,
+    this.deletedAt,
+    this.store,
+  });
 
   User.fromJson(Map<String, dynamic> json) {
     id = json['id'];

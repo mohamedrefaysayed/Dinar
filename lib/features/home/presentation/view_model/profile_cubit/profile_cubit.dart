@@ -69,6 +69,7 @@ class ProfileCubit extends Cubit<ProfileState> {
       position: position,
     );
     emit(ProfileUpdate());
+    
 
     await placemarkFromCoordinates(position.latitude, position.longitude)
         .then((List<Placemark> placemarks) {

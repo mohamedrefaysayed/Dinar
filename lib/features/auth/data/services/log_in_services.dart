@@ -4,6 +4,7 @@ import 'package:dinar_store/core/errors/server_failure.dart';
 import 'package:dinar_store/core/helpers/dio_helper.dart';
 import 'package:dinar_store/core/utils/constants.dart';
 import 'package:dinar_store/features/auth/data/repos/log_in_repo.dart';
+import 'package:dinar_store/features/home/data/models/profile_model.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -74,7 +75,7 @@ class LogInServices implements LogInRepo {
   }
 
   @override
-  Future<Either<ServerFailure, void>> storeData({
+  Future<Either<ServerFailure, Store>> storeData({
     String? ownerName,
     String? storeName,
     String? district,
@@ -83,9 +84,11 @@ class LogInServices implements LogInRepo {
     LatLng? position,
     required String token,
     bool? isUpdate = false,
+    int? storeId,
   }) async {
+    Store store = Store();
     try {
-      await _dioHelper.postRequest(
+      Map<String, dynamic> data = await _dioHelper.postRequest(
         token: token,
         body: {
           if (isUpdate!) '_method': "put",
@@ -97,9 +100,10 @@ class LogInServices implements LogInRepo {
           if (position != null) 'lng': position.longitude,
           if (position != null) 'lat': position.latitude,
         },
-        endPoint: isUpdate ? 'store/1' : 'store',
+        endPoint: isUpdate ? 'store/$storeId' : 'store',
       );
-      return right(null);
+      store = Store.fromJson(data);
+      return right(isUpdate ? store : Store());
     } on DioException catch (error) {
       return left(
         ServerFailure.fromDioException(dioException: error),

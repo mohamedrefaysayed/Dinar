@@ -34,6 +34,7 @@ class OldOrdersView extends StatelessWidget {
               return OrderRow(
                 order: OrderCubit.ordersModel!.oldOrders![index],
                 isInDetails: false,
+                isInOld: true,
               );
             },
           ),

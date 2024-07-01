@@ -19,8 +19,9 @@ class OrdersServices implements OrdersRepo {
   String? fcmToken;
 
   @override
-  Future<Either<ServerFailure, OrdersModel>> getAllOrders(
-      {required String token}) async {
+  Future<Either<ServerFailure, OrdersModel>> getAllOrders({
+    required String token,
+  }) async {
     OrdersModel ordersModel = OrdersModel();
     try {
       Map<String, dynamic> data = await _dioHelper.getRequest(
@@ -29,6 +30,30 @@ class OrdersServices implements OrdersRepo {
       );
       ordersModel = OrdersModel.fromJson(data);
       return right(ordersModel);
+    } on DioException catch (error) {
+      return left(
+        ServerFailure.fromDioException(dioException: error),
+      );
+    } catch (error) {
+      return left(
+        ServerFailure(errMessage: error.toString()),
+      );
+    }
+  }
+
+  @override
+  Future<Either<ServerFailure, DinarOrder>> getOrder({
+    required String token,
+    required int orderId,
+  }) async {
+    try {
+      Map<String, dynamic> data = await _dioHelper.getRequest(
+        token: token,
+        endPoint: 'orders/$orderId',
+      );
+      return right(
+        DinarOrder.fromJson(data),
+      );
     } on DioException catch (error) {
       return left(
         ServerFailure.fromDioException(dioException: error),

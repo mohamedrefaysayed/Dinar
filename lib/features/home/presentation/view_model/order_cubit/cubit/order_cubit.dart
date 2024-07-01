@@ -43,14 +43,37 @@ class OrderCubit extends Cubit<OrderState> {
         );
       },
       //success
-      (orders) async {
+      (orders) {
         ordersModel = OrdersModel(
           currentOrders: orders.currentOrders!.reversed.toList(),
-          oldOrders: orders.oldOrders!.reversed.toList(),
+          oldOrders: orders.oldOrders!,
         );
         emit(OrderSuccess(ordersModel: orders));
       },
     );
+  }
+
+  Future<DinarOrder?> getOrder({required int orderId}) async {
+    emit(UpdateOrderLoading());
+    Either<ServerFailure, DinarOrder> result = await _ordersServices.getOrder(
+      token: AppCubit.token!,
+      orderId: orderId,
+    );
+
+    result.fold(
+      //error
+      (serverFailure) {
+        emit(
+          UpdateOrderFailuer(errMessage: serverFailure.errMessage),
+        );
+      },
+      //success
+      (order) {
+        emit(UpdateOrderSuccess());
+        return order;
+      },
+    );
+    return null;
   }
 
   storeOrder({
@@ -176,6 +199,9 @@ class OrderCubit extends Cubit<OrderState> {
   String getStatusMessage(String statusNumber) {
     OrderStatus status;
     switch (statusNumber) {
+      case "0":
+        status = OrderStatus.orderd;
+        break;
       case "1":
         status = OrderStatus.underReview;
         break;
@@ -196,6 +222,8 @@ class OrderCubit extends Cubit<OrderState> {
     }
 
     switch (status) {
+      case OrderStatus.orderd:
+        return "تم الطلب";
       case OrderStatus.underReview:
         return "قيد المراجعة";
       case OrderStatus.preparing:
@@ -227,6 +255,7 @@ class OrderCubit extends Cubit<OrderState> {
 }
 
 enum OrderStatus {
+  orderd, // corresponds to "0"
   underReview, // corresponds to "1"
   preparing, // corresponds to "2"
   delivering, // corresponds to "3"

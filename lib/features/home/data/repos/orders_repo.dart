@@ -8,6 +8,11 @@ abstract class OrdersRepo {
     required String token,
   });
 
+  Future<Either<ServerFailure, DinarOrder>> getOrder({
+    required String token,
+    required int orderId,
+  });
+
   Future<Either<ServerFailure, void>> storeOrder({
     required String token,
     required SendOrderModel sendOrderModel,

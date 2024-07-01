@@ -147,6 +147,7 @@ class _OrdersViewState extends State<OrdersView>
                                     order: OrderCubit
                                         .ordersModel!.currentOrders![index],
                                     isInDetails: false,
+                                    isInOld: false,
                                   );
                                 },
                               ),

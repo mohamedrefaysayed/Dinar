@@ -32,7 +32,16 @@ final class OrderFailuer extends OrderState {
   OrderFailuer({required this.errMessage});
 }
 
+final class UpdateOrderLoading extends OrderState {}
+
 final class DeleteOrderFailuer extends OrderState {
   final String errMessage;
   DeleteOrderFailuer({required this.errMessage});
+}
+
+final class UpdateOrderSuccess extends OrderState {}
+
+final class UpdateOrderFailuer extends OrderState {
+  final String errMessage;
+  UpdateOrderFailuer({required this.errMessage});
 }

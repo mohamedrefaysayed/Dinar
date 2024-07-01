@@ -22,32 +22,25 @@ class LocationCubit extends Cubit<LocationState> {
   static Position? currentPosition;
 
   Future getCurrentLocation({required BuildContext context}) async {
-    try {
-      emit(LocationLoading());
-      bool locationsIsGranted = await Permission.location.status.isGranted;
-      if (!locationsIsGranted) {
-        locationsIsGranted = await Permission.location.request().isDenied;
-      } else {
-        bool locationsIsGranted =
-            await Permission.locationAlways.status.isGranted;
-        if (!locationsIsGranted) {
-          locationsIsGranted =
-              await Permission.locationAlways.request().isGranted;
-        }
+    emit(LocationLoading());
+    bool locationsIsGranted = await Permission.location.status.isGranted;
+    if (!locationsIsGranted) {
+      locationsIsGranted = await Permission.location.request().isDenied;
+    } else {
+      try {
+        currentPosition = await Geolocator.getCurrentPosition(
+            desiredAccuracy: LocationAccuracy.bestForNavigation);
+        emit(LocationSuccess(position: currentPosition!));
+      } catch (error) {
+        emit(LocationFailuer());
+        ScaffoldMessenger.of(context).showSnackBar(
+          messageSnackBar(message: "أفتح الموقع"),
+        );
       }
-
-      // When we reach here, permissions are granted and we can
-      // continue accessing the position of the device.
-
-      currentPosition = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.high);
-      emit(LocationSuccess(position: currentPosition!));
-    } catch (error) {
-      emit(LocationFailuer());
-      ScaffoldMessenger.of(context).showSnackBar(
-        messageSnackBar(message: "أفتح الموقع"),
-      );
     }
+
+    // When we reach here, permissions are granted and we can
+    // continue accessing the position of the device.
   }
 
   Future<void> getAddress(double lat, double lng) async {

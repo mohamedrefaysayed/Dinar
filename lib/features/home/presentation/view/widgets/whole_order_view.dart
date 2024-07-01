@@ -14,24 +14,27 @@ class WholeOrderView extends StatefulWidget {
   const WholeOrderView({
     super.key,
     required this.order,
+    required this.isInOld,
   });
-  final ValueNotifier<DinarOrder> order;
+  final DinarOrder order;
+  final bool isInOld;
 
   @override
   State<WholeOrderView> createState() => _WholeOrderViewState();
 }
 
 class _WholeOrderViewState extends State<WholeOrderView> {
-  int activeStep = 1;
-  ValueNotifier<bool> idDetailed = ValueNotifier<bool>(false);
+  ValueNotifier<int> activeStep = ValueNotifier(0);
+  ValueNotifier<bool> isDetailed = ValueNotifier<bool>(false);
   Timer? timer;
+  DinarOrder currentOrder = DinarOrder();
+
   @override
   void initState() {
     super.initState();
-    for (int i = 1; i < int.parse(widget.order.value.status!) - 1; ++i) {
-      setState(() {
-        activeStep++;
-      });
+    currentOrder = widget.order;
+    for (int i = 0; i < int.parse(currentOrder.status!); i++) {
+      activeStep.value = activeStep.value + 1;
     }
   }
 
@@ -41,159 +44,172 @@ class _WholeOrderViewState extends State<WholeOrderView> {
       body: SafeArea(
         child: RefreshIndicator(
           onRefresh: () async {
-            await context.read<OrderCubit>().getAllOrders();
+            await context
+                .read<OrderCubit>()
+                .getOrder(orderId: currentOrder.id!)
+                .then(
+              (value) {
+                return currentOrder = value ?? currentOrder;
+              },
+            );
+            activeStep.value = 0;
+
+            for (int i = 0; i < int.parse(currentOrder.status!); i++) {
+              activeStep.value = activeStep.value + 1;
+            }
+
           },
-          child: ValueListenableBuilder(
-            valueListenable: widget.order,
-            builder: (BuildContext context, DinarOrder order, Widget? child) =>
-                ListView(
-              children: [
-                Stack(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10.w),
-                      child: Container(
-                        height: 250.h,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15.w),
-                          border: Border.all(
-                            color: AppColors.kASDCPrimaryColor,
-                            width: 2.w,
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: AppColors.kGrey.withOpacity(0.5),
-                              spreadRadius: 5,
-                              blurRadius: 7,
-                              offset: const Offset(0, 3),
-                            )
-                          ],
+          child: ListView(
+            children: [
+              Stack(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10.w),
+                    child: Container(
+                      height: 250.h,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15.w),
+                        border: Border.all(
+                          color: AppColors.kASDCPrimaryColor,
+                          width: 2.w,
                         ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(15.w),
-                          child: GoogleMap(
-                            markers: {
-                              Marker(
-                                markerId: const MarkerId('موقع المتجر'),
-                                position: order.location != null
-                                    ? LatLng(
-                                        context
-                                            .read<OrderCubit>()
-                                            .extractLatLng(order.location!)
-                                            .first,
-                                        context
-                                            .read<OrderCubit>()
-                                            .extractLatLng(order.location!)
-                                            .last,
-                                      )
-                                    : const LatLng(28.8993468, 76.6250249),
-                              )
-                            },
-                            myLocationEnabled: true,
-                            liteModeEnabled: true,
-                            compassEnabled: false,
-                            zoomGesturesEnabled: false,
-                            rotateGesturesEnabled: false,
-                            scrollGesturesEnabled: false,
-                            mapToolbarEnabled: false,
-                            zoomControlsEnabled: false,
-                            initialCameraPosition: CameraPosition(
-                              zoom: 18,
-                              target: order.location != null
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppColors.kGrey.withOpacity(0.5),
+                            spreadRadius: 5,
+                            blurRadius: 7,
+                            offset: const Offset(0, 3),
+                          )
+                        ],
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(15.w),
+                        child: GoogleMap(
+                          markers: {
+                            Marker(
+                              markerId: const MarkerId('موقع المتجر'),
+                              position: currentOrder.location != null
                                   ? LatLng(
                                       context
                                           .read<OrderCubit>()
-                                          .extractLatLng(order.location!)
+                                          .extractLatLng(currentOrder.location!)
                                           .first,
                                       context
                                           .read<OrderCubit>()
-                                          .extractLatLng(order.location!)
+                                          .extractLatLng(currentOrder.location!)
                                           .last,
                                     )
                                   : const LatLng(28.8993468, 76.6250249),
-                            ),
+                            )
+                          },
+                          myLocationEnabled: true,
+                          liteModeEnabled: true,
+                          compassEnabled: false,
+                          zoomGesturesEnabled: false,
+                          rotateGesturesEnabled: false,
+                          scrollGesturesEnabled: false,
+                          mapToolbarEnabled: false,
+                          zoomControlsEnabled: false,
+                          initialCameraPosition: CameraPosition(
+                            zoom: 18,
+                            target: currentOrder.location != null
+                                ? LatLng(
+                                    context
+                                        .read<OrderCubit>()
+                                        .extractLatLng(currentOrder.location!)
+                                        .first,
+                                    context
+                                        .read<OrderCubit>()
+                                        .extractLatLng(currentOrder.location!)
+                                        .last,
+                                  )
+                                : const LatLng(28.8993468, 76.6250249),
                           ),
                         ),
-                      ),
-                    ),
-                    Positioned(
-                      right: 10.w,
-                      child: IconButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        icon: Transform.flip(
-                          flipX: true,
-                          child: Icon(
-                            Icons.arrow_back,
-                            size: 25.w,
-                            color: AppColors.kASDCPrimaryColor,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                Padding(
-                  padding:
-                      EdgeInsets.symmetric(vertical: 30.h, horizontal: 30.w),
-                  child: ValueListenableBuilder(
-                    valueListenable: idDetailed,
-                    builder:
-                        (BuildContext context, bool value, Widget? child) =>
-                            GestureDetector(
-                      onTap: () {
-                        idDetailed.value = !value;
-                      },
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Icon(
-                                value
-                                    ? Icons.arrow_drop_up
-                                    : Icons.arrow_drop_down,
-                                size: 30.w,
-                                color: AppColors.kASDCPrimaryColor,
-                              ),
-                              value
-                                  ? Text(
-                                      "إضغط للغلق",
-                                      style: TextStyles.textStyle10.copyWith(
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    )
-                                  : Text(
-                                      "إضغط لعرض المنتجات",
-                                      style: TextStyles.textStyle10.copyWith(
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                              Text(
-                                "x${order.orderDetails!.length}",
-                                style: TextStyles.textStyle16.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16.w,
-                                ),
-                              ),
-                            ],
-                          ),
-                          value
-                              ? OrderRow(
-                                  order: widget.order.value,
-                                  isInDetails: true,
-                                )
-                              : const SizedBox(),
-                        ],
                       ),
                     ),
                   ),
+                  Positioned(
+                    right: 10.w,
+                    child: IconButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      icon: Transform.flip(
+                        flipX: true,
+                        child: Icon(
+                          Icons.arrow_back,
+                          size: 25.w,
+                          color: AppColors.kASDCPrimaryColor,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 30.h, horizontal: 30.w),
+                child: ValueListenableBuilder(
+                  valueListenable: isDetailed,
+                  builder: (BuildContext context, bool value, Widget? child) =>
+                      GestureDetector(
+                    onTap: () {
+                      isDetailed.value = !value;
+                    },
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Icon(
+                              value
+                                  ? Icons.arrow_drop_up
+                                  : Icons.arrow_drop_down,
+                              size: 30.w,
+                              color: AppColors.kASDCPrimaryColor,
+                            ),
+                            value
+                                ? Text(
+                                    "إضغط للغلق",
+                                    style: TextStyles.textStyle10.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  )
+                                : Text(
+                                    "إضغط لعرض المنتجات",
+                                    style: TextStyles.textStyle10.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                            Text(
+                              "x${currentOrder.orderDetails!.length}",
+                              style: TextStyles.textStyle16.copyWith(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16.w,
+                              ),
+                            ),
+                          ],
+                        ),
+                        value
+                            ? OrderRow(
+                                order: currentOrder,
+                                isInDetails: true,
+                                isInOld: false,
+                              )
+                            : const SizedBox(),
+                      ],
+                    ),
+                  ),
                 ),
-                Directionality(
+              ),
+              ValueListenableBuilder(
+                valueListenable: activeStep,
+                builder:
+                    (BuildContext context, int currentStep, Widget? child) =>
+                        Directionality(
                   textDirection: TextDirection.rtl,
                   child: EasyStepper(
-                    activeStep: activeStep,
+                    activeStep: currentStep,
                     lineStyle: LineStyle(lineLength: 60.w),
                     stepShape: StepShape.rRectangle,
                     stepBorderRadius: 15,
@@ -205,91 +221,121 @@ class _WholeOrderViewState extends State<WholeOrderView> {
                     activeStepIconColor: AppColors.kASDCPrimaryColor,
                     showLoadingAnimation: false,
                     steps: [
-                      EasyStep(
-                        customStep: ClipRRect(
-                          borderRadius: BorderRadius.circular(15),
-                          child: Opacity(
-                            opacity: activeStep >= 0 ? 1 : 0.3,
-                            child: Icon(
-                              Icons.watch_later_outlined,
-                              size: 40.sp,
+                      if (!widget.isInOld) ...[
+                        EasyStep(
+                          customStep: ClipRRect(
+                            borderRadius: BorderRadius.circular(15),
+                            child: Opacity(
+                              opacity: currentStep >= 0 ? 1 : 0.3,
+                              child: Icon(
+                                Icons.watch_later_outlined,
+                                size: 40.sp,
+                              ),
                             ),
                           ),
+                          title:
+                              context.read<OrderCubit>().getStatusMessage('0'),
                         ),
-                        title: context.read<OrderCubit>().getStatusMessage('1'),
-                      ),
-                      EasyStep(
-                        customStep: ClipRRect(
-                          borderRadius: BorderRadius.circular(15),
-                          child: Opacity(
-                            opacity: activeStep >= 1 ? 1 : 0.3,
-                            child: Icon(
-                              Icons.food_bank_outlined,
-                              size: 40.sp,
+                        EasyStep(
+                          customStep: ClipRRect(
+                            borderRadius: BorderRadius.circular(15),
+                            child: Opacity(
+                              opacity: currentStep >= 0 ? 1 : 0.3,
+                              child: Icon(
+                                Icons.watch_later_outlined,
+                                size: 40.sp,
+                              ),
                             ),
                           ),
+                          title:
+                              context.read<OrderCubit>().getStatusMessage('1'),
                         ),
-                        title: context.read<OrderCubit>().getStatusMessage('2'),
-                      ),
-                      EasyStep(
-                        customStep: ClipRRect(
-                          borderRadius: BorderRadius.circular(15),
-                          child: Opacity(
-                            opacity: activeStep >= 2 ? 1 : 0.3,
-                            child: Icon(
-                              Icons.delivery_dining_outlined,
-                              size: 40.sp,
+                        EasyStep(
+                          customStep: ClipRRect(
+                            borderRadius: BorderRadius.circular(15),
+                            child: Opacity(
+                              opacity: currentStep >= 1 ? 1 : 0.3,
+                              child: Icon(
+                                Icons.food_bank_outlined,
+                                size: 40.sp,
+                              ),
                             ),
                           ),
+                          title:
+                              context.read<OrderCubit>().getStatusMessage('2'),
                         ),
-                        title: context.read<OrderCubit>().getStatusMessage('3'),
-                      ),
-                      EasyStep(
-                        customStep: ClipRRect(
-                          borderRadius: BorderRadius.circular(15),
-                          child: Opacity(
-                            opacity: activeStep >= 3 ? 1 : 0.3,
-                            child: Icon(
-                              Icons.done_all_rounded,
-                              size: 40.sp,
+                        EasyStep(
+                          customStep: ClipRRect(
+                            borderRadius: BorderRadius.circular(15),
+                            child: Opacity(
+                              opacity: currentStep >= 2 ? 1 : 0.3,
+                              child: Icon(
+                                Icons.delivery_dining_outlined,
+                                size: 40.sp,
+                              ),
                             ),
                           ),
+                          title:
+                              context.read<OrderCubit>().getStatusMessage('3'),
                         ),
-                        title: context.read<OrderCubit>().getStatusMessage('4'),
-                      ),
-                      EasyStep(
-                        customStep: ClipRRect(
-                          borderRadius: BorderRadius.circular(15),
-                          child: Opacity(
-                            opacity: activeStep >= 3 ? 1 : 0.3,
-                            child: Icon(
-                              Icons.remove_done_rounded,
-                              size: 40.sp,
+                      ],
+                      if (widget.isInOld) ...[
+                        if (int.parse(currentOrder.status!) == 4)
+                          EasyStep(
+                            customStep: ClipRRect(
+                              borderRadius: BorderRadius.circular(15),
+                              child: Opacity(
+                                opacity: currentStep >= 3 ? 1 : 0.3,
+                                child: Icon(
+                                  Icons.done_all_rounded,
+                                  size: 40.sp,
+                                ),
+                              ),
                             ),
+                            title: context
+                                .read<OrderCubit>()
+                                .getStatusMessage('4'),
                           ),
-                        ),
-                        title: context.read<OrderCubit>().getStatusMessage('5'),
-                      ),
-                      EasyStep(
-                        customStep: ClipRRect(
-                          borderRadius: BorderRadius.circular(15),
-                          child: Opacity(
-                            opacity: activeStep >= 3 ? 1 : 0.3,
-                            child: Icon(
-                              Icons.running_with_errors_rounded,
-                              size: 40.sp,
+                        if (int.parse(currentOrder.status!) == 5)
+                          EasyStep(
+                            customStep: ClipRRect(
+                              borderRadius: BorderRadius.circular(15),
+                              child: Opacity(
+                                opacity: currentStep >= 3 ? 1 : 0.3,
+                                child: Icon(
+                                  Icons.remove_done_rounded,
+                                  size: 40.sp,
+                                ),
+                              ),
                             ),
+                            title: context
+                                .read<OrderCubit>()
+                                .getStatusMessage('5'),
                           ),
-                        ),
-                        title: context.read<OrderCubit>().getStatusMessage('6'),
-                      ),
+                        if (int.parse(currentOrder.status!) > 5)
+                          EasyStep(
+                            customStep: ClipRRect(
+                              borderRadius: BorderRadius.circular(15),
+                              child: Opacity(
+                                opacity: currentStep >= 3 ? 1 : 0.3,
+                                child: Icon(
+                                  Icons.running_with_errors_rounded,
+                                  size: 40.sp,
+                                ),
+                              ),
+                            ),
+                            title: context
+                                .read<OrderCubit>()
+                                .getStatusMessage('6'),
+                          ),
+                      ],
                     ],
                     onStepReached: (index) =>
-                        setState(() => activeStep = index),
+                        setState(() => currentStep = index),
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

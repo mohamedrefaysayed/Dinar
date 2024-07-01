@@ -16,10 +16,12 @@ class OrderRow extends StatelessWidget {
     super.key,
     required this.order,
     required this.isInDetails,
+    required this.isInOld,
   });
 
   final DinarOrder order;
   final bool isInDetails;
+  final bool isInOld;
 
   @override
   Widget build(BuildContext context) {
@@ -147,7 +149,8 @@ class OrderRow extends StatelessWidget {
                               context,
                               RightSlideTransition(
                                 page: WholeOrderView(
-                                  order: ValueNotifier(order),
+                                  order: order,
+                                  isInOld: isInOld,
                                 ),
                               ),
                             );

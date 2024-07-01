@@ -4,6 +4,7 @@ import 'package:dinar_store/core/errors/server_failure.dart';
 import 'package:dinar_store/features/auth/data/services/log_in_services.dart';
 import 'package:dinar_store/features/auth/presentation/view_model/location_cubit/cubit/location_cubit.dart';
 import 'package:dinar_store/features/home/data/models/profile_model.dart';
+import 'package:dinar_store/features/home/presentation/view_model/profile_cubit/profile_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -31,6 +32,7 @@ class StoreDataCubit extends Cubit<StoreDataState> {
     emit(StoreDataLoading());
 
     Either<ServerFailure, void> result = await _logInServices.storeData(
+      isUpdate: false,
       ownerName: nameController.text,
       storeName: marketNameController.text,
       district: govController.text,
@@ -66,7 +68,7 @@ class StoreDataCubit extends Cubit<StoreDataState> {
   Future<void> updateData({required ProfileModel profileModel}) async {
     emit(UpdateDataLoading());
 
-    Either<ServerFailure, void> result = await _logInServices.storeData(
+    Either<ServerFailure, Store> result = await _logInServices.storeData(
       isUpdate: true,
       ownerName: nameController.text.isNotEmpty
           ? nameController.text
@@ -83,11 +85,12 @@ class StoreDataCubit extends Cubit<StoreDataState> {
       phone: marketPhoneController.text.isNotEmpty
           ? marketPhoneController.text
           : profileModel.user!.first.store!.phone,
-      token: AppCubit.token!,
       position: LatLng(
         double.parse(profileModel.user!.first.store!.lat!),
         double.parse(profileModel.user!.first.store!.lng!),
       ),
+      storeId: profileModel.user!.first.store!.id,
+      token: AppCubit.token!,
     );
 
     result.fold(
@@ -98,7 +101,9 @@ class StoreDataCubit extends Cubit<StoreDataState> {
         );
       },
       //success
-      (data) async {
+      (store) async {
+        ProfileCubit.profileModel!.user!.first.store = store;
+
         emit(UpdateDataSuccess());
         nameController.clear();
         marketNameController.clear();
@@ -114,7 +119,7 @@ class StoreDataCubit extends Cubit<StoreDataState> {
       {required LatLng position, required ProfileModel profileModel}) async {
     emit(UpdateLocationLoading());
 
-    Either<ServerFailure, void> result = await _logInServices.storeData(
+    Either<ServerFailure, Store> result = await _logInServices.storeData(
       isUpdate: true,
       position: position,
       token: AppCubit.token!,
@@ -123,6 +128,7 @@ class StoreDataCubit extends Cubit<StoreDataState> {
       district: profileModel.user!.first.store!.district,
       address: profileModel.user!.first.store!.address,
       phone: profileModel.user!.first.store!.phone,
+      storeId: profileModel.user!.first.store!.id,
     );
 
     result.fold(
@@ -133,7 +139,9 @@ class StoreDataCubit extends Cubit<StoreDataState> {
         );
       },
       //success
-      (data) async {
+      (store) async {
+        ProfileCubit.profileModel!.user!.first.store = store;
+
         emit(UpdateLocationSuccess());
         LocationCubit.currentPosition == null;
       },
