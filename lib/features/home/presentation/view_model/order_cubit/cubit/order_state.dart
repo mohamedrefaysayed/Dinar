@@ -39,7 +39,10 @@ final class DeleteOrderFailuer extends OrderState {
   DeleteOrderFailuer({required this.errMessage});
 }
 
-final class UpdateOrderSuccess extends OrderState {}
+final class UpdateOrderSuccess extends OrderState {
+  final DinarOrder order;
+  UpdateOrderSuccess({required this.order});
+}
 
 final class UpdateOrderFailuer extends OrderState {
   final String errMessage;

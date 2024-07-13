@@ -51,9 +51,11 @@ class OrdersServices implements OrdersRepo {
         token: token,
         endPoint: 'orders/$orderId',
       );
-      return right(
-        DinarOrder.fromJson(data),
-      );
+      List<DinarOrder> orders = [];
+       data["order"].forEach((element) {
+        orders.add(DinarOrder.fromJson(element));
+      });
+      return right(orders.firstWhere((element) => element.id == orderId));
     } on DioException catch (error) {
       return left(
         ServerFailure.fromDioException(dioException: error),

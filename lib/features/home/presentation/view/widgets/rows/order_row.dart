@@ -58,6 +58,19 @@ class OrderRow extends StatelessWidget {
                         ),
                       ],
                     ),
+                    SizedBox(
+                      height: 10.h,
+                    ),
+                    Text(
+                      "رقم الطلب : ${order.id}",
+                      style: TextStyles.textStyle16.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
+                      textDirection: TextDirection.rtl,
+                    ),
+                    SizedBox(
+                      height: 10.h,
+                    ),
                     Text(
                       "${order.orderDetails!.length} x منتجات",
                       style: TextStyles.textStyle16.copyWith(

@@ -53,7 +53,7 @@ class OrderCubit extends Cubit<OrderState> {
     );
   }
 
-  Future<DinarOrder?> getOrder({required int orderId}) async {
+   getOrder({required int orderId}) async {
     emit(UpdateOrderLoading());
     Either<ServerFailure, DinarOrder> result = await _ordersServices.getOrder(
       token: AppCubit.token!,
@@ -69,11 +69,9 @@ class OrderCubit extends Cubit<OrderState> {
       },
       //success
       (order) {
-        emit(UpdateOrderSuccess());
-        return order;
+        emit(UpdateOrderSuccess(order: order));
       },
     );
-    return null;
   }
 
   storeOrder({
