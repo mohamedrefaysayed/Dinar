@@ -90,9 +90,9 @@ class CartCubit extends Cubit<CartState> {
             await storeItem(
               productId: requiredProducts[i].id!,
               quantity: productCount.toInt(),
-              unitId: int.parse(requiredProducts[i].pivot!.requiredUnitId!),
+              unitId: requiredProducts[i].pivot!.requiredUnitId!,
               price: requiredProducts[i].pivot!.requiredUnitId! ==
-                      requiredProducts[i].retailUnit!.id.toString()
+                      requiredProducts[i].retailUnit!.id
                   ? double.parse(requiredProducts[i].retailPrice!)
                   : double.parse(requiredProducts[i].wholeSalePrice!),
               isRequired: '1',
@@ -173,12 +173,11 @@ class CartCubit extends Cubit<CartState> {
     totalPrice = 0;
     totalDiscount = 0;
     for (var element in items) {
-      totalPrice = totalPrice +
-          (double.parse(element.price!) * double.parse(element.quantity!));
+      totalPrice = totalPrice + (element.price! * element.quantity!);
       totalDiscount = totalDiscount +
-          (((double.parse(element.price!) / 100) *
+          (((element.price!) / 100) *
                   double.parse(element.product!.discount!)) *
-              double.parse(element.quantity!));
+              element.quantity!;
     }
     finalPrice = totalPrice - totalDiscount;
   }
@@ -190,11 +189,11 @@ class CartCubit extends Cubit<CartState> {
 
     for (var element in items) {
       uniqeItems[element] = uniqeItems.containsKey(element)
-          ? uniqeItems[element]! + double.parse(element.quantity!).toInt()
-          : double.parse(element.quantity!).toInt();
+          ? uniqeItems[element]! + element.quantity!
+          : element.quantity!;
     }
     uniqeItems.forEach((key, value) {
-      key.quantity = value.toString();
+      key.quantity = value;
     });
     cartItemsModel = CartItemsModel(cart: uniqeItems.keys.toList());
   }

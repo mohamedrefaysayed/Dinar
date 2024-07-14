@@ -31,28 +31,27 @@ class User {
   String? updatedAt;
   String? countryCode;
   String? expireAt;
-  String? phoneVerified;
+  int? phoneVerified;
   String? tokenDevice;
   String? currentDeviceId;
   String? deletedAt;
   Store? store;
 
-  User({
-    this.id,
-    this.name,
-    this.email,
-    this.phone,
-    this.emailVerifiedAt,
-    this.createdAt,
-    this.updatedAt,
-    this.countryCode,
-    this.expireAt,
-    this.phoneVerified,
-    this.tokenDevice,
-    this.currentDeviceId,
-    this.deletedAt,
-    this.store,
-  });
+  User(
+      {this.id,
+      this.name,
+      this.email,
+      this.phone,
+      this.emailVerifiedAt,
+      this.createdAt,
+      this.updatedAt,
+      this.countryCode,
+      this.expireAt,
+      this.phoneVerified,
+      this.tokenDevice,
+      this.currentDeviceId,
+      this.deletedAt,
+      this.store});
 
   User.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -102,8 +101,8 @@ class Store {
   String? phone;
   String? lng;
   String? lat;
-  String? userId;
-  String? status;
+  int? userId;
+  int? status;
   String? deletedAt;
   String? createdAt;
   String? updatedAt;

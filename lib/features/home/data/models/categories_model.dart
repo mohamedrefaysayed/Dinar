@@ -26,10 +26,10 @@ class Categories {
   String? categoryName;
   String? description;
   String? image;
-  String? level;
+  int? level;
   int? parentId;
   int? categorySpecificationId;
-  String? status;
+  int? status;
   String? deletedAt;
   String? createdAt;
   String? updatedAt;
@@ -94,10 +94,10 @@ class SubCategories {
   String? categoryName;
   String? description;
   String? image;
-  String? level;
-  String? parentId;
-  String? categorySpecificationId;
-  String? status;
+  int? level;
+  int? parentId;
+  int? categorySpecificationId;
+  int? status;
   String? deletedAt;
   String? createdAt;
   String? updatedAt;

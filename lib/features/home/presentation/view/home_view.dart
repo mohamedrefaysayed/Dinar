@@ -34,75 +34,67 @@ class _HomeViewState extends State<HomeView>
         await context.read<CategoriesCubit>().getAllCategories();
       },
       child: SafeArea(
-        child: ScaffoldMessenger(
-          child: Scaffold(
-            body: Column(
-              children: [
-                Padding(
-                  padding:
-                      EdgeInsets.symmetric(vertical: 15.h, horizontal: 20.w),
-                  child: Stack(
-                    children: [
-                      Hero(
-                        tag: "HomeSearch",
-                        child: Material(
-                          child: SearchRow(
-                            textEditingController: TextEditingController(),
-                            hintText: 'إبحث عن المتجر او القطعة',
-                            canGoBack: false,
-                            whenBack: () {},
-                            haveFilter: true,
-                            onFilter: () {},
-                            onChanged: (_) {},
-                          ),
-                        ),
-                      ),
-                      Positioned.fill(
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(15.w),
-                          child: Material(
-                            color: AppColors.kTransparent,
-                            child: InkWell(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    TopSlideTransition(
-                                        page: const SearchView()));
-                              },
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child: SingleChildScrollView(
-                    child: GestureDetector(
-                      onTap: () {
-                        FocusScope.of(context).unfocus();
-                      },
-                      child: Column(
-                        children: [
-                          const AddsView(),
-                          const GeneralDivider(),
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 20.w),
-                            child: const CompaniesView(),
-                          ),
-                          const GeneralDivider(),
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 20.w),
-                            child: const CategoriesViewHome(),
-                          ),
-                        ],
+        child: ListView(
+          shrinkWrap: true,
+          children: [
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 15.h, horizontal: 20.w),
+              child: Stack(
+                children: [
+                  Hero(
+                    tag: "HomeSearch",
+                    child: Material(
+                      child: SearchRow(
+                        textEditingController: TextEditingController(),
+                        hintText: 'إبحث عن المتجر او القطعة',
+                        canGoBack: false,
+                        whenBack: () {},
+                        haveFilter: true,
+                        onFilter: () {},
+                        onChanged: (_) {},
                       ),
                     ),
                   ),
-                ),
-              ],
+                  Positioned.fill(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(15.w),
+                      child: Material(
+                        color: AppColors.kTransparent,
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.push(context,
+                                TopSlideTransition(page: const SearchView()));
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
+            SingleChildScrollView(
+              child: GestureDetector(
+                onTap: () {
+                  FocusScope.of(context).unfocus();
+                },
+                child: Column(
+                  children: [
+                    const AddsView(),
+                    const GeneralDivider(),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20.w),
+                      child: const CompaniesView(),
+                    ),
+                    const GeneralDivider(),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20.w),
+                      child: const CategoriesViewHome(),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

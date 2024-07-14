@@ -32,27 +32,27 @@ class Category {
   String? categoryName;
   String? description;
   String? image;
-  String? level;
-  String? parentId;
-  String? categorySpecificationId;
-  String? status;
+  int? level;
+  int? parentId;
+  int? categorySpecificationId;
+  int? status;
   String? deletedAt;
   String? createdAt;
   String? updatedAt;
 
-  Category(
-      {this.id,
-      this.categoryName,
-      this.description,
-      this.image,
-      this.level,
-      this.parentId,
-      this.categorySpecificationId,
-      this.status,
-      this.deletedAt,
-      this.createdAt,
-      this.updatedAt,
- });
+  Category({
+    this.id,
+    this.categoryName,
+    this.description,
+    this.image,
+    this.level,
+    this.parentId,
+    this.categorySpecificationId,
+    this.status,
+    this.deletedAt,
+    this.createdAt,
+    this.updatedAt,
+  });
 
   Category.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -93,14 +93,14 @@ class Products {
   String? wholeSalePrice;
   String? retailPrice;
   String? vipPrice;
-  String? categoryId;
-  String? companyId;
-  String? unitGroupId;
-  String? wholeUnitId;
-  String? retailUnitId;
-  String? vipUnitId;
+  int? categoryId;
+  int? companyId;
+  int? unitGroupId;
+  int? wholeUnitId;
+  int? retailUnitId;
+  int? vipUnitId;
   String? discount;
-  String? status;
+  int? status;
   String? deletedAt;
   String? createdAt;
   String? updatedAt;
@@ -252,8 +252,8 @@ class WholeUnit {
   int? id;
   String? unitName;
   String? eq;
-  String? unitGroupId;
-  String? status;
+  int? unitGroupId;
+  int? status;
   String? deletedAt;
   String? createdAt;
   String? updatedAt;
@@ -297,7 +297,7 @@ class UnitGroup {
   int? id;
   String? unitGroupName;
   String? description;
-  String? status;
+  int? status;
   String? deletedAt;
   String? createdAt;
   String? updatedAt;
@@ -339,10 +339,10 @@ class MainCategory {
   String? categoryName;
   String? description;
   String? image;
-  String? level;
-  String? parentId;
-  String? categorySpecificationId;
-  String? status;
+  int? level;
+  int? parentId;
+  int? categorySpecificationId;
+  int? status;
   String? deletedAt;
   String? createdAt;
   String? updatedAt;
@@ -396,7 +396,7 @@ class Company {
   String? companyName;
   String? description;
   String? logo;
-  String? status;
+  int? status;
   String? deletedAt;
   String? createdAt;
   String? updatedAt;
@@ -444,14 +444,14 @@ class RequiredProducts {
   String? wholeSalePrice;
   String? retailPrice;
   String? vipPrice;
-  String? categoryId;
-  String? companyId;
-  String? unitGroupId;
-  String? wholeUnitId;
-  String? retailUnitId;
-  String? vipUnitId;
+  int? categoryId;
+  int? companyId;
+  int? unitGroupId;
+  int? wholeUnitId;
+  int? retailUnitId;
+  int? vipUnitId;
   String? discount;
-  String? status;
+  int? status;
   String? deletedAt;
   String? createdAt;
   String? updatedAt;
@@ -564,13 +564,13 @@ class RequiredProducts {
 }
 
 class Pivot {
-  String? productId;
-  String? requiredProductId;
-  String? unitId;
+  int? productId;
+  int? requiredProductId;
+  int? unitId;
   String? quantity;
-  String? requiredUnitId;
+  int? requiredUnitId;
   String? requiredQuantiy;
-  String? status;
+  int? status;
   String? createdAt;
   String? updatedAt;
 

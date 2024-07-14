@@ -33,9 +33,9 @@ class OrdersModel {
 
 class DinarOrder {
   int? id;
-  String? userId;
+  int? userId;
   String? orderDate;
-  String? status;
+  int? status;
   String? tax;
   String? discount;
   String? subTotal;
@@ -117,10 +117,10 @@ class DinarOrder {
 
 class OrderDetails {
   int? id;
-  String? orderId;
-  String? productId;
-  String? unitId;
-  String? qty;
+  int? orderId;
+  int? productId;
+  int? unitId;
+  int? qty;
   String? price;
   String? subTotal;
   String? deletedAt;
@@ -129,20 +129,19 @@ class OrderDetails {
   Products? products;
   Units? units;
 
-  OrderDetails({
-    this.id,
-    this.orderId,
-    this.productId,
-    this.unitId,
-    this.qty,
-    this.price,
-    this.subTotal,
-    this.deletedAt,
-    this.createdAt,
-    this.updatedAt,
-    this.products,
-    this.units,
-  });
+  OrderDetails(
+      {this.id,
+      this.orderId,
+      this.productId,
+      this.unitId,
+      this.qty,
+      this.price,
+      this.subTotal,
+      this.deletedAt,
+      this.createdAt,
+      this.updatedAt,
+      this.products,
+      this.units});
 
   OrderDetails.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -190,14 +189,14 @@ class Products {
   String? wholeSalePrice;
   String? retailPrice;
   String? vipPrice;
-  String? categoryId;
-  String? companyId;
-  String? unitGroupId;
-  String? wholeUnitId;
-  String? retailUnitId;
-  String? vipUnitId;
+  int? categoryId;
+  int? companyId;
+  int? unitGroupId;
+  int? wholeUnitId;
+  int? retailUnitId;
+  int? vipUnitId;
   String? discount;
-  String? status;
+  int? status;
   String? deletedAt;
   String? createdAt;
   String? updatedAt;
@@ -207,31 +206,30 @@ class Products {
   String? maxWholeQuantity;
   String? maxRetailQuantity;
 
-  Products({
-    this.id,
-    this.productName,
-    this.description,
-    this.image,
-    this.wholeSalePrice,
-    this.retailPrice,
-    this.vipPrice,
-    this.categoryId,
-    this.companyId,
-    this.unitGroupId,
-    this.wholeUnitId,
-    this.retailUnitId,
-    this.vipUnitId,
-    this.discount,
-    this.status,
-    this.deletedAt,
-    this.createdAt,
-    this.updatedAt,
-    this.minWholeQuantity,
-    this.minRetailQuantity,
-    this.minVipQuantity,
-    this.maxWholeQuantity,
-    this.maxRetailQuantity,
-  });
+  Products(
+      {this.id,
+      this.productName,
+      this.description,
+      this.image,
+      this.wholeSalePrice,
+      this.retailPrice,
+      this.vipPrice,
+      this.categoryId,
+      this.companyId,
+      this.unitGroupId,
+      this.wholeUnitId,
+      this.retailUnitId,
+      this.vipUnitId,
+      this.discount,
+      this.status,
+      this.deletedAt,
+      this.createdAt,
+      this.updatedAt,
+      this.minWholeQuantity,
+      this.minRetailQuantity,
+      this.minVipQuantity,
+      this.maxWholeQuantity,
+      this.maxRetailQuantity});
 
   Products.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -292,22 +290,21 @@ class Units {
   int? id;
   String? unitName;
   String? eq;
-  String? unitGroupId;
-  String? status;
+  int? unitGroupId;
+  int? status;
   String? deletedAt;
   String? createdAt;
   String? updatedAt;
 
-  Units({
-    this.id,
-    this.unitName,
-    this.eq,
-    this.unitGroupId,
-    this.status,
-    this.deletedAt,
-    this.createdAt,
-    this.updatedAt,
-  });
+  Units(
+      {this.id,
+      this.unitName,
+      this.eq,
+      this.unitGroupId,
+      this.status,
+      this.deletedAt,
+      this.createdAt,
+      this.updatedAt});
 
   Units.fromJson(Map<String, dynamic> json) {
     id = json['id'];

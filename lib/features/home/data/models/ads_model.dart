@@ -28,7 +28,7 @@ class Ads {
   String? image;
   String? adType;
   String? expirationTime;
-  String? status;
+  int? status;
   String? deletedAt;
   String? createdAt;
   String? updatedAt;

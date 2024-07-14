@@ -29,4 +29,4 @@ final List<Color> comapniesBgColor = [
   const Color(0xffF5FCE9),
 ];
 
-String appDomain = "https://just.sd/dinar/public/index.php/api/";
+String appDomain = "https://dinnari.com/public/index.php/api/";

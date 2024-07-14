@@ -26,8 +26,8 @@ class Companies {
   String? companyName;
   String? description;
   String? logo;
-  String? status;
-  int? deletedAt;
+  int? status; // Change status to int
+  String? deletedAt;
   String? createdAt;
   String? updatedAt;
 
@@ -46,7 +46,7 @@ class Companies {
     companyName = json['company_name'];
     description = json['description'];
     logo = json['logo'];
-    status = json['status'];
+    status = json['status']; // Parse status to int
     deletedAt = json['deleted_at'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];

@@ -45,7 +45,7 @@ class CategoriesSearchGridView extends StatelessWidget {
             name: categories[index].categoryName!,
             onTap: () async {
               Map<String, dynamic> data = categories[index].toJson();
-              if (categories[index].level == "1") {
+              if (categories[index].level == 1) {
                 Navigator.push(
                     context,
                     RightSlideTransition(
@@ -54,7 +54,7 @@ class CategoriesSearchGridView extends StatelessWidget {
                       getData: true,
                     )));
               }
-              if (categories[index].level == "2") {
+              if (categories[index].level == 2) {
                 Navigator.push(
                     context,
                     RightSlideTransition(
@@ -62,11 +62,9 @@ class CategoriesSearchGridView extends StatelessWidget {
                       subcategory: SubCategories.fromJson(data),
                     )));
               }
-              if (categories[index].level == "3") {
+              if (categories[index].level == 3) {
                 await context.read<SubCategoriesCubit>().getAllSubSubCategories(
-                      catId: int.parse(
-                        categories[index].parentId!,
-                      ),
+                      catId: categories[index].parentId!,
                     );
                 Navigator.push(
                     context,

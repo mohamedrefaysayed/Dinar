@@ -368,8 +368,7 @@ class _ProductViewState extends State<ProductView> {
                                       await context.read<CartCubit>().storeItem(
                                         productId: widget.product.id!,
                                         quantity: retailCount.value,
-                                        unitId: int.parse(
-                                            widget.product.retailUnitId!),
+                                        unitId: widget.product.retailUnitId!,
                                         price: totalRetailPrice.value,
                                         isRequired: '0',
                                         isLast: true,
@@ -381,8 +380,7 @@ class _ProductViewState extends State<ProductView> {
                                       await context.read<CartCubit>().storeItem(
                                         productId: widget.product.id!,
                                         quantity: wholeCount.value,
-                                        unitId: int.parse(
-                                            widget.product.wholeUnitId!),
+                                        unitId: widget.product.wholeUnitId!,
                                         price: totalWholePrice.value,
                                         isRequired: '0',
                                         isLast: true,

@@ -34,7 +34,7 @@ class _WholeOrderViewState extends State<WholeOrderView> {
   void initState() {
     super.initState();
     currentOrder = widget.order;
-    for (int i = 0; i < int.parse(currentOrder.status!); i++) {
+    for (int i = 0; i < int.parse(currentOrder.status!.toString()); i++) {
       activeStep.value = activeStep.value + 1;
     }
   }
@@ -55,7 +55,9 @@ class _WholeOrderViewState extends State<WholeOrderView> {
                 currentOrder = state.order;
                 activeStep.value = 0;
 
-                for (int i = 0; i < int.parse(currentOrder.status!); i++) {
+                for (int i = 0;
+                    i < int.parse(currentOrder.status!.toString());
+                    i++) {
                   activeStep.value = activeStep.value + 1;
                 }
               }
@@ -224,9 +226,9 @@ class _WholeOrderViewState extends State<WholeOrderView> {
                       activeStep: currentStep,
                       lineStyle: LineStyle(lineLength: 60.w),
                       stepShape: StepShape.rRectangle,
-                      stepBorderRadius: 15,
+                      stepBorderRadius: 15.r,
                       borderThickness: 2,
-                      stepRadius: 28,
+                      stepRadius: 25.r,
                       finishedStepBorderColor: AppColors.kGreen,
                       finishedStepTextColor: AppColors.kGreen,
                       finishedStepBackgroundColor: AppColors.kLightGreen,
@@ -243,7 +245,7 @@ class _WholeOrderViewState extends State<WholeOrderView> {
                                 opacity: currentStep >= 0 ? 1 : 0.3,
                                 child: Icon(
                                   Icons.done,
-                                  size: 40.sp,
+                                  size: 30.sp,
                                 ),
                               ),
                             ),
@@ -258,7 +260,7 @@ class _WholeOrderViewState extends State<WholeOrderView> {
                                 opacity: currentStep >= 0 ? 1 : 0.3,
                                 child: Icon(
                                   Icons.watch_later_outlined,
-                                  size: 40.sp,
+                                  size: 30.sp,
                                 ),
                               ),
                             ),
@@ -298,7 +300,7 @@ class _WholeOrderViewState extends State<WholeOrderView> {
                           ),
                         ],
                         if (widget.isInOld) ...[
-                          if (int.parse(currentOrder.status!) == 4)
+                          if (int.parse(currentOrder.status!.toString()) == 4)
                             EasyStep(
                               customStep: ClipRRect(
                                 borderRadius: BorderRadius.circular(15),
@@ -314,7 +316,7 @@ class _WholeOrderViewState extends State<WholeOrderView> {
                                   .read<OrderCubit>()
                                   .getStatusMessage('4'),
                             ),
-                          if (int.parse(currentOrder.status!) == 5)
+                          if (int.parse(currentOrder.status!.toString()) == 5)
                             EasyStep(
                               customStep: ClipRRect(
                                 borderRadius: BorderRadius.circular(15),
@@ -330,7 +332,7 @@ class _WholeOrderViewState extends State<WholeOrderView> {
                                   .read<OrderCubit>()
                                   .getStatusMessage('5'),
                             ),
-                          if (int.parse(currentOrder.status!) > 5)
+                          if (int.parse(currentOrder.status!.toString()) > 5)
                             EasyStep(
                               customStep: ClipRRect(
                                 borderRadius: BorderRadius.circular(15),

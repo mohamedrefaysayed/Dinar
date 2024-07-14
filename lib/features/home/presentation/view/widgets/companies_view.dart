@@ -1,6 +1,8 @@
 import 'package:dinar_store/core/animations/right_slide_transition.dart';
 import 'package:dinar_store/core/functions/future_delayed_navigator.dart';
+import 'package:dinar_store/core/utils/app_colors.dart';
 import 'package:dinar_store/core/utils/text_styles.dart';
+import 'package:dinar_store/core/widgets/message_snack_bar.dart';
 import 'package:dinar_store/features/home/presentation/view/widgets/all_companies_view.dart';
 import 'package:dinar_store/features/home/presentation/view/widgets/containers/company_container.dart';
 import 'package:dinar_store/features/home/presentation/view/widgets/place_holders/companies_place_holder.dart';
@@ -28,7 +30,17 @@ class _CompaniesViewState extends State<CompaniesView> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
 
-    return BlocBuilder<CompaniesCubit, CompaniesState>(
+    return BlocConsumer<CompaniesCubit, CompaniesState>(
+      listener: (context, state) {
+        if (state is CompaniesFaliuer) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            messageSnackBar(
+              message: state.errMessage,
+              isBottomNavBar: true,
+            ),
+          );
+        }
+      },
       builder: (context, state) {
         if (state is CompaniesSuccess) {
           return SizedBox(
@@ -101,6 +113,21 @@ class _CompaniesViewState extends State<CompaniesView> {
                   ),
                 ),
               ],
+            ),
+          );
+        }
+        if (state is CompaniesFaliuer) {
+          return SizedBox(
+            height: 200.h,
+            child: Center(
+              child: Text(
+                "حدثت مشكلة أثناء جلب الشركات",
+                style: TextStyle(
+                  fontSize: 20.sp,
+                  color: AppColors.kGrey,
+                ),
+                textAlign: TextAlign.center,
+              ),
             ),
           );
         }

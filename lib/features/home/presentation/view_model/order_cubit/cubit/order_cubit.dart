@@ -53,7 +53,7 @@ class OrderCubit extends Cubit<OrderState> {
     );
   }
 
-   getOrder({required int orderId}) async {
+  getOrder({required int orderId}) async {
     emit(UpdateOrderLoading());
     Either<ServerFailure, DinarOrder> result = await _ordersServices.getOrder(
       token: AppCubit.token!,
@@ -92,10 +92,10 @@ class OrderCubit extends Cubit<OrderState> {
     for (var cartItem in CartCubit.cartItemsModel!.cart!) {
       orderDetails.add(
         SendOrderDetails(
-          productId: int.parse(cartItem.productId!),
-          unitId: double.parse(cartItem.unitId!).toInt(),
-          qty: double.parse(cartItem.quantity!).toInt(),
-          price: double.parse(cartItem.price!).toInt(),
+          productId: cartItem.productId!,
+          unitId: cartItem.unitId!,
+          qty: cartItem.quantity!,
+          price: cartItem.price!,
         ).toJson(),
       );
     }

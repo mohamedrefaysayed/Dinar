@@ -40,7 +40,9 @@ class OrderRow extends StatelessWidget {
             children: [
               Center(
                 child: Text(
-                  context.read<OrderCubit>().getStatusMessage(order.status!),
+                  context
+                      .read<OrderCubit>()
+                      .getStatusMessage(order.status!.toString()),
                 ),
               ),
               Padding(

@@ -33,7 +33,7 @@ class CartItemRow extends StatelessWidget {
                         }
                       },
                       builder: (context, state) {
-                        if (cartItem.isRequired == '0') {
+                        if (cartItem.isRequired == 0) {
                           if (cartItem.loading) {
                             return SizedBox(
                               width: 20.w,
@@ -80,7 +80,7 @@ class CartItemRow extends StatelessWidget {
                     SizedBox(
                       height: 15.h,
                     ),
-                    cartItem.isRequired == '0'
+                    cartItem.isRequired == 0
                         ? Row(
                             children: [
                               // AppDefaultButton(
@@ -133,9 +133,7 @@ class CartItemRow extends StatelessWidget {
                                       );
                                     }
                                     return Text(
-                                      double.parse(cartItem.quantity!)
-                                          .toInt()
-                                          .toString(),
+                                      cartItem.quantity!.toString(),
                                       style: TextStyles.textStyle16.copyWith(
                                         fontWeight: FontWeight.w400,
                                         fontSize: 16.w,
@@ -177,9 +175,7 @@ class CartItemRow extends StatelessWidget {
                               Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 37.w),
                                 child: Text(
-                                  double.parse(cartItem.quantity!)
-                                      .toInt()
-                                      .toString(),
+                                  cartItem.quantity!.toString(),
                                   style: TextStyles.textStyle16.copyWith(
                                     fontWeight: FontWeight.w400,
                                     fontSize: 16.w,

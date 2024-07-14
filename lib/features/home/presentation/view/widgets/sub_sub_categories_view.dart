@@ -132,15 +132,17 @@ class _SubSubCategoryViewState extends State<SubSubCategoryView> {
                                                         .subCategories[index],
                                                 onPress: () {
                                                   Navigator.push(
-                                                      context,
-                                                      RightSlideTransition(
-                                                          page:
-                                                              WholeSubCategoryView(
+                                                    context,
+                                                    RightSlideTransition(
+                                                      page:
+                                                          WholeSubCategoryView(
                                                         subCategory: state
                                                             .categories[index],
                                                         subCategories:
                                                             state.categories,
-                                                      )));
+                                                      ),
+                                                    ),
+                                                  );
                                                 },
                                               ),
                                             ],

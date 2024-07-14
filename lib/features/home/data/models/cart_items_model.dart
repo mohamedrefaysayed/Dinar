@@ -23,17 +23,17 @@ class CartItemsModel {
 
 class CartItem {
   int? id;
-  String? productId;
-  String? userId;
-  String? unitId;
-  String? quantity;
-  String? price;
-  String? status;
+  int? productId;
+  int? userId;
+  int? unitId;
+  int? quantity;
+  int? price;
+  int? status;
   String? deletedAt;
   String? createdAt;
   String? updatedAt;
-  String? isRequired;
-  String? refCartId;
+  int? isRequired;
+  int? refCartId;
   Product? product;
   Unit? unit;
   bool loading = false;
@@ -108,14 +108,14 @@ class Product {
   String? wholeSalePrice;
   String? retailPrice;
   String? vipPrice;
-  String? categoryId;
-  String? companyId;
-  String? unitGroupId;
-  String? wholeUnitId;
-  String? retailUnitId;
-  String? vipUnitId;
+  int? categoryId;
+  int? companyId;
+  int? unitGroupId;
+  int? wholeUnitId;
+  int? retailUnitId;
+  int? vipUnitId;
   String? discount;
-  String? status;
+  int? status;
   String? deletedAt;
   String? createdAt;
   String? updatedAt;
@@ -209,8 +209,8 @@ class Unit {
   int? id;
   String? unitName;
   String? eq;
-  String? unitGroupId;
-  String? status;
+  int? unitGroupId;
+  int? status;
   String? deletedAt;
   String? createdAt;
   String? updatedAt;

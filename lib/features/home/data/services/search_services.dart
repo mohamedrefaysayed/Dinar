@@ -21,10 +21,13 @@ class SearchServices implements SearchRepo {
   }) async {
     SearchModel searchModel = SearchModel();
     try {
-      Map<String, dynamic> data =
-          await _dioHelper.postRequest(token: token, endPoint: 'search', body: {
-        'keyword': keyWord,
-      });
+      Map<String, dynamic> data = await _dioHelper.postRequest(
+        token: token,
+        endPoint: 'search',
+        body: {
+          'keyword': keyWord,
+        },
+      );
       searchModel = SearchModel.fromJson(data);
       return right(searchModel);
     } on DioException catch (error) {

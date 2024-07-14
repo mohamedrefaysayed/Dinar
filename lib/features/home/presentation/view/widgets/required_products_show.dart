@@ -177,7 +177,7 @@ class _RequiredProductsShowState extends State<RequiredProductsShow> {
                           await context.read<CartCubit>().storeItem(
                                 productId: widget.product.id!,
                                 quantity: widget.retailCount.value,
-                                unitId: int.parse(widget.product.retailUnitId!),
+                                unitId: widget.product.retailUnitId!,
                                 price: widget.totalRetailPrice.value,
                                 isRequired: '0',
                                 isLast: false,
@@ -193,7 +193,7 @@ class _RequiredProductsShowState extends State<RequiredProductsShow> {
                           await context.read<CartCubit>().storeItem(
                                 productId: widget.product.id!,
                                 quantity: widget.wholeCount.value,
-                                unitId: int.parse(widget.product.wholeUnitId!),
+                                unitId: widget.product.wholeUnitId!,
                                 price: widget.totalWholePrice.value,
                                 isRequired: '0',
                                 isLast: false,
