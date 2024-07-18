@@ -26,7 +26,7 @@ class AdsServices implements AdsRepo {
         endPoint: 'ads',
       );
       adsModel = AdsModel.fromJson(data);
-      if (adsModel.ads == null) {
+      if (adsModel.ads == null || adsModel.ads!.isEmpty) {
         return right(AdsModel(ads: []));
       }
       return right(adsModel);

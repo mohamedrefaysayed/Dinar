@@ -99,8 +99,8 @@ class Store {
   String? district;
   String? address;
   String? phone;
-  String? lng;
-  String? lat;
+  double? lng;
+  double? lat;
   int? userId;
   int? status;
   String? deletedAt;

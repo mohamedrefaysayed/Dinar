@@ -212,7 +212,7 @@ class CartItemRow extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          "\$ ${double.parse(cartItem.product!.retailPrice!).toInt()}",
+                          "\$ ${cartItem.product!.retailPrice!}",
                           style: TextStyles.textStyle16.copyWith(
                             fontWeight: FontWeight.w400,
                             color: AppColors.kRed,

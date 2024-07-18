@@ -88,10 +88,10 @@ class DataEdit extends StatelessWidget {
             AppDefaultButton(
               color: AppColors.kASDCPrimaryColor,
               onPressed: () {
-                double latitude = double.parse(
-                    ProfileCubit.profileModel!.user!.first.store!.lat!);
-                double longitude = double.parse(
-                    ProfileCubit.profileModel!.user!.first.store!.lng!);
+                double latitude =
+                    ProfileCubit.profileModel!.user!.first.store!.lat!;
+                double longitude =
+                    ProfileCubit.profileModel!.user!.first.store!.lng!;
 
                 Navigator.push(
                   context,

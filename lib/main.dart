@@ -44,25 +44,26 @@ class MyApp extends StatelessWidget {
       ),
     );
     return MainMultiBlocProvider(
-        child: ScreenUtilInit(
-      designSize: const Size(375, 811),
-      minTextAdapt: true,
-      child: Directionality(
-        textDirection: TextDirection.rtl,
-        child: MaterialApp(
-          debugShowCheckedModeBanner: false,
-          title: 'Dinar',
-          theme: ThemeData(
-            fontFamily: 'SegoeUI',
-            scaffoldBackgroundColor: Colors.white,
-            colorScheme:
-                ColorScheme.fromSeed(seedColor: AppColors.kASDCPrimaryColor),
-            useMaterial3: true,
+      child: ScreenUtilInit(
+        designSize: const Size(375, 811),
+        minTextAdapt: true,
+        child: Directionality(
+          textDirection: TextDirection.rtl,
+          child: MaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: 'Dinar',
+            theme: ThemeData(
+              fontFamily: 'SegoeUI',
+              scaffoldBackgroundColor: Colors.white,
+              colorScheme:
+                  ColorScheme.fromSeed(seedColor: AppColors.kASDCPrimaryColor),
+              useMaterial3: true,
+            ),
+            initialRoute: '/',
+            routes: AppRoutes.routes,
           ),
-          initialRoute: '/',
-          routes: AppRoutes.routes,
         ),
       ),
-    ));
+    );
   }
 }

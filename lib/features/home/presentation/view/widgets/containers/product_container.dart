@@ -82,15 +82,13 @@ class ProductContainer extends StatelessWidget {
                               child: Text.rich(
                                 TextSpan(children: [
                                   TextSpan(
-                                    text:
-                                        "\$${double.parse(product.retailPrice!).toInt()}, ",
+                                    text: "\$${product.retailPrice!}, ",
                                     style: TextStyles.textStyle12.copyWith(
                                         fontWeight: FontWeight.w400,
                                         color: Colors.grey),
                                   ),
                                   TextSpan(
-                                    text:
-                                        "\$${double.parse(product.wholeSalePrice!).toInt()}",
+                                    text: "\$${product.wholeSalePrice!}",
                                     style: TextStyles.textStyle12.copyWith(
                                         fontWeight: FontWeight.w400,
                                         color: Colors.green),

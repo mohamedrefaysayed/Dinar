@@ -86,8 +86,8 @@ class StoreDataCubit extends Cubit<StoreDataState> {
           ? marketPhoneController.text
           : profileModel.user!.first.store!.phone,
       position: LatLng(
-        double.parse(profileModel.user!.first.store!.lat!),
-        double.parse(profileModel.user!.first.store!.lng!),
+        profileModel.user!.first.store!.lat!,
+        profileModel.user!.first.store!.lng!,
       ),
       storeId: profileModel.user!.first.store!.id,
       token: AppCubit.token!,

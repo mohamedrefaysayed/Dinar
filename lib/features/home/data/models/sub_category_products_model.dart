@@ -5,8 +5,9 @@ class SubCategoryProductsModel {
   SubCategoryProductsModel({this.category, this.products});
 
   SubCategoryProductsModel.fromJson(Map<String, dynamic> json) {
-    category =
-        json['category'] != null ? Category.fromJson(json['category']) : null;
+    category = json['category'] != null
+        ? Category.fromJson(json['category'])
+        : null;
     if (json['products'] != null) {
       products = <Products>[];
       json['products'].forEach((v) {
@@ -39,20 +40,21 @@ class Category {
   String? deletedAt;
   String? createdAt;
   String? updatedAt;
+  CategorySpecification? categorySpecification;
 
-  Category({
-    this.id,
-    this.categoryName,
-    this.description,
-    this.image,
-    this.level,
-    this.parentId,
-    this.categorySpecificationId,
-    this.status,
-    this.deletedAt,
-    this.createdAt,
-    this.updatedAt,
-  });
+  Category(
+      {this.id,
+      this.categoryName,
+      this.description,
+      this.image,
+      this.level,
+      this.parentId,
+      this.categorySpecificationId,
+      this.status,
+      this.deletedAt,
+      this.createdAt,
+      this.updatedAt,
+      this.categorySpecification});
 
   Category.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -66,6 +68,9 @@ class Category {
     deletedAt = json['deleted_at'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
+    categorySpecification = json['category_specification'] != null
+        ? CategorySpecification.fromJson(json['category_specification'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -81,6 +86,50 @@ class Category {
     data['deleted_at'] = deletedAt;
     data['created_at'] = createdAt;
     data['updated_at'] = updatedAt;
+    if (categorySpecification != null) {
+      data['category_specification'] = categorySpecification!.toJson();
+    }
+    return data;
+  }
+}
+
+class CategorySpecification {
+  int? id;
+  String? specificationName;
+  String? description;
+  int? status;
+  String? deletedAt;
+  String? createdAt;
+  String? updatedAt;
+
+  CategorySpecification(
+      {this.id,
+      this.specificationName,
+      this.description,
+      this.status,
+      this.deletedAt,
+      this.createdAt,
+      this.updatedAt});
+
+  CategorySpecification.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    specificationName = json['specification_name'];
+    description = json['description'];
+    status = json['status'];
+    deletedAt = json['deleted_at'];
+    createdAt = json['created_at'];
+    updatedAt = json['updated_at'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['specification_name'] = specificationName;
+    data['description'] = description;
+    data['status'] = status;
+    data['deleted_at'] = deletedAt;
+    data['created_at'] = createdAt;
+    data['updated_at'] = updatedAt;
     return data;
   }
 }
@@ -90,25 +139,25 @@ class Products {
   String? productName;
   String? description;
   String? image;
-  String? wholeSalePrice;
-  String? retailPrice;
-  String? vipPrice;
+  int? wholeSalePrice;
+  int? retailPrice;
+  int? vipPrice;
   int? categoryId;
   int? companyId;
   int? unitGroupId;
   int? wholeUnitId;
   int? retailUnitId;
   int? vipUnitId;
-  String? discount;
+  int? discount;
   int? status;
   String? deletedAt;
   String? createdAt;
   String? updatedAt;
-  String? minWholeQuantity;
-  String? minRetailQuantity;
-  String? minVipQuantity;
-  String? maxWholeQuantity;
-  String? maxRetailQuantity;
+  int? minWholeQuantity;
+  int? minRetailQuantity;
+  int? minVipQuantity;
+  int? maxWholeQuantity;
+  int? maxRetailQuantity;
   WholeUnit? wholeUnit;
   UnitGroup? unitGroup;
   Category? category;
@@ -117,38 +166,37 @@ class Products {
   WholeUnit? vipUnit;
   List<RequiredProducts>? requiredProducts;
 
-  Products({
-    this.id,
-    this.productName,
-    this.description,
-    this.image,
-    this.wholeSalePrice,
-    this.retailPrice,
-    this.vipPrice,
-    this.categoryId,
-    this.companyId,
-    this.unitGroupId,
-    this.wholeUnitId,
-    this.retailUnitId,
-    this.vipUnitId,
-    this.discount,
-    this.status,
-    this.deletedAt,
-    this.createdAt,
-    this.updatedAt,
-    this.minWholeQuantity,
-    this.minRetailQuantity,
-    this.minVipQuantity,
-    this.maxWholeQuantity,
-    this.maxRetailQuantity,
-    this.wholeUnit,
-    this.unitGroup,
-    this.category,
-    this.company,
-    this.retailUnit,
-    this.vipUnit,
-    this.requiredProducts,
-  });
+  Products(
+      {this.id,
+      this.productName,
+      this.description,
+      this.image,
+      this.wholeSalePrice,
+      this.retailPrice,
+      this.vipPrice,
+      this.categoryId,
+      this.companyId,
+      this.unitGroupId,
+      this.wholeUnitId,
+      this.retailUnitId,
+      this.vipUnitId,
+      this.discount,
+      this.status,
+      this.deletedAt,
+      this.createdAt,
+      this.updatedAt,
+      this.minWholeQuantity,
+      this.minRetailQuantity,
+      this.minVipQuantity,
+      this.maxWholeQuantity,
+      this.maxRetailQuantity,
+      this.wholeUnit,
+      this.unitGroup,
+      this.category,
+      this.company,
+      this.retailUnit,
+      this.vipUnit,
+      this.requiredProducts});
 
   Products.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -180,15 +228,17 @@ class Products {
     unitGroup = json['unit_group'] != null
         ? UnitGroup.fromJson(json['unit_group'])
         : null;
-    category =
-        json['category'] != null ? Category.fromJson(json['category']) : null;
+    category = json['category'] != null
+        ? Category.fromJson(json['category'])
+        : null;
     company =
         json['company'] != null ? Company.fromJson(json['company']) : null;
     retailUnit = json['retail_unit'] != null
         ? WholeUnit.fromJson(json['retail_unit'])
         : null;
-    vipUnit =
-        json['vip_unit'] != null ? WholeUnit.fromJson(json['vip_unit']) : null;
+    vipUnit = json['vip_unit'] != null
+        ? WholeUnit.fromJson(json['vip_unit'])
+        : null;
     if (json['required_products'] != null) {
       requiredProducts = <RequiredProducts>[];
       json['required_products'].forEach((v) {
@@ -251,7 +301,7 @@ class Products {
 class WholeUnit {
   int? id;
   String? unitName;
-  String? eq;
+  int? eq;
   int? unitGroupId;
   int? status;
   String? deletedAt;
@@ -334,7 +384,7 @@ class UnitGroup {
   }
 }
 
-class MainCategory {
+class ProductCategory {
   int? id;
   String? categoryName;
   String? description;
@@ -347,7 +397,7 @@ class MainCategory {
   String? createdAt;
   String? updatedAt;
 
-  MainCategory(
+  ProductCategory(
       {this.id,
       this.categoryName,
       this.description,
@@ -360,7 +410,7 @@ class MainCategory {
       this.createdAt,
       this.updatedAt});
 
-  MainCategory.fromJson(Map<String, dynamic> json) {
+  ProductCategory.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     categoryName = json['category_name'];
     description = json['description'];
@@ -441,25 +491,25 @@ class RequiredProducts {
   String? productName;
   String? description;
   String? image;
-  String? wholeSalePrice;
-  String? retailPrice;
-  String? vipPrice;
+  int? wholeSalePrice;
+  int? retailPrice;
+  int? vipPrice;
   int? categoryId;
   int? companyId;
   int? unitGroupId;
   int? wholeUnitId;
   int? retailUnitId;
   int? vipUnitId;
-  String? discount;
+  int? discount;
   int? status;
   String? deletedAt;
   String? createdAt;
   String? updatedAt;
-  String? minWholeQuantity;
-  String? minRetailQuantity;
-  String? minVipQuantity;
-  String? maxWholeQuantity;
-  String? maxRetailQuantity;
+  int? minWholeQuantity;
+  int? minRetailQuantity;
+  int? minVipQuantity;
+  int? maxWholeQuantity;
+  int? maxRetailQuantity;
   Pivot? pivot;
   WholeUnit? wholeUnit;
   WholeUnit? retailUnit;
@@ -567,12 +617,10 @@ class Pivot {
   int? productId;
   int? requiredProductId;
   int? unitId;
-  String? quantity;
+  int? quantity;
   int? requiredUnitId;
-  String? requiredQuantiy;
+  int? requiredQuantiy;
   int? status;
-  String? createdAt;
-  String? updatedAt;
 
   Pivot(
       {this.productId,
@@ -581,9 +629,7 @@ class Pivot {
       this.quantity,
       this.requiredUnitId,
       this.requiredQuantiy,
-      this.status,
-      this.createdAt,
-      this.updatedAt});
+      this.status});
 
   Pivot.fromJson(Map<String, dynamic> json) {
     productId = json['product_id'];
@@ -593,8 +639,6 @@ class Pivot {
     requiredUnitId = json['required_unit_id'];
     requiredQuantiy = json['required_quantiy'];
     status = json['status'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
   }
 
   Map<String, dynamic> toJson() {
@@ -606,8 +650,6 @@ class Pivot {
     data['required_unit_id'] = requiredUnitId;
     data['required_quantiy'] = requiredQuantiy;
     data['status'] = status;
-    data['created_at'] = createdAt;
-    data['updated_at'] = updatedAt;
     return data;
   }
 }

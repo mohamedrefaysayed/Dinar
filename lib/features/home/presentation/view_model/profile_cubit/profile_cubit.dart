@@ -49,12 +49,8 @@ class ProfileCubit extends Cubit<ProfileState> {
       (newProfileModel) async {
         profileModel = newProfileModel;
         context.read<LocationCubit>().getAddress(
-              double.parse(
-                newProfileModel.user!.first.store!.lat!,
-              ),
-              double.parse(
-                newProfileModel.user!.first.store!.lng!,
-              ),
+              newProfileModel.user!.first.store!.lat!,
+              newProfileModel.user!.first.store!.lng!,
             );
         emit(ProfileSuccess(profileModel: newProfileModel));
       },
@@ -69,7 +65,6 @@ class ProfileCubit extends Cubit<ProfileState> {
       position: position,
     );
     emit(ProfileUpdate());
-    
 
     await placemarkFromCoordinates(position.latitude, position.longitude)
         .then((List<Placemark> placemarks) {

@@ -87,15 +87,13 @@ class _ProductViewState extends State<ProductView> {
                       child: Text.rich(
                         TextSpan(children: [
                           TextSpan(
-                            text:
-                                "\$ ${double.parse(widget.product.retailPrice!).toInt()} , ",
+                            text: "\$ ${widget.product.retailPrice!} , ",
                             style: TextStyles.textStyle12.copyWith(
                                 fontWeight: FontWeight.w400,
                                 color: Colors.grey),
                           ),
                           TextSpan(
-                            text:
-                                "\$ ${double.parse(widget.product.wholeSalePrice!).toInt()}",
+                            text: "\$ ${widget.product.wholeSalePrice!}",
                             style: TextStyles.textStyle16.copyWith(
                               fontWeight: FontWeight.w400,
                               color: Colors.green,
@@ -130,20 +128,16 @@ class _ProductViewState extends State<ProductView> {
                   height: 10.h,
                 ),
                 ProductAmountRow(
-                  retailPrice: widget.product.retailPrice!,
-                  wholeSalePrice: widget.product.wholeSalePrice!,
+                  retailPrice: widget.product.retailPrice!.toString(),
+                  wholeSalePrice: widget.product.wholeSalePrice!.toString(),
                   retailCount: retailCount,
                   wholeCount: wholeCount,
                   totalRetailPrice: totalRetailPrice,
                   totalWholePrice: totalWholePrice,
-                  minRetail:
-                      double.parse(widget.product.minRetailQuantity!).toInt(),
-                  maxRetail:
-                      double.parse(widget.product.maxRetailQuantity!).toInt(),
-                  minWhole:
-                      double.parse(widget.product.minWholeQuantity!).toInt(),
-                  maxWhole:
-                      double.parse(widget.product.maxWholeQuantity!).toInt(),
+                  minRetail: widget.product.minRetailQuantity!,
+                  maxRetail: widget.product.maxRetailQuantity!,
+                  minWhole: widget.product.minWholeQuantity!,
+                  maxWhole: widget.product.maxWholeQuantity!,
                   itemImage: widget.product.image!,
                 ),
               ],

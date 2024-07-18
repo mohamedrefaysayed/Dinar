@@ -105,25 +105,25 @@ class Product {
   String? productName;
   String? description;
   String? image;
-  String? wholeSalePrice;
-  String? retailPrice;
-  String? vipPrice;
+  int? wholeSalePrice;
+  int? retailPrice;
+  int? vipPrice;
   int? categoryId;
   int? companyId;
   int? unitGroupId;
   int? wholeUnitId;
   int? retailUnitId;
   int? vipUnitId;
-  String? discount;
+  int? discount;
   int? status;
   String? deletedAt;
   String? createdAt;
   String? updatedAt;
-  String? minWholeQuantity;
-  String? minRetailQuantity;
-  String? minVipQuantity;
-  String? maxWholeQuantity;
-  String? maxRetailQuantity;
+  int? minWholeQuantity;
+  int? minRetailQuantity;
+  int? minVipQuantity;
+  int? maxWholeQuantity;
+  int? maxRetailQuantity;
 
   Product(
       {this.id,
@@ -208,7 +208,7 @@ class Product {
 class Unit {
   int? id;
   String? unitName;
-  String? eq;
+  int? eq;
   int? unitGroupId;
   int? status;
   String? deletedAt;

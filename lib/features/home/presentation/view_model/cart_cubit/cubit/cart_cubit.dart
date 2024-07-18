@@ -82,10 +82,10 @@ class CartCubit extends Cubit<CartState> {
         }
         if (isRequired == '0') {
           for (int i = 0; i < requiredProducts.length; i++) {
-            double productCount = ((quantity /
-                        (double.parse(requiredProducts[i].pivot!.quantity!)))
-                    .floor() *
-                double.parse(requiredProducts[i].pivot!.requiredQuantiy!));
+            double productCount =
+                ((quantity / (requiredProducts[i].pivot!.quantity!)).floor() *
+                    requiredProducts[i].pivot!.requiredQuantiy! *
+                    1.0);
 
             await storeItem(
               productId: requiredProducts[i].id!,
@@ -93,8 +93,8 @@ class CartCubit extends Cubit<CartState> {
               unitId: requiredProducts[i].pivot!.requiredUnitId!,
               price: requiredProducts[i].pivot!.requiredUnitId! ==
                       requiredProducts[i].retailUnit!.id
-                  ? double.parse(requiredProducts[i].retailPrice!)
-                  : double.parse(requiredProducts[i].wholeSalePrice!),
+                  ? (requiredProducts[i].retailPrice! * 1.0)
+                  : (requiredProducts[i].wholeSalePrice! * 1.0),
               isRequired: '1',
               isLast: requiredProducts.length - 1 == i,
               requiredProducts: [],
@@ -175,8 +175,7 @@ class CartCubit extends Cubit<CartState> {
     for (var element in items) {
       totalPrice = totalPrice + (element.price! * element.quantity!);
       totalDiscount = totalDiscount +
-          (((element.price!) / 100) *
-                  double.parse(element.product!.discount!)) *
+          (((element.price!) / 100) * element.product!.discount!) *
               element.quantity!;
     }
     finalPrice = totalPrice - totalDiscount;

@@ -38,14 +38,14 @@ class _RequierdProductContainerState extends State<RequierdProductContainer> {
 
     if (widget.isRetail) {
       productCount = ((widget.retailCount.value /
-                  (double.parse(widget.product.pivot!.quantity!)))
+                  ((widget.product.pivot!.quantity! * 1.0)))
               .floor() *
-          double.parse(widget.product.pivot!.requiredQuantiy!));
+          (widget.product.pivot!.requiredQuantiy! * 1.0));
     } else {
-      productCount = ((widget.wholeCount.value /
-                  (double.parse(widget.product.pivot!.quantity!)))
-              .floor() *
-          double.parse(widget.product.pivot!.requiredQuantiy!));
+      productCount =
+          ((widget.wholeCount.value / ((widget.product.pivot!.quantity! * 1.0)))
+                  .floor() *
+              (widget.product.pivot!.requiredQuantiy! * 1.0));
     }
   }
 
@@ -62,7 +62,7 @@ class _RequierdProductContainerState extends State<RequierdProductContainer> {
         child: Column(
           children: [
             Text(
-              "${double.parse(widget.product.pivot!.requiredQuantiy!).toInt()} فرض  لكل ${double.parse(widget.product.pivot!.quantity!).toInt()}",
+              "${widget.product.pivot!.requiredQuantiy!} فرض  لكل ${widget.product.pivot!.quantity!}",
               style:
                   TextStyles.textStyle12.copyWith(fontWeight: FontWeight.w400),
               overflow: TextOverflow.ellipsis,
@@ -125,7 +125,7 @@ class _RequierdProductContainerState extends State<RequierdProductContainer> {
                             TextSpan(children: [
                               TextSpan(
                                 text:
-                                    "\$ ${widget.product.pivot!.requiredUnitId! == widget.product.retailUnitId! ? double.parse(widget.product.retailPrice!).toInt() : double.parse(widget.product.wholeSalePrice!).toInt()}",
+                                    "\$ ${widget.product.pivot!.requiredUnitId! == widget.product.retailUnitId! ? widget.product.retailPrice! : widget.product.wholeSalePrice!}",
                                 style: TextStyles.textStyle12.copyWith(
                                     fontWeight: FontWeight.w400,
                                     color: Colors.green),
