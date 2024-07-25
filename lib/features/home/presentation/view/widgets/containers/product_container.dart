@@ -44,7 +44,7 @@ class ProductContainer extends StatelessWidget {
                           errorIcon: Icon(
                             Icons.image,
                             size: 50.w,
-                            color: AppColors.kASDCPrimaryColor,
+                            color: AppColors.primaryColor,
                           ),
                           loadingWidth: 30.w,
                         ),
@@ -82,19 +82,21 @@ class ProductContainer extends StatelessWidget {
                               child: Text.rich(
                                 TextSpan(children: [
                                   TextSpan(
-                                    text: "\$${product.retailPrice!}, ",
+                                    text: "${product.retailPrice!}.د, ",
                                     style: TextStyles.textStyle12.copyWith(
-                                        fontWeight: FontWeight.w400,
-                                        color: Colors.grey),
+                                      fontWeight: FontWeight.w400,
+                                      color: Colors.grey,
+                                    ),
                                   ),
                                   TextSpan(
-                                    text: "\$${product.wholeSalePrice!}",
+                                    text: "${product.wholeSalePrice!}.د",
                                     style: TextStyles.textStyle12.copyWith(
                                         fontWeight: FontWeight.w400,
                                         color: Colors.green),
                                   ),
                                 ]),
                                 overflow: TextOverflow.ellipsis,
+                                textDirection: TextDirection.rtl,
                               ),
                             ),
                           )

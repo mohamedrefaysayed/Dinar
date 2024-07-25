@@ -47,11 +47,11 @@ class PhoneTextFieldBuilder extends StatelessWidget {
             countryNameStyle: TextStyles.textStyle12,
           ),
           decoration: InputDecoration(
-            prefixIconColor: AppColors.kASDCPrimaryColor,
+            prefixIconColor: AppColors.primaryColor,
             focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(kIsTablet ? 10.w : 15.w),
                 borderSide: const BorderSide(
-                  color: AppColors.kASDCPrimaryColor,
+                  color: AppColors.primaryColor,
                 )),
             counterText: '',
             errorStyle: TextStyles.textStyle10,

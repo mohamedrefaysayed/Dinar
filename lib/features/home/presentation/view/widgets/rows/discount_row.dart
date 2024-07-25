@@ -21,7 +21,7 @@ class DiscountRow extends StatelessWidget {
         dashPattern: const [6, 6],
         borderType: BorderType.RRect,
         radius: Radius.circular(15.w),
-        color: AppColors.kASDCPrimaryColor,
+        color: AppColors.primaryColor,
         strokeWidth: 1,
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.h),
@@ -33,7 +33,7 @@ class DiscountRow extends StatelessWidget {
                   onPressed: () {},
                   title: "تطبيق",
                   width: 70.w,
-                  color: AppColors.kASDCPrimaryColor,
+                  color: AppColors.primaryColor,
                   textStyle: TextStyles.textStyle12.copyWith(
                     fontWeight: FontWeight.w400,
                     color: AppColors.kWhite,
@@ -59,14 +59,14 @@ class DiscountRow extends StatelessWidget {
                   decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       border: Border.all(
-                        color: AppColors.kASDCPrimaryColor,
+                        color: AppColors.primaryColor,
                         width: 1.w,
                       )),
                   child: Center(
                     child: Text(
                       "%",
                       style: TextStyles.textStyle16.copyWith(
-                        color: AppColors.kASDCPrimaryColor,
+                        color: AppColors.primaryColor,
                         fontWeight: FontWeight.bold,
                         fontSize: 16.w,
                       ),

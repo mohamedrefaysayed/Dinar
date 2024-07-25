@@ -131,7 +131,7 @@ class _CartViewState extends State<CartView>
                                       width: 15.w,
                                       decoration: const BoxDecoration(
                                         shape: BoxShape.circle,
-                                        color: AppColors.kASDCPrimaryColor,
+                                        color: AppColors.primaryColor,
                                       ),
                                       child: Center(
                                         child: Text(
@@ -209,17 +209,18 @@ class _CartViewState extends State<CartView>
                                   Row(
                                     children: [
                                       Text(
-                                        "\$${CartCubit.totalPrice}",
+                                        "${CartCubit.totalPrice}.د",
                                         style: TextStyles.textStyle14.copyWith(
                                           fontWeight: FontWeight.w700,
                                         ),
+                                        textDirection: TextDirection.rtl,
                                       ),
                                       const Spacer(),
                                       Text(
                                         'مجموع الشراء',
                                         style: TextStyles.textStyle14.copyWith(
                                           fontWeight: FontWeight.w700,
-                                          color: AppColors.kASDCPrimaryColor,
+                                          color: AppColors.primaryColor,
                                         ),
                                       ),
                                     ],
@@ -230,18 +231,19 @@ class _CartViewState extends State<CartView>
                                   Row(
                                     children: [
                                       Text(
-                                        "\$${CartCubit.totalDiscount}",
+                                        "${CartCubit.totalDiscount}.د",
                                         style: TextStyles.textStyle14.copyWith(
                                           fontWeight: FontWeight.w700,
-                                          color: AppColors.kRed,
+                                          color: AppColors.primaryColor,
                                         ),
+                                        textDirection: TextDirection.rtl,
                                       ),
                                       const Spacer(),
                                       Text(
                                         'سعر الخصم',
                                         style: TextStyles.textStyle14.copyWith(
                                           fontWeight: FontWeight.w700,
-                                          color: AppColors.kASDCPrimaryColor,
+                                          color: AppColors.primaryColor,
                                         ),
                                       ),
                                     ],
@@ -252,17 +254,18 @@ class _CartViewState extends State<CartView>
                                   Row(
                                     children: [
                                       Text(
-                                        '\$0.00',
+                                        '0.00.د',
                                         style: TextStyles.textStyle14.copyWith(
                                           fontWeight: FontWeight.w700,
                                         ),
+                                        textDirection: TextDirection.rtl,
                                       ),
                                       const Spacer(),
                                       Text(
                                         'سعر التوصيل',
                                         style: TextStyles.textStyle14.copyWith(
                                           fontWeight: FontWeight.w700,
-                                          color: AppColors.kASDCPrimaryColor,
+                                          color: AppColors.primaryColor,
                                         ),
                                       ),
                                     ],
@@ -273,17 +276,18 @@ class _CartViewState extends State<CartView>
                                   Row(
                                     children: [
                                       Text(
-                                        '\$0.00',
+                                        '0.00.د',
                                         style: TextStyles.textStyle14.copyWith(
                                           fontWeight: FontWeight.w700,
                                         ),
+                                        textDirection: TextDirection.rtl,
                                       ),
                                       const Spacer(),
                                       Text(
                                         'رسوم الخدمة',
                                         style: TextStyles.textStyle14.copyWith(
                                           fontWeight: FontWeight.w700,
-                                          color: AppColors.kASDCPrimaryColor,
+                                          color: AppColors.primaryColor,
                                         ),
                                       ),
                                     ],
@@ -292,17 +296,18 @@ class _CartViewState extends State<CartView>
                                   Row(
                                     children: [
                                       Text(
-                                        "\$${CartCubit.finalPrice}",
+                                        "${CartCubit.finalPrice}.د",
                                         style: TextStyles.textStyle14.copyWith(
                                           fontWeight: FontWeight.w700,
                                         ),
+                                        textDirection: TextDirection.rtl,
                                       ),
                                       const Spacer(),
                                       Text(
                                         'السعر النهائى',
                                         style: TextStyles.textStyle14.copyWith(
                                           fontWeight: FontWeight.w700,
-                                          color: AppColors.kASDCPrimaryColor,
+                                          color: AppColors.primaryColor,
                                         ),
                                       ),
                                     ],
@@ -315,7 +320,7 @@ class _CartViewState extends State<CartView>
                                           RightSlideTransition(
                                               page: const OrderConfirmView()));
                                     },
-                                    color: AppColors.kASDCPrimaryColor,
+                                    color: AppColors.primaryColor,
                                     title: "إتمام الطلب",
                                     textStyle: TextStyles.textStyle16.copyWith(
                                       color: AppColors.kWhite,

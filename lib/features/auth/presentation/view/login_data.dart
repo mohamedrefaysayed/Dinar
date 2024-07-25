@@ -46,7 +46,7 @@ class LoginData extends StatelessWidget {
                         AppImages.dinarLogo,
                         height: 40.w,
                         width: 177.w,
-                        color: AppColors.kASDCPrimaryColor,
+                        color: AppColors.primaryColor,
                       ),
                     ),
                   ),
@@ -148,7 +148,7 @@ class LoginData extends StatelessWidget {
                                 .getCurrentLocation(context: context);
                           },
                           title: 'تحديد موقعي',
-                          color: AppColors.kASDCPrimaryColor,
+                          color: AppColors.primaryColor,
                         ),
                       );
                     },
@@ -194,7 +194,7 @@ class LoginData extends StatelessWidget {
                             }
                           },
                           title: 'حفظ',
-                          color: AppColors.kASDCPrimaryColor,
+                          color: AppColors.primaryColor,
                         );
                       },
                     ),

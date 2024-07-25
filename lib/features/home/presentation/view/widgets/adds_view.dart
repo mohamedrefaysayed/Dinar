@@ -54,7 +54,7 @@ class _AddsViewState extends State<AddsView> {
                                   errorIcon: Icon(
                                     Icons.image,
                                     size: 100.w,
-                                    color: AppColors.kASDCPrimaryColor,
+                                    color: AppColors.primaryColor,
                                   ),
                                   loadingWidth: 30.w,
                                 )),

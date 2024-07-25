@@ -59,11 +59,10 @@ class CodeBuilder extends StatelessWidget {
           child: VerificationCode(
               underlineWidth: 2,
               length: 6,
-              underlineColor: AppColors.kASDCPrimaryColor,
-              textStyle: TextStyle(
-                  color: AppColors.kASDCPrimaryColor, fontSize: 20.sp),
-              underlineUnfocusedColor:
-                  AppColors.kASDCPrimaryColor.withOpacity(0.5),
+              underlineColor: AppColors.primaryColor,
+              textStyle:
+                  TextStyle(color: AppColors.primaryColor, fontSize: 20.sp),
+              underlineUnfocusedColor: AppColors.primaryColor.withOpacity(0.5),
               fillColor: Colors.white.withOpacity(.05),
               itemSize: 45.w,
               fullBorder: true,
@@ -117,7 +116,7 @@ class CodeBuilder extends StatelessWidget {
                 }
               },
               title: 'أرسال',
-              color: AppColors.kASDCPrimaryColor,
+              color: AppColors.primaryColor,
               borderRadius: BorderRadius.circular(15.w),
               width: double.infinity,
               textStyle: TextStyles.textStyle16.copyWith(

@@ -77,7 +77,7 @@ class AllCompanyContainer extends StatelessWidget {
                         errorIcon: Icon(
                           Icons.home_work_rounded,
                           size: 30.w,
-                          color: AppColors.kASDCPrimaryColor,
+                          color: AppColors.primaryColor,
                         ),
                         loadingWidth: 13.w,
                       ),

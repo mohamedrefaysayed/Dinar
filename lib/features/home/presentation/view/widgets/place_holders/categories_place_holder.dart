@@ -11,7 +11,7 @@ class CategoriesPlaceHolder extends StatelessWidget {
   Widget build(BuildContext context) {
     return Shimmer.fromColors(
       baseColor: Colors.grey.withOpacity(0.3),
-      highlightColor: AppColors.kASDCPrimaryColor.withOpacity(0.5),
+      highlightColor: AppColors.primaryColor.withOpacity(0.5),
       child: Padding(
         padding:
             EdgeInsets.only(right: 20.w, left: 20.w, top: 30.h, bottom: 20.h),

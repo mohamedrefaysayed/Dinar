@@ -60,7 +60,7 @@ class DeleteAccountContainer extends StatelessWidget {
                         child: Text(
                           'إلغاء',
                           style: TextStyles.textStyle14.copyWith(
-                            color: AppColors.kASDCPrimaryColor,
+                            color: AppColors.primaryColor,
                           ),
                         ),
                       ),
@@ -73,7 +73,7 @@ class DeleteAccountContainer extends StatelessWidget {
                         child: Text(
                           'حذف',
                           style: TextStyles.textStyle14.copyWith(
-                            color: AppColors.kASDCPrimaryColor,
+                            color: AppColors.primaryColor,
                           ),
                         ),
                       ),

@@ -33,7 +33,7 @@ class SearchItem extends StatelessWidget {
                     url: imag,
                     errorIcon: const Icon(
                       Icons.image,
-                      color: AppColors.kASDCPrimaryColor,
+                      color: AppColors.primaryColor,
                     ),
                     loadingWidth: 13.w),
               ),

@@ -56,11 +56,17 @@ class _ProductAmountRowState extends State<ProductAmountRow> {
                 children: [
                   SizedBox(
                     width: 80.w,
-                    child: Text(
-                      '\$${double.parse(widget.wholeSalePrice).toInt()}',
-                      style: TextStyles.textStyle12.copyWith(
-                          fontWeight: FontWeight.w800,
-                          color: AppColors.kASDCPrimaryColor),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          '${double.parse(widget.wholeSalePrice).toInt()}.د',
+                          style: TextStyles.textStyle12.copyWith(
+                              fontWeight: FontWeight.w800,
+                              color: AppColors.primaryColor),
+                          textDirection: TextDirection.rtl,
+                        ),
+                      ],
                     ),
                   ),
                   Row(
@@ -137,7 +143,7 @@ class _ProductAmountRowState extends State<ProductAmountRow> {
                         width: 50.w,
                         child: Center(
                           child: AppDefaultButton(
-                            color: AppColors.kASDCPrimaryColor.withOpacity(0.2),
+                            color: AppColors.primaryColor.withOpacity(0.2),
                             height: 22.w,
                             width: 22.w,
                             noFuture: true,
@@ -172,7 +178,7 @@ class _ProductAmountRowState extends State<ProductAmountRow> {
                             icon: Icon(
                               Icons.add,
                               size: 20.w,
-                              color: AppColors.kASDCPrimaryColor,
+                              color: AppColors.primaryColor,
                             ),
                             title: '',
                           ),
@@ -199,11 +205,18 @@ class _ProductAmountRowState extends State<ProductAmountRow> {
                 children: [
                   SizedBox(
                     width: 80.w,
-                    child: Text(
-                      '\$${double.parse(widget.retailPrice).toInt()}',
-                      style: TextStyles.textStyle12.copyWith(
-                          fontWeight: FontWeight.w800,
-                          color: AppColors.kASDCPrimaryColor),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          '${double.parse(widget.retailPrice).toInt()}.د',
+                          style: TextStyles.textStyle12.copyWith(
+                            fontWeight: FontWeight.w800,
+                            color: AppColors.primaryColor,
+                          ),
+                          textDirection: TextDirection.rtl,
+                        ),
+                      ],
                     ),
                   ),
                   Row(
@@ -277,7 +290,7 @@ class _ProductAmountRowState extends State<ProductAmountRow> {
                         width: 50.w,
                         child: Center(
                           child: AppDefaultButton(
-                            color: AppColors.kASDCPrimaryColor.withOpacity(0.2),
+                            color: AppColors.primaryColor.withOpacity(0.2),
                             height: 22.w,
                             width: 22.w,
                             noFuture: true,
@@ -309,7 +322,7 @@ class _ProductAmountRowState extends State<ProductAmountRow> {
                             icon: Icon(
                               Icons.add,
                               size: 20.w,
-                              color: AppColors.kASDCPrimaryColor,
+                              color: AppColors.primaryColor,
                             ),
                             title: '',
                           ),

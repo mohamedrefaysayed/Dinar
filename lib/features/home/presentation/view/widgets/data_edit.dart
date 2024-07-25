@@ -86,7 +86,7 @@ class DataEdit extends StatelessWidget {
               height: 30.h,
             ),
             AppDefaultButton(
-              color: AppColors.kASDCPrimaryColor,
+              color: AppColors.primaryColor,
               onPressed: () {
                 double latitude =
                     ProfileCubit.profileModel!.user!.first.store!.lat!;
@@ -145,7 +145,7 @@ class DataEdit extends StatelessWidget {
                   return const AppLoadingButton();
                 }
                 return AppDefaultButton(
-                  color: AppColors.kASDCPrimaryColor,
+                  color: AppColors.primaryColor,
                   onPressed: () {
                     if (StoreDataCubit.nameController.text != "" ||
                         StoreDataCubit.marketNameController.text != "" ||

@@ -42,7 +42,7 @@ class SubCategoryContainerHome extends StatelessWidget {
                       errorIcon: Icon(
                         Icons.image,
                         size: 100.w,
-                        color: AppColors.kASDCPrimaryColor,
+                        color: AppColors.primaryColor,
                       ),
                       loadingWidth: 30.w,
                     ),

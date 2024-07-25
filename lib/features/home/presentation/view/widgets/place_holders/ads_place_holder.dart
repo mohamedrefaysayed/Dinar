@@ -12,7 +12,7 @@ class AdsPlaceHolder extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 20.w),
       child: Shimmer.fromColors(
         baseColor: Colors.grey.withOpacity(0.3),
-        highlightColor: AppColors.kASDCPrimaryColor.withOpacity(0.5),
+        highlightColor: AppColors.primaryColor.withOpacity(0.5),
         child: Container(
           height: 185.h,
           width: double.infinity,

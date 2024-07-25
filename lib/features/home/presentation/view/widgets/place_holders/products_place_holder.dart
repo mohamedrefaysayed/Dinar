@@ -12,7 +12,7 @@ class ProductsPlaceHolder extends StatelessWidget {
   Widget build(BuildContext context) {
     return Shimmer.fromColors(
       baseColor: Colors.grey.withOpacity(0.3),
-      highlightColor: AppColors.kASDCPrimaryColor.withOpacity(0.5),
+      highlightColor: AppColors.primaryColor.withOpacity(0.5),
       child: ListView.builder(
         shrinkWrap: true,
         itemCount: 10,

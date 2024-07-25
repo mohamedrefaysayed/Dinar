@@ -29,7 +29,7 @@ class OrderRow extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
       decoration: BoxDecoration(
         color: isInDetails
-            ? AppColors.kASDCPrimaryColor.withOpacity(0.1)
+            ? AppColors.primaryColor.withOpacity(0.1)
             : AppColors.kWhite,
         borderRadius: BorderRadius.circular(15.w),
       ),
@@ -56,7 +56,7 @@ class OrderRow extends StatelessWidget {
                         Icon(
                           Icons.arrow_back_ios,
                           size: 15.w,
-                          color: AppColors.kASDCPrimaryColor,
+                          color: AppColors.primaryColor,
                         ),
                       ],
                     ),

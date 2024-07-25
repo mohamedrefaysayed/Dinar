@@ -83,7 +83,7 @@ class LogInView extends StatelessWidget {
                       AppImages.dinarLogo,
                       height: 40.w,
                       width: 177.w,
-                      color: AppColors.kASDCPrimaryColor,
+                      color: AppColors.primaryColor,
                     ),
                   ),
                 ),

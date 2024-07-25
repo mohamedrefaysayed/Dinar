@@ -66,7 +66,7 @@ class PhoneBuilder extends StatelessWidget {
                 }
               },
               title: 'أرسال',
-              color: AppColors.kASDCPrimaryColor,
+              color: AppColors.primaryColor,
               borderRadius: BorderRadius.circular(15.w),
               width: double.infinity,
               textStyle: TextStyles.textStyle16.copyWith(

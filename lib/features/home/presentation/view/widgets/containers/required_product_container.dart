@@ -83,7 +83,7 @@ class _RequierdProductContainerState extends State<RequierdProductContainer> {
                       errorIcon: Icon(
                         Icons.image,
                         size: 50.w,
-                        color: AppColors.kASDCPrimaryColor,
+                        color: AppColors.primaryColor,
                       ),
                       loadingWidth: 30.w,
                     ),
@@ -125,13 +125,14 @@ class _RequierdProductContainerState extends State<RequierdProductContainer> {
                             TextSpan(children: [
                               TextSpan(
                                 text:
-                                    "\$ ${widget.product.pivot!.requiredUnitId! == widget.product.retailUnitId! ? widget.product.retailPrice! : widget.product.wholeSalePrice!}",
+                                    "${widget.product.pivot!.requiredUnitId! == widget.product.retailUnitId! ? widget.product.retailPrice! : widget.product.wholeSalePrice!}.د",
                                 style: TextStyles.textStyle12.copyWith(
                                     fontWeight: FontWeight.w400,
                                     color: Colors.green),
                               )
                             ]),
                             overflow: TextOverflow.ellipsis,
+                            textDirection: TextDirection.rtl,
                           ),
                         ),
                       )

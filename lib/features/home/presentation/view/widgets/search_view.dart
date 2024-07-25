@@ -182,7 +182,7 @@ class _SearchViewState extends State<SearchView> {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   const CircularProgressIndicator(
-                                    color: AppColors.kASDCPrimaryColor,
+                                    color: AppColors.primaryColor,
                                   ),
                                   Text(
                                     "جارى البحث ...",

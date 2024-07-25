@@ -56,7 +56,7 @@ class MyApp extends StatelessWidget {
               fontFamily: 'SegoeUI',
               scaffoldBackgroundColor: Colors.white,
               colorScheme:
-                  ColorScheme.fromSeed(seedColor: AppColors.kASDCPrimaryColor),
+                  ColorScheme.fromSeed(seedColor: AppColors.primaryColor),
               useMaterial3: true,
             ),
             initialRoute: '/',

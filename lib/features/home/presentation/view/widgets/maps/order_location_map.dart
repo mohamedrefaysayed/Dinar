@@ -102,7 +102,7 @@ class _OrderLocationMapState extends State<OrderLocationMap> {
                       child: AppDefaultButton(
                         width: 100.w,
                         height: 40.w,
-                        color: AppColors.kASDCPrimaryColor,
+                        color: AppColors.primaryColor,
                         onPressed: () {
                           Navigator.pop(context);
                         },

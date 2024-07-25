@@ -53,7 +53,7 @@ class _ProductViewState extends State<ProductView> {
                   errorIcon: Icon(
                     Icons.image,
                     size: 150.w,
-                    color: AppColors.kASDCPrimaryColor,
+                    color: AppColors.primaryColor,
                   ),
                   loadingWidth: 13.w,
                 ),
@@ -85,23 +85,26 @@ class _ProductViewState extends State<ProductView> {
                     Align(
                       alignment: Alignment.centerRight,
                       child: Text.rich(
-                        TextSpan(children: [
-                          TextSpan(
-                            text: "\$ ${widget.product.retailPrice!} , ",
-                            style: TextStyles.textStyle12.copyWith(
-                                fontWeight: FontWeight.w400,
-                                color: Colors.grey),
-                          ),
-                          TextSpan(
-                            text: "\$ ${widget.product.wholeSalePrice!}",
-                            style: TextStyles.textStyle16.copyWith(
-                              fontWeight: FontWeight.w400,
-                              color: Colors.green,
-                              fontSize: 16.w,
+                        TextSpan(
+                          children: [
+                            TextSpan(
+                              text: "${widget.product.retailPrice!}.د , ",
+                              style: TextStyles.textStyle12.copyWith(
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.grey),
                             ),
-                          ),
-                        ]),
+                            TextSpan(
+                              text: "${widget.product.wholeSalePrice!}.د",
+                              style: TextStyles.textStyle16.copyWith(
+                                fontWeight: FontWeight.w400,
+                                color: Colors.green,
+                                fontSize: 16.w,
+                              ),
+                            ),
+                          ],
+                        ),
                         overflow: TextOverflow.ellipsis,
+                        textDirection: TextDirection.rtl,
                       ),
                     )
                   ],
@@ -197,7 +200,7 @@ class _ProductViewState extends State<ProductView> {
                             value.toString(),
                             style: TextStyles.textStyle14.copyWith(
                                 fontWeight: FontWeight.w400,
-                                color: AppColors.kASDCPrimaryColor),
+                                color: AppColors.primaryColor),
                             overflow: TextOverflow.ellipsis,
                             textDirection: TextDirection.rtl,
                           );
@@ -226,7 +229,7 @@ class _ProductViewState extends State<ProductView> {
                             value.toString(),
                             style: TextStyles.textStyle14.copyWith(
                                 fontWeight: FontWeight.w400,
-                                color: AppColors.kASDCPrimaryColor),
+                                color: AppColors.primaryColor),
                             overflow: TextOverflow.ellipsis,
                             textDirection: TextDirection.rtl,
                           );
@@ -258,10 +261,10 @@ class _ProductViewState extends State<ProductView> {
                         builder: (BuildContext context, double value,
                             Widget? child) {
                           return Text(
-                            "\$$value",
+                            "$value.د",
                             style: TextStyles.textStyle14.copyWith(
                                 fontWeight: FontWeight.w400,
-                                color: AppColors.kASDCPrimaryColor),
+                                color: AppColors.primaryColor),
                             overflow: TextOverflow.ellipsis,
                             textDirection: TextDirection.rtl,
                           );
@@ -287,10 +290,10 @@ class _ProductViewState extends State<ProductView> {
                         builder: (BuildContext context, double value,
                             Widget? child) {
                           return Text(
-                            "\$$value",
+                            "$value.د",
                             style: TextStyles.textStyle14.copyWith(
                                 fontWeight: FontWeight.w400,
-                                color: AppColors.kASDCPrimaryColor),
+                                color: AppColors.primaryColor),
                             overflow: TextOverflow.ellipsis,
                             textDirection: TextDirection.rtl,
                           );
@@ -332,7 +335,7 @@ class _ProductViewState extends State<ProductView> {
                               return const AppLoadingButton();
                             }
                             return AppDefaultButton(
-                              color: AppColors.kASDCPrimaryColor,
+                              color: AppColors.primaryColor,
                               icon: Icon(
                                 Icons.shopping_cart_rounded,
                                 color: Colors.white,
@@ -419,13 +422,14 @@ class _ProductViewState extends State<ProductView> {
                                         double totalwholePricevalue,
                                         Widget? child) {
                                       return Text(
-                                        '\$${totalRetailPricevalue + totalwholePricevalue} : المجموع',
+                                        'المجموع : ${totalRetailPricevalue + totalwholePricevalue}.د',
                                         style: TextStyles.textStyle14.copyWith(
                                           fontSize: 14.w,
-                                          color: AppColors.kASDCPrimaryColor,
+                                          color: AppColors.primaryColor,
                                           fontWeight: FontWeight.w400,
                                           overflow: TextOverflow.ellipsis,
                                         ),
+                                        textDirection: TextDirection.rtl,
                                       );
                                     },
                                   );

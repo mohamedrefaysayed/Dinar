@@ -37,7 +37,7 @@ class MyCachedNetworkImage extends StatelessWidget {
         return errorIcon;
       },
       placeholder: (context, url) => SpinKitThreeBounce(
-        color: AppColors.kASDCPrimaryColor,
+        color: AppColors.primaryColor,
         size: loadingWidth,
       ),
     );

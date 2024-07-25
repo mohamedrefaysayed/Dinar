@@ -28,7 +28,7 @@ class DevoloperData extends StatelessWidget {
                   height: 150.h,
                   decoration: BoxDecoration(
                     border: Border.all(
-                      color: AppColors.kASDCPrimaryColor,
+                      color: AppColors.primaryColor,
                       width: 2,
                     ),
                     shape: BoxShape.circle,

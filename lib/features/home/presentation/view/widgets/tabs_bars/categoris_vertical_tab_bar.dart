@@ -40,13 +40,13 @@ class CategoriesVerticalTabBar extends StatelessWidget {
                   duration: const Duration(milliseconds: 300),
                   height: CategoriesCubit.selectedIndex == index ? 90.h : 0,
                   width: 2.w,
-                  color: AppColors.kASDCPrimaryColor,
+                  color: AppColors.primaryColor,
                 ),
                 Expanded(
                     child: Container(
                   alignment: Alignment.center,
                   color: CategoriesCubit.selectedIndex == index
-                      ? AppColors.kASDCPrimaryColor.withOpacity(0.2)
+                      ? AppColors.primaryColor.withOpacity(0.2)
                       : AppColors.kTransparent,
                   child: Padding(
                     padding:
@@ -62,7 +62,7 @@ class CategoriesVerticalTabBar extends StatelessWidget {
                             errorIcon: Icon(
                               Icons.home_work_rounded,
                               size: 30.w,
-                              color: AppColors.kASDCPrimaryColor,
+                              color: AppColors.primaryColor,
                             ),
                             loadingWidth: 13.w,
                           ),

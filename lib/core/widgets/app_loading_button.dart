@@ -26,12 +26,12 @@ class AppLoadingButton extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20.w),
         border: showBorder
-            ? Border.all(color: AppColors.kASDCPrimaryColor, width: 1.w)
+            ? Border.all(color: AppColors.primaryColor, width: 1.w)
             : null,
         color: Colors.white,
       ),
       child: SpinKitThreeBounce(
-        color: AppColors.kASDCPrimaryColor,
+        color: AppColors.primaryColor,
         size: 24.w,
       ),
     );

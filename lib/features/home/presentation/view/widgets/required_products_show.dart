@@ -129,7 +129,7 @@ class _RequiredProductsShowState extends State<RequiredProductsShow> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               AppDefaultButton(
-                color: AppColors.kASDCPrimaryColor,
+                color: AppColors.primaryColor,
                 textStyle: TextStyles.textStyle16.copyWith(
                   color: AppColors.kWhite,
                   fontSize: 16.w,
@@ -164,7 +164,7 @@ class _RequiredProductsShowState extends State<RequiredProductsShow> {
                       );
                     }
                     return AppDefaultButton(
-                      color: AppColors.kASDCPrimaryColor,
+                      color: AppColors.primaryColor,
                       textStyle: TextStyles.textStyle16.copyWith(
                         color: AppColors.kWhite,
                         fontSize: 16.w,

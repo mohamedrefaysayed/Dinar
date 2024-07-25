@@ -34,12 +34,12 @@ class OrderConfirmActionRow extends StatelessWidget {
           color: AppColors.kWhite,
           textStyle: TextStyles.textStyle12.copyWith(
             fontWeight: FontWeight.w400,
-            color: AppColors.kASDCPrimaryColor,
+            color: AppColors.primaryColor,
           ),
           icon: Icon(
             icon,
             size: 25.w,
-            color: AppColors.kASDCPrimaryColor,
+            color: AppColors.primaryColor,
           ),
         ),
         Column(
@@ -63,8 +63,7 @@ class OrderConfirmActionRow extends StatelessWidget {
               child: Text(
                 subTitle,
                 style: TextStyles.textStyle14.copyWith(
-                    color: AppColors.kASDCPrimaryColor,
-                    fontWeight: FontWeight.bold),
+                    color: AppColors.primaryColor, fontWeight: FontWeight.bold),
                 overflow: TextOverflow.ellipsis,
               ),
             ),

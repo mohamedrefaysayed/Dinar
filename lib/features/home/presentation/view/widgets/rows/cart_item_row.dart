@@ -128,7 +128,7 @@ class CartItemRow extends StatelessWidget {
                                         width: 20.w,
                                         height: 20.h,
                                         child: const CircularProgressIndicator(
-                                          color: AppColors.kASDCPrimaryColor,
+                                          color: AppColors.primaryColor,
                                         ),
                                       );
                                     }
@@ -212,10 +212,10 @@ class CartItemRow extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          "\$ ${cartItem.product!.retailPrice!}",
+                          "${cartItem.product!.retailPrice!}.د",
                           style: TextStyles.textStyle16.copyWith(
                             fontWeight: FontWeight.w400,
-                            color: AppColors.kRed,
+                            color: AppColors.primaryColor,
                             fontSize: 16.w,
                           ),
                           textDirection: TextDirection.rtl,
@@ -235,7 +235,7 @@ class CartItemRow extends StatelessWidget {
                           errorIcon: Icon(
                             Icons.image,
                             size: 25.w,
-                            color: AppColors.kASDCPrimaryColor,
+                            color: AppColors.primaryColor,
                           ),
                           loadingWidth: 10.w,
                         )),

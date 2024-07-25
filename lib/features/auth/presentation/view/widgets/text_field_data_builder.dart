@@ -68,7 +68,7 @@ class TextFieldDataBulder extends StatelessWidget {
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15.w),
                   borderSide: const BorderSide(
-                    color: AppColors.kASDCPrimaryColor,
+                    color: AppColors.primaryColor,
                   ),
                 ),
               ),

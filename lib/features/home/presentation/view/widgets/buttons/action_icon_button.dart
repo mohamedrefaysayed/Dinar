@@ -19,7 +19,7 @@ class ActionIconButton extends StatelessWidget {
               height: 30.w,
               width: 30.w,
               decoration: const BoxDecoration(
-                color: AppColors.kASDCPrimaryColor,
+                color: AppColors.primaryColor,
                 shape: BoxShape.circle,
               ),
               child: Center(

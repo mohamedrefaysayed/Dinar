@@ -32,7 +32,7 @@ class OrderProductRow extends StatelessWidget {
                 url: order.orderDetails![index].products!.image!,
                 errorIcon: const Icon(
                   Icons.image,
-                  color: AppColors.kASDCPrimaryColor,
+                  color: AppColors.primaryColor,
                 ),
                 loadingWidth: 10.w,
               ),

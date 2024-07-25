@@ -53,7 +53,6 @@ class SearchRow extends StatelessWidget {
                 }
                 FocusManager.instance.primaryFocus?.unfocus();
               },
-              
               autofocus: autofocus ?? false,
               controller: textEditingController,
               textDirection: TextDirection.rtl,
@@ -63,7 +62,7 @@ class SearchRow extends StatelessWidget {
                 hintTextDirection: TextDirection.rtl,
                 hintStyle: TextStyles.textStyle10,
                 filled: true,
-                fillColor: AppColors.kASDCPrimaryColor.withOpacity(0.09),
+                fillColor: AppColors.primaryColor.withOpacity(0.09),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15.w),
                   borderSide: BorderSide.none,
@@ -72,7 +71,7 @@ class SearchRow extends StatelessWidget {
                   padding: EdgeInsets.all(5.w),
                   child: Icon(
                     Icons.search_rounded,
-                    color: AppColors.kASDCPrimaryColor,
+                    color: AppColors.primaryColor,
                     size: 30.w,
                   ),
                 ),
@@ -89,7 +88,7 @@ class SearchRow extends StatelessWidget {
               child: Icon(
                 Icons.arrow_back_rounded,
                 size: 30.w,
-                color: AppColors.kASDCPrimaryColor,
+                color: AppColors.primaryColor,
               ),
             ),
           ),

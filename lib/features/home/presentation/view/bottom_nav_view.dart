@@ -77,7 +77,7 @@ class _BottomNavBarViewState extends State<BottomNavBarView>
                 items: BottomNavBarCubit.items,
                 backgroundColor: Colors.white,
                 color: Colors.grey,
-                colorSelected: AppColors.kASDCPrimaryColor,
+                colorSelected: AppColors.primaryColor,
                 indexSelected: BottomNavBarCubit.index,
                 titleStyle: TextStyles.textStyle12
                     .copyWith(fontWeight: FontWeight.w700),

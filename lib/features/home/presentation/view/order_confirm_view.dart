@@ -240,17 +240,18 @@ class _OrderConfirmViewState extends State<OrderConfirmView> {
                       Row(
                         children: [
                           Text(
-                            "\$${CartCubit.finalPrice}",
+                            "${CartCubit.finalPrice}.د",
                             style: TextStyles.textStyle14.copyWith(
                               fontWeight: FontWeight.w700,
                             ),
+                            textDirection: TextDirection.rtl,
                           ),
                           const Spacer(),
                           Text(
                             'السعر النهائى',
                             style: TextStyles.textStyle14.copyWith(
                               fontWeight: FontWeight.w700,
-                              color: AppColors.kASDCPrimaryColor,
+                              color: AppColors.primaryColor,
                             ),
                           ),
                         ],
@@ -305,7 +306,7 @@ class _OrderConfirmViewState extends State<OrderConfirmView> {
                                     messageSnackBar(message: "اختر الموقع"));
                               }
                             },
-                            color: AppColors.kASDCPrimaryColor,
+                            color: AppColors.primaryColor,
                             title: "إتمام الطلب",
                             textStyle: TextStyles.textStyle16.copyWith(
                               color: AppColors.kWhite,

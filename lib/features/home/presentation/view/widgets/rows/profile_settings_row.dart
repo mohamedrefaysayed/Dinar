@@ -34,7 +34,7 @@ class ProfileSettingsRow extends StatelessWidget {
                     Icon(
                       Icons.arrow_back_ios,
                       size: 20.w,
-                      color: AppColors.kASDCPrimaryColor,
+                      color: AppColors.primaryColor,
                     ),
                   const Spacer(),
                   Text(
@@ -49,7 +49,7 @@ class ProfileSettingsRow extends StatelessWidget {
                   Icon(
                     icon,
                     size: 20.w,
-                    color: iconColor ?? AppColors.kASDCPrimaryColor,
+                    color: iconColor ?? AppColors.primaryColor,
                   ),
                 ],
               ),

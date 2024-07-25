@@ -61,7 +61,7 @@ class _AllCompaniesViewState extends State<AllCompaniesView> {
                             flipX: true,
                             child: Icon(
                               Icons.arrow_back,
-                              color: AppColors.kASDCPrimaryColor,
+                              color: AppColors.primaryColor,
                               size: 30.w,
                             ))),
                   ],

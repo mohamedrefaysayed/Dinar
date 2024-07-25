@@ -113,7 +113,7 @@ class _WholeSubCategoryViewNewState extends State<WholeSubCategoryViewNew>
                     errorIcon: Icon(
                       Icons.image,
                       size: 150.w,
-                      color: AppColors.kASDCPrimaryColor,
+                      color: AppColors.primaryColor,
                     ),
                     loadingWidth: 13.w,
                   ),

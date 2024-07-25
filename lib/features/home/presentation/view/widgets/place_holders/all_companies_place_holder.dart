@@ -10,7 +10,7 @@ class AllCompaniesPlaceHolder extends StatelessWidget {
   Widget build(BuildContext context) {
     return Shimmer.fromColors(
       baseColor: Colors.grey.withOpacity(0.3),
-      highlightColor: AppColors.kASDCPrimaryColor.withOpacity(0.5),
+      highlightColor: AppColors.primaryColor.withOpacity(0.5),
       child: ListView.builder(
         physics: const BouncingScrollPhysics(),
         itemCount: 12,

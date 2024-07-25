@@ -112,7 +112,7 @@ class _WholeSubCategoryViewState extends State<WholeSubCategoryView>
                               errorIcon: Icon(
                                 Icons.image,
                                 size: 150.w,
-                                color: AppColors.kASDCPrimaryColor,
+                                color: AppColors.primaryColor,
                               ),
                               loadingWidth: 13.w,
                             ),
@@ -165,7 +165,7 @@ class _WholeSubCategoryViewState extends State<WholeSubCategoryView>
                                                 bool value, Widget? child) =>
                                             Icon(
                                           value ? Icons.close : Icons.search,
-                                          color: AppColors.kASDCPrimaryColor,
+                                          color: AppColors.primaryColor,
                                           size: 25.w,
                                         ),
                                       ),
@@ -294,8 +294,7 @@ class _WholeSubCategoryViewState extends State<WholeSubCategoryView>
                                             },
                                             icon: Icon(
                                               Icons.arrow_back,
-                                              color:
-                                                  AppColors.kASDCPrimaryColor,
+                                              color: AppColors.primaryColor,
                                               size: 25.w,
                                             )),
                                       )

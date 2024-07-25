@@ -97,7 +97,7 @@ class DataEditLocation extends StatelessWidget {
                   return const AppLoadingButton();
                 }
                 return AppDefaultButton(
-                  color: AppColors.kASDCPrimaryColor,
+                  color: AppColors.primaryColor,
                   onPressed: () {
                     if (ProfileCubit.markerPosition != null) {
                       context.read<StoreDataCubit>().updateLocation(

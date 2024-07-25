@@ -155,7 +155,7 @@ class _ProfileContainerState extends State<ProfileContainer> {
               height: 20.h,
             ),
             AppDefaultButton(
-              color: AppColors.kASDCPrimaryColor,
+              color: AppColors.primaryColor,
               onPressed: () {
                 double latitude =
                     ProfileCubit.profileModel!.user!.first.store!.lat!;

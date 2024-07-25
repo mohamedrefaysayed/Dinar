@@ -19,7 +19,7 @@ class SplashViewFutureBuilder extends StatelessWidget {
         context.checkInternet();
       }),
       builder: (context, snapShot) => const Scaffold(
-        backgroundColor: AppColors.kASDCPrimaryColor,
+        backgroundColor: AppColors.primaryColor,
         body: SplashViewBody(),
       ),
     );

@@ -12,7 +12,7 @@ class MapPlaceHolder extends StatelessWidget {
       padding: EdgeInsets.only(top: 30.h),
       child: Shimmer.fromColors(
         baseColor: Colors.grey.withOpacity(0.3),
-        highlightColor: AppColors.kASDCPrimaryColor.withOpacity(0.5),
+        highlightColor: AppColors.primaryColor.withOpacity(0.5),
         child: Container(
           height: 200.h,
           width: 300.w,
