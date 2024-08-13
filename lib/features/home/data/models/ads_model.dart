@@ -1,3 +1,5 @@
+import 'package:dinar_store/features/home/data/models/sub_category_products_model.dart';
+
 class AdsModel {
   List<Ads>? ads;
 
@@ -7,7 +9,7 @@ class AdsModel {
     if (json['ads'] != null) {
       ads = <Ads>[];
       json['ads'].forEach((v) {
-        ads!.add(Ads.fromJson(v));
+        ads!.add( Ads.fromJson(v));
       });
     }
   }
@@ -32,6 +34,8 @@ class Ads {
   String? deletedAt;
   String? createdAt;
   String? updatedAt;
+  int? productId;
+  Products? product;
 
   Ads(
       {this.id,
@@ -43,7 +47,9 @@ class Ads {
       this.status,
       this.deletedAt,
       this.createdAt,
-      this.updatedAt});
+      this.updatedAt,
+      this.productId,
+      this.product});
 
   Ads.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -56,6 +62,9 @@ class Ads {
     deletedAt = json['deleted_at'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
+    productId = json['product_id'];
+    product =
+        json['product'] != null ? Products.fromJson(json['product']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -70,6 +79,10 @@ class Ads {
     data['deleted_at'] = deletedAt;
     data['created_at'] = createdAt;
     data['updated_at'] = updatedAt;
+    data['product_id'] = productId;
+    if (product != null) {
+      data['product'] = product!.toJson();
+    }
     return data;
   }
 }

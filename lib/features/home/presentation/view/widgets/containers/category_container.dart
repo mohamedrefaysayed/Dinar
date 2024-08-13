@@ -5,7 +5,7 @@ import 'package:dinar_store/features/home/data/models/categories_model.dart';
 import 'package:dinar_store/features/home/presentation/view/widgets/containers/sub_category_container_home.dart';
 import 'package:dinar_store/features/home/presentation/view/widgets/dividers/ginerall_divider.dart';
 import 'package:dinar_store/features/home/presentation/view/widgets/sub_category_view.dart';
-import 'package:dinar_store/features/home/presentation/view/widgets/sub_sub_categories_view.dart';
+import 'package:dinar_store/features/home/presentation/view/widgets/whole_sub_category_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -25,11 +25,13 @@ class CategoryContainer extends StatelessWidget {
               TextButton.icon(
                   onPressed: () {
                     Navigator.push(
-                        context,
-                        RightSlideTransition(
-                            page: SubCategoryView(
+                      context,
+                      RightSlideTransition(
+                        page: SubCategoryView(
                           category: category,
-                        )));
+                        ),
+                      ),
+                    );
                   },
                   icon: Icon(
                     Icons.arrow_back_ios_new_rounded,
@@ -92,11 +94,22 @@ class CategoryContainer extends StatelessWidget {
                         subCategory: category.subCategories![index],
                         onPress: () {
                           Navigator.push(
-                              context,
-                              RightSlideTransition(
-                                  page: SubSubCategoryView(
-                                      subcategory:
-                                          category.subCategories![index])));
+                            context,
+                            RightSlideTransition(
+                              page: WholeSubCategoryView(
+                                subCategory: category.subCategories![index],
+                                subCategories: category.subCategories!,
+                              ),
+                            ),
+                          );
+                          // Navigator.push(
+                          //   context,
+                          //   RightSlideTransition(
+                          //     page: SubSubCategoryView(
+                          //       subcategory: category.subCategories![index],
+                          //     ),
+                          //   ),
+                          // );
                         },
                       );
                     },

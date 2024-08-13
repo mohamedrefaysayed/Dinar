@@ -27,29 +27,27 @@ class _CategoriesViewHomeState extends State<CategoriesViewHome> {
     return BlocConsumer<CategoriesCubit, CategoriesState>(
       listener: (context, state) {
         if (state is CategoriesFaliuer) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            messageSnackBar(
-              message: state.errMessage,
-              isBottomNavBar: true,
-            ),
+          context.showMessageSnackBar(
+            message: state.errMessage,
           );
         }
       },
       builder: (context, state) {
         if (state is CategoriesSuccess) {
           return ListView.builder(
-              padding: EdgeInsets.symmetric(vertical: 5.h),
-              physics: const NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: state.categoriesModel.categories!.length,
-              itemBuilder: (context, index) {
-                final Categories category =
-                    state.categoriesModel.categories![index];
+            padding: EdgeInsets.symmetric(vertical: 5.h),
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: state.categoriesModel.categories!.length,
+            itemBuilder: (context, index) {
+              final Categories category =
+                  state.categoriesModel.categories![index];
 
-                return CategoryContainer(
-                  category: category,
-                );
-              });
+              return CategoryContainer(
+                category: category,
+              );
+            },
+          );
         }
         if (state is CategoriesFaliuer) {
           return SizedBox(

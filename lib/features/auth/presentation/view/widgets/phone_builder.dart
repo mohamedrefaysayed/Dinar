@@ -57,12 +57,14 @@ class PhoneBuilder extends StatelessWidget {
                     LogInCubit.phoneNumber!.isValidNumber();
                     await BlocProvider.of<LogInCubit>(context).register();
                   } catch (e) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                        messageSnackBar(message: "أدخل رقم صحيح"));
+                    context.showMessageSnackBar(
+                      message: "أدخل رقم صحيح",
+                    );
                   }
                 } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                      messageSnackBar(message: "أدخل رقم الهاتف"));
+                  context.showMessageSnackBar(
+                    message: "أدخل رقم الهاتف",
+                  );
                 }
               },
               title: 'أرسال',

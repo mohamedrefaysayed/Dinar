@@ -36,21 +36,25 @@ class _OrdersViewState extends State<OrdersView>
         child: BlocConsumer<OrderCubit, OrderState>(
           listener: (context, state) {
             if (state is OrderFailuer) {
-              ScaffoldMessenger.of(context).showSnackBar(messageSnackBar(
-                  message: state.errMessage, isBottomNavBar: true));
+              context.showMessageSnackBar(
+                message: state.errMessage,
+              );
             }
             if (state is AddOrderFailuer) {
-              ScaffoldMessenger.of(context).showSnackBar(messageSnackBar(
-                  message: state.errMessage, isBottomNavBar: true));
+              context.showMessageSnackBar(
+                message: state.errMessage,
+              );
             }
             if (state is DeleteOrderSuccess) {
               OrderCubit.ordersModel = state.ordersModel;
-              ScaffoldMessenger.of(context).showSnackBar(
-                  messageSnackBar(message: "تم الحذف", isBottomNavBar: true));
+              context.showMessageSnackBar(
+                message: "تم الحذف",
+              );
             }
             if (state is DeleteOrderFailuer) {
-              ScaffoldMessenger.of(context).showSnackBar(messageSnackBar(
-                  message: state.errMessage, isBottomNavBar: true));
+              context.showMessageSnackBar(
+                message: state.errMessage,
+              );
             }
           },
           builder: (context, state) {

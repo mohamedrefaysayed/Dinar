@@ -1,7 +1,9 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:dinar_store/core/animations/left_slide_transition.dart';
 import 'package:dinar_store/core/utils/app_colors.dart';
 import 'package:dinar_store/features/home/presentation/view/widgets/cachedNetworkImage/my_cached_nework_Image.dart';
 import 'package:dinar_store/features/home/presentation/view/widgets/place_holders/ads_place_holder.dart';
+import 'package:dinar_store/features/home/presentation/view/widgets/product_view_in_ads.dart';
 import 'package:dinar_store/features/home/presentation/view_model/ads_cubit/ads_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -46,18 +48,31 @@ class _AddsViewState extends State<AddsView> {
                         carouselController: _controller,
                         itemBuilder: (BuildContext context, int itemIndex,
                                 int pageViewIndex) =>
-                            ClipRRect(
-                                borderRadius: BorderRadius.circular(15.w),
-                                child: MyCachedNetworkImage(
-                                  width: double.infinity,
-                                  url: state.adsModel.ads![itemIndex].image!,
-                                  errorIcon: Icon(
-                                    Icons.image,
-                                    size: 100.w,
-                                    color: AppColors.primaryColor,
-                                  ),
-                                  loadingWidth: 30.w,
-                                )),
+                            InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              LeftSlideTransition(
+                                page: ProductViewInAdds(
+                                    productId: state
+                                        .adsModel.ads![itemIndex].productId!),
+                              ),
+                            );
+                          },
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(15.w),
+                            child: MyCachedNetworkImage(
+                              width: double.infinity,
+                              url: state.adsModel.ads![itemIndex].image!,
+                              errorIcon: Icon(
+                                Icons.image,
+                                size: 100.w,
+                                color: AppColors.primaryColor,
+                              ),
+                              loadingWidth: 30.w,
+                            ),
+                          ),
+                        ),
                         options: CarouselOptions(
                             aspectRatio: 16 / 9,
                             viewportFraction: 0.95,

@@ -160,14 +160,14 @@ class LoginData extends StatelessWidget {
                         if (state is StoreDataSuccess) {
                           Navigator.pushNamedAndRemoveUntil(
                               context, BottomNavBarView.id, (route) => false);
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              messageSnackBar(
-                                  message: "تم الحفظ بنجاح !",
-                                  isBottomNavBar: true));
+                          context.showMessageSnackBar(
+                            message: "تم الحفظ بنجاح !",
+                          );
                         }
                         if (state is StoreDataFailure) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              messageSnackBar(message: state.errMessage));
+                          context.showMessageSnackBar(
+                            message: state.errMessage,
+                          );
                         }
                       },
                       builder: (context, state) {
@@ -189,8 +189,9 @@ class LoginData extends StatelessWidget {
                                 context.read<StoreDataCubit>().storeData();
                               }
                             } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  messageSnackBar(message: "حدد الموقع"));
+                              context.showMessageSnackBar(
+                                message: "حدد الموقع",
+                              );
                             }
                           },
                           title: 'حفظ',

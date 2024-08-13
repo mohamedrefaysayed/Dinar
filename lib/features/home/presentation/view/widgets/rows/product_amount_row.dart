@@ -1,6 +1,7 @@
 import 'package:dinar_store/core/utils/app_colors.dart';
 import 'package:dinar_store/core/utils/text_styles.dart';
 import 'package:dinar_store/core/widgets/app_default_button.dart';
+import 'package:dinar_store/core/widgets/message_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -159,20 +160,35 @@ class _ProductAmountRowState extends State<ProductAmountRow> {
                             // },
                             onPressed: () {
                               if (wholeSaleCounter.value == 0) {
-                                wholeSaleCounter.value =
-                                    wholeSaleCounter.value + widget.minWhole;
-                                widget.wholeCount.value =
-                                    widget.wholeCount.value + widget.minWhole;
-                                widget.totalWholePrice.value =
-                                    (widget.totalWholePrice.value +
-                                        (double.parse(widget.wholeSalePrice) *
-                                            widget.minWhole));
+                                if (widget.wholeCount.value + widget.minWhole >
+                                    widget.maxWhole) {
+                                  context.showMessageSnackBar(
+                                      message:
+                                          "لا يمكنك طلب اكثر من ${widget.maxWhole} من هذا المنتج فى حالة الجملة");
+                                } else {
+                                  wholeSaleCounter.value =
+                                      wholeSaleCounter.value + widget.minWhole;
+                                  widget.wholeCount.value =
+                                      widget.wholeCount.value + widget.minWhole;
+                                  widget.totalWholePrice.value =
+                                      (widget.totalWholePrice.value +
+                                          (double.parse(widget.wholeSalePrice) *
+                                              widget.minWhole));
+                                }
                               } else {
-                                wholeSaleCounter.value++;
-                                widget.wholeCount.value++;
-                                widget.totalWholePrice.value = (widget
-                                        .totalWholePrice.value +
-                                    (double.parse(widget.wholeSalePrice) * 1));
+                                if (widget.wholeCount.value + 1 >
+                                    widget.maxWhole) {
+                                  context.showMessageSnackBar(
+                                      message:
+                                          "لا يمكنك طلب اكثر من ${widget.maxWhole} من هذا المنتج فى حالة الجملة");
+                                } else {
+                                  wholeSaleCounter.value++;
+                                  widget.wholeCount.value++;
+                                  widget.totalWholePrice.value =
+                                      (widget.totalWholePrice.value +
+                                          (double.parse(widget.wholeSalePrice) *
+                                              1));
+                                }
                               }
                             },
                             icon: Icon(
@@ -193,6 +209,7 @@ class _ProductAmountRowState extends State<ProductAmountRow> {
                       style: TextStyles.textStyle12.copyWith(
                         fontWeight: FontWeight.w400,
                       ),
+                      textDirection: TextDirection.rtl,
                     ),
                   ),
                 ],
@@ -303,20 +320,35 @@ class _ProductAmountRowState extends State<ProductAmountRow> {
                             // },
                             onPressed: () {
                               if (retailCounter.value == 0) {
-                                retailCounter.value =
-                                    retailCounter.value + widget.minRetail;
-                                widget.retailCount.value =
-                                    widget.retailCount.value + widget.minRetail;
-                                widget.totalRetailPrice.value =
-                                    (widget.totalRetailPrice.value +
-                                        (double.parse(widget.retailPrice) *
-                                            widget.minRetail));
+                                if (retailCounter.value + widget.minRetail >
+                                    widget.maxRetail) {
+                                  context.showMessageSnackBar(
+                                      message:
+                                          "لا يمكنك طلب اكثر من ${widget.maxRetail} من هذا المنتج فى حالة المفرد");
+                                } else {
+                                  retailCounter.value =
+                                      retailCounter.value + widget.minRetail;
+                                  widget.retailCount.value =
+                                      widget.retailCount.value +
+                                          widget.minRetail;
+                                  widget.totalRetailPrice.value =
+                                      (widget.totalRetailPrice.value +
+                                          (double.parse(widget.retailPrice) *
+                                              widget.minRetail));
+                                }
                               } else {
-                                retailCounter.value++;
-                                widget.retailCount.value++;
-                                widget.totalRetailPrice.value =
-                                    (widget.totalRetailPrice.value +
-                                        double.parse(widget.retailPrice));
+                                if (retailCounter.value + 1 >
+                                    widget.maxRetail) {
+                                  context.showMessageSnackBar(
+                                      message:
+                                          "لا يمكنك طلب اكثر من ${widget.maxRetail} من هذا المنتج فى حالة المفرد");
+                                } else {
+                                  retailCounter.value++;
+                                  widget.retailCount.value++;
+                                  widget.totalRetailPrice.value =
+                                      (widget.totalRetailPrice.value +
+                                          double.parse(widget.retailPrice));
+                                }
                               }
                             },
                             icon: Icon(
@@ -337,6 +369,7 @@ class _ProductAmountRowState extends State<ProductAmountRow> {
                       style: TextStyles.textStyle12.copyWith(
                         fontWeight: FontWeight.w400,
                       ),
+                      textDirection: TextDirection.rtl,
                     ),
                   ),
                 ],

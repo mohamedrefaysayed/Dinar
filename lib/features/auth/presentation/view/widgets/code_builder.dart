@@ -107,12 +107,14 @@ class CodeBuilder extends StatelessWidget {
                   if (LogInCubit.code!.length == 6) {
                     context.read<LogInCubit>().sendVerficationCode();
                   } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                        messageSnackBar(message: "أدخل كود صحيح"));
+                    context.showMessageSnackBar(
+                      message: "أدخل كود صحيح",
+                    );
                   }
                 } else {
-                  ScaffoldMessenger.of(context)
-                      .showSnackBar(messageSnackBar(message: "أدخل الكود"));
+                  context.showMessageSnackBar(
+                    message: "أدخل الكود",
+                  );
                 }
               },
               title: 'أرسال',

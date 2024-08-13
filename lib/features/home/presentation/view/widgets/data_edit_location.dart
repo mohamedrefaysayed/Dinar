@@ -72,10 +72,8 @@ class DataEditLocation extends StatelessWidget {
             BlocConsumer<StoreDataCubit, StoreDataState>(
               listener: (context, state) async {
                 if (state is UpdateLocationFailure) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    messageSnackBar(
-                      message: " خطأ أثناء تعديل الموقع ${state.errMessage}",
-                    ),
+                  context.showMessageSnackBar(
+                    message: " خطأ أثناء تعديل الموقع ${state.errMessage}",
                   );
                 }
                 if (state is UpdateLocationSuccess) {
@@ -85,10 +83,8 @@ class DataEditLocation extends StatelessWidget {
                   Navigator.pop(context);
                   Navigator.pop(context);
 
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    messageSnackBar(
-                      message: "تم تعديل الموقع بنجاح",
-                    ),
+                  context.showMessageSnackBar(
+                    message: "تم تعديل الموقع بنجاح",
                   );
                 }
               },

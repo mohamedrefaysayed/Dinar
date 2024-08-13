@@ -80,21 +80,23 @@ class _WholeSubCategoryViewNewState extends State<WholeSubCategoryViewNew>
                 ),
               ),
               bottom: TabBar(
-                  onTap: (index) {
-                    context
-                        .read<SubCategoryProductCubit>()
-                        .getSubCategoryWithProduct(
-                            catId: widget.subCategories[index].id!);
-                  },
-                  tabs: List.generate(
-                      widget.subCategories.length,
-                      (index) => Tab(
-                            height: 60.h,
-                            child: Text(
-                              widget.subCategories[index].categoryName!,
-                              style: TextStyles.textStyle14,
-                            ),
-                          ))),
+                onTap: (index) {
+                  context
+                      .read<SubCategoryProductCubit>()
+                      .getSubCategoryWithProduct(
+                          catId: widget.subCategories[index].id!);
+                },
+                tabs: List.generate(
+                  widget.subCategories.length,
+                  (index) => Tab(
+                    height: 60.h,
+                    child: Text(
+                      widget.subCategories[index].categoryName!,
+                      style: TextStyles.textStyle14,
+                    ),
+                  ),
+                ),
+              ),
             )
           ],
           body: RefreshIndicator(
@@ -123,14 +125,15 @@ class _WholeSubCategoryViewNewState extends State<WholeSubCategoryViewNew>
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 20.w),
                     child: TabBarView(
-                        physics: const NeverScrollableScrollPhysics(),
-                        children: List.generate(
-                          widget.subCategories.length,
-                          (index) => WholeSubCategoryListView(
-                            scrollController: scrollController,
-                            subCategory: widget.subCategories[index],
-                          ),
-                        )),
+                      physics: const NeverScrollableScrollPhysics(),
+                      children: List.generate(
+                        widget.subCategories.length,
+                        (index) => WholeSubCategoryListView(
+                          scrollController: scrollController,
+                          subCategory: widget.subCategories[index],
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ],

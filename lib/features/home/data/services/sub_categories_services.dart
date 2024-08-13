@@ -91,4 +91,26 @@ class SubCategoriesServices implements SubCategoriesRepo {
       );
     }
   }
+
+  @override
+  Future<Either<ServerFailure, Products>> getProduct({
+    required String token,
+    required int productId,
+  }) async {
+    try {
+      Map<String, dynamic> data = await _dioHelper.getRequest(
+        token: token,
+        endPoint: 'products/$productId',
+      );
+      return right(Products.fromJson(data['products']));
+    } on DioException catch (error) {
+      return left(
+        ServerFailure.fromDioException(dioException: error),
+      );
+    } catch (error) {
+      return left(
+        ServerFailure(errMessage: error.toString()),
+      );
+    }
+  }
 }

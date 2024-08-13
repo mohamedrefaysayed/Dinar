@@ -147,12 +147,14 @@ class _RequiredProductsShowState extends State<RequiredProductsShow> {
                   listener: (context, state) {
                     if (state is AddToCartFailuer) {
                       Navigator.pop(context);
-                      ScaffoldMessenger.of(context).showSnackBar(
-                          messageSnackBar(message: state.errMessage));
+                      context.showMessageSnackBar(
+                        message: state.errMessage,
+                      );
                     }
                     if (state is AddToCartSuccess) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                          messageSnackBar(message: "تمت الإضافة الى العربة"));
+                      context.showMessageSnackBar(
+                        message: "تمت الإضافة الى العربة",
+                      );
                       Navigator.pop(context);
                       Navigator.pop(context);
                     }

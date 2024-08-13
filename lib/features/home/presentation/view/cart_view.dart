@@ -1,5 +1,7 @@
 import 'package:dinar_store/core/animations/right_slide_transition.dart';
+import 'package:dinar_store/core/helpers/app_cache/cahch_helper.dart';
 import 'package:dinar_store/core/utils/app_colors.dart';
+import 'package:dinar_store/core/utils/genrall.dart';
 import 'package:dinar_store/core/utils/text_styles.dart';
 import 'package:dinar_store/core/widgets/app_default_button.dart';
 import 'package:dinar_store/core/widgets/message_snack_bar.dart';
@@ -39,21 +41,30 @@ class _CartViewState extends State<CartView>
         child: BlocConsumer<CartCubit, CartState>(
           listener: (context, state) {
             if (state is GetCartFailuer) {
-              ScaffoldMessenger.of(context).showSnackBar(messageSnackBar(
-                  message: state.errMessage, isBottomNavBar: true));
+              context.showMessageSnackBar(
+                message: state.errMessage,
+              );
             }
             if (state is DeleteItemFailuer) {
-              ScaffoldMessenger.of(context).showSnackBar(messageSnackBar(
-                  message: state.errMessage, isBottomNavBar: true));
+              context.showMessageSnackBar(
+                message: state.errMessage,
+              );
             }
             if (state is UpdateItemFailuer) {
-              ScaffoldMessenger.of(context).showSnackBar(messageSnackBar(
-                  message: state.errMessage, isBottomNavBar: true));
+              context.showMessageSnackBar(
+                message: state.errMessage,
+              );
             }
             if (state is DeleteItemSuccess) {
               CartCubit.cartItemsModel = state.cartItemsModel;
-              ScaffoldMessenger.of(context).showSnackBar(
-                  messageSnackBar(message: "تم الحذف", isBottomNavBar: true));
+              if (state.cartItemsModel.cart != null &&
+                  state.cartItemsModel.cart!.isEmpty) {
+                cartNotEmpty.value = false;
+                CahchHelper.saveData(key: "cartNotEmpty", value: false);
+              }
+              context.showMessageSnackBar(
+                message: "تم الحذف",
+              );
             }
             if (state is UpdateItemSuccess) {
               CartCubit.cartItemsModel = state.cartItemsModel;

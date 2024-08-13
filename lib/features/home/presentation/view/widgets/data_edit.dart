@@ -122,10 +122,8 @@ class DataEdit extends StatelessWidget {
             BlocConsumer<StoreDataCubit, StoreDataState>(
               listener: (context, state) async {
                 if (state is UpdateDataFailure) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    messageSnackBar(
-                      message: " خطأ أثناء تعديل البيانات ${state.errMessage}",
-                    ),
+                  context.showMessageSnackBar(
+                    message: " خطأ أثناء تعديل البيانات ${state.errMessage}",
                   );
                 }
                 if (state is UpdateDataSuccess) {
@@ -133,10 +131,8 @@ class DataEdit extends StatelessWidget {
                       .read<ProfileCubit>()
                       .getProfile(context: context);
                   Navigator.pop(context);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    messageSnackBar(
-                      message: "تم تعديل البيانات بنجاح",
-                    ),
+                  context.showMessageSnackBar(
+                    message: "تم تعديل البيانات بنجاح",
                   );
                 }
               },
@@ -156,10 +152,8 @@ class DataEdit extends StatelessWidget {
                             profileModel: ProfileCubit.profileModel!,
                           );
                     } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        messageSnackBar(
-                          message: "لم يتم تعديل اى بيانات",
-                        ),
+                      context.showMessageSnackBar(
+                        message: "لم يتم تعديل اى بيانات",
                       );
                     }
                   },

@@ -33,8 +33,8 @@ class LocationCubit extends Cubit<LocationState> {
         emit(LocationSuccess(position: currentPosition!));
       } catch (error) {
         emit(LocationFailuer());
-        ScaffoldMessenger.of(context).showSnackBar(
-          messageSnackBar(message: "أفتح الموقع"),
+        context.showMessageSnackBar(
+          message: "أفتح الموقع",
         );
       }
     }

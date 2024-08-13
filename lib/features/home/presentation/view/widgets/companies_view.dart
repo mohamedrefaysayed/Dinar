@@ -33,11 +33,8 @@ class _CompaniesViewState extends State<CompaniesView> {
     return BlocConsumer<CompaniesCubit, CompaniesState>(
       listener: (context, state) {
         if (state is CompaniesFaliuer) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            messageSnackBar(
-              message: state.errMessage,
-              isBottomNavBar: true,
-            ),
+          context.showMessageSnackBar(
+            message: state.errMessage,
           );
         }
       },

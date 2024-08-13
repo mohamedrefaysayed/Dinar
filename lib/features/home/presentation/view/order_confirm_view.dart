@@ -1,7 +1,9 @@
 // ignore_for_file: invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member, use_build_context_synchronously
 
 import 'package:dinar_store/core/animations/right_slide_transition.dart';
+import 'package:dinar_store/core/helpers/app_cache/cahch_helper.dart';
 import 'package:dinar_store/core/utils/app_colors.dart';
+import 'package:dinar_store/core/utils/genrall.dart';
 import 'package:dinar_store/core/utils/text_styles.dart';
 import 'package:dinar_store/core/utils/time_date_handler.dart';
 import 'package:dinar_store/core/widgets/app_default_button.dart';
@@ -260,12 +262,17 @@ class _OrderConfirmViewState extends State<OrderConfirmView> {
                       BlocConsumer<OrderCubit, OrderState>(
                         listener: (context, state) {
                           if (state is AddOrderFailuer) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                                messageSnackBar(message: state.errMessage));
+                            context.showMessageSnackBar(
+                              message: state.errMessage,
+                            );
                           }
                           if (state is AddOrderSuccess) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                                messageSnackBar(message: "تم إرسال الطلب"));
+                            cartNotEmpty.value = false;
+                            CahchHelper.saveData(
+                                key: "cartNotEmpty", value: false);
+                            context.showMessageSnackBar(
+                              message: "تم إرسال الطلب",
+                            );
                             Navigator.of(context).popUntil(
                                 ModalRoute.withName(BottomNavBarView.id));
                             context.read<CartCubit>().getAllItems();
@@ -296,14 +303,15 @@ class _OrderConfirmViewState extends State<OrderConfirmView> {
                                         paymentMethod: 'عند الاستلام',
                                       );
                                 } else {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                      messageSnackBar(
-                                          message:
-                                              "اختر وقت التوصيل بطريقة صحيحة, يجب أن يكون الوقت على الأقل 24 ساعة من الأن"));
+                                  context.showMessageSnackBar(
+                                    message:
+                                        "اختر وقت التوصيل بطريقة صحيحة, يجب أن يكون الوقت على الأقل 24 ساعة من الأن",
+                                  );
                                 }
                               } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                    messageSnackBar(message: "اختر الموقع"));
+                                context.showMessageSnackBar(
+                                  message: "اختر الموقع",
+                                );
                               }
                             },
                             color: AppColors.primaryColor,

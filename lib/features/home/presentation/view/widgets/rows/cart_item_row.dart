@@ -44,18 +44,19 @@ class CartItemRow extends StatelessWidget {
                             );
                           } else {
                             return IconButton(
-                                onPressed: () {
-                                  cartItem.loading = true;
+                              onPressed: () {
+                                cartItem.loading = true;
 
-                                  context.read<CartCubit>().deleteItem(
-                                        itemId: cartItem.id!,
-                                      );
-                                },
-                                icon: Icon(
-                                  Icons.delete_forever_rounded,
-                                  size: 25.w,
-                                  color: AppColors.kRed,
-                                ));
+                                context.read<CartCubit>().deleteItem(
+                                      itemId: cartItem.id!,
+                                    );
+                              },
+                              icon: Icon(
+                                Icons.delete_forever_rounded,
+                                size: 25.w,
+                                color: AppColors.primaryColor,
+                              ),
+                            );
                           }
                         } else {
                           return Text(

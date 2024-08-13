@@ -18,14 +18,16 @@ class LogOutContainer extends StatelessWidget {
     return BlocConsumer<LogOutCubit, LogOutState>(
       listener: (context, state) {
         if (state is LogOutFailure) {
-          ScaffoldMessenger.of(context)
-              .showSnackBar(messageSnackBar(message: state.errMessage));
+          context.showMessageSnackBar(
+            message: state.errMessage,
+          );
         }
         if (state is LogOutSuccess) {
           Navigator.pushNamedAndRemoveUntil(
               context, LogInView.id, (route) => false);
-          ScaffoldMessenger.of(context)
-              .showSnackBar(messageSnackBar(message: "تم الخروج بنجاح"));
+          context.showMessageSnackBar(
+            message: "تم الخروج بنجاح",
+          );
         }
       },
       builder: (context, state) {

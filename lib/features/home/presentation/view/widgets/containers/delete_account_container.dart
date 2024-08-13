@@ -18,14 +18,16 @@ class DeleteAccountContainer extends StatelessWidget {
     return BlocConsumer<LogOutCubit, LogOutState>(
       listener: (context, state) {
         if (state is DeleteAccountFailure) {
-          ScaffoldMessenger.of(context)
-              .showSnackBar(messageSnackBar(message: state.errMessage));
+          context.showMessageSnackBar(
+            message: state.errMessage,
+          );
         }
         if (state is DeleteAccountSuccess) {
           Navigator.pushNamedAndRemoveUntil(
               context, LogInView.id, (route) => false);
-          ScaffoldMessenger.of(context)
-              .showSnackBar(messageSnackBar(message: "تم حذف الحساب بنجاح"));
+          context.showMessageSnackBar(
+            message: "تم حذف الحساب بنجاح",
+          );
         }
       },
       builder: (context, state) {

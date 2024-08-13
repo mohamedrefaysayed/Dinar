@@ -6,6 +6,7 @@ import 'package:dinar_store/features/home/data/models/orders_model.dart';
 import 'package:dinar_store/features/home/presentation/view/widgets/rows/order_row.dart';
 import 'package:dinar_store/features/home/presentation/view_model/order_cubit/cubit/order_cubit.dart';
 import 'package:easy_stepper/easy_stepper.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -37,6 +38,13 @@ class _WholeOrderViewState extends State<WholeOrderView> {
     for (int i = 0; i < int.parse(currentOrder.status!.toString()); i++) {
       activeStep.value = activeStep.value + 1;
     }
+    FirebaseMessaging.onMessage.listen(
+      (RemoteMessage message) async {
+        if (message.notification!.title!.contains(widget.order.id.toString())) {
+          await context.read<OrderCubit>().getOrder(orderId: currentOrder.id!);
+        }
+      },
+    );
   }
 
   @override
@@ -62,10 +70,8 @@ class _WholeOrderViewState extends State<WholeOrderView> {
                 }
               }
               if (state is UpdateOrderFailuer) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  messageSnackBar(
-                    message: state.errMessage,
-                  ),
+                context.showMessageSnackBar(
+                  message: state.errMessage,
                 );
               }
             },
@@ -233,150 +239,225 @@ class _WholeOrderViewState extends State<WholeOrderView> {
                       SizedBox(
                         height: 15.h,
                       ),
-                      Directionality(
-                        textDirection: TextDirection.rtl,
-                        child: EasyStepper(
-                          direction: Axis.vertical,
-                          activeStep: currentStep,
-                          lineStyle: LineStyle(
-                            lineType: LineType.normal,
-                            lineLength: 20.h,
-                            unreachedLineType: LineType.dotted,
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 40.w),
+                        child: Directionality(
+                          textDirection: TextDirection.rtl,
+                          child: EasyStepper(
+                            alignment: Alignment.centerRight,
+                            direction: Axis.vertical,
+                            activeStep: currentStep,
+                            lineStyle: LineStyle(
+                              lineType: LineType.normal,
+                              lineLength: 20.h,
+                              unreachedLineType: LineType.dotted,
+                            ),
+                            stepShape: StepShape.rRectangle,
+                            stepBorderRadius: 15.r,
+                            borderThickness: 2,
+                            stepRadius: 28.r,
+                            finishedStepBorderColor: AppColors.primaryColor,
+                            finishedStepTextColor: AppColors.primaryColor,
+                            finishedStepBackgroundColor: AppColors.primaryColor,
+                            activeStepBorderColor:
+                                AppColors.kBlack.withOpacity(0.7),
+                            activeStepTextColor:
+                                AppColors.kBlack.withOpacity(0.7),
+                            activeStepBackgroundColor: AppColors.kGrey,
+                            showLoadingAnimation: false,
+                            showTitle: false,
+                            steps: [
+                              if (!widget.isInOld) ...[
+                                EasyStep(
+                                  customStep: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(15),
+                                      border: Border.all(
+                                        color: Colors.white,
+                                        width: 5.w,
+                                      ),
+                                    ),
+                                    padding: EdgeInsets.all(5.w),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(15),
+                                      child: Opacity(
+                                        opacity: currentStep >= 0 ? 1 : 0.3,
+                                        child: Icon(
+                                          Icons.done,
+                                          size: 30.sp,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  title: context
+                                      .read<OrderCubit>()
+                                      .getStatusMessage('0'),
+                                ),
+                                EasyStep(
+                                  customStep: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(15),
+                                      border: Border.all(
+                                        color: Colors.white,
+                                        width: 5.w,
+                                      ),
+                                    ),
+                                    padding: EdgeInsets.all(5.w),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(15),
+                                      child: Opacity(
+                                        opacity: currentStep >= 0 ? 1 : 0.3,
+                                        child: Icon(
+                                          Icons.watch_later_outlined,
+                                          size: 30.sp,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  title: context
+                                      .read<OrderCubit>()
+                                      .getStatusMessage('1'),
+                                ),
+                                EasyStep(
+                                  customStep: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(15),
+                                      border: Border.all(
+                                        color: Colors.white,
+                                        width: 5.w,
+                                      ),
+                                    ),
+                                    padding: EdgeInsets.all(5.w),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(15),
+                                      child: Opacity(
+                                        opacity: currentStep >= 0 ? 1 : 0.3,
+                                        child: Icon(
+                                          Icons.food_bank_outlined,
+                                          size: 30.sp,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  title: context
+                                      .read<OrderCubit>()
+                                      .getStatusMessage('2'),
+                                ),
+                                EasyStep(
+                                  customStep: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(15),
+                                      border: Border.all(
+                                        color: Colors.white,
+                                        width: 5.w,
+                                      ),
+                                    ),
+                                    padding: EdgeInsets.all(5.w),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(15),
+                                      child: Opacity(
+                                        opacity: currentStep >= 0 ? 1 : 0.3,
+                                        child: Icon(
+                                          Icons.delivery_dining_outlined,
+                                          size: 30.sp,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  title: context
+                                      .read<OrderCubit>()
+                                      .getStatusMessage('3'),
+                                ),
+                              ],
+                              if (widget.isInOld) ...[
+                                if (int.parse(
+                                        currentOrder.status!.toString()) ==
+                                    4)
+                                  EasyStep(
+                                    customStep: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(15),
+                                        border: Border.all(
+                                          color: Colors.white,
+                                          width: 5.w,
+                                        ),
+                                      ),
+                                      padding: EdgeInsets.all(5.w),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(15),
+                                        child: Opacity(
+                                          opacity: currentStep >= 0 ? 1 : 0.3,
+                                          child: Icon(
+                                            Icons.done_all_rounded,
+                                            size: 30.sp,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    title: context
+                                        .read<OrderCubit>()
+                                        .getStatusMessage('4'),
+                                  ),
+                                if (int.parse(
+                                        currentOrder.status!.toString()) ==
+                                    5)
+                                  EasyStep(
+                                    customStep: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(15),
+                                        border: Border.all(
+                                          color: Colors.white,
+                                          width: 5.w,
+                                        ),
+                                      ),
+                                      padding: EdgeInsets.all(5.w),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(15),
+                                        child: Opacity(
+                                          opacity: currentStep >= 0 ? 1 : 0.3,
+                                          child: Icon(
+                                            Icons.remove_done_rounded,
+                                            size: 30.sp,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    title: context
+                                        .read<OrderCubit>()
+                                        .getStatusMessage('5'),
+                                  ),
+                                if (int.parse(currentOrder.status!.toString()) >
+                                    5)
+                                  EasyStep(
+                                    customStep: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(15),
+                                        border: Border.all(
+                                          color: Colors.white,
+                                          width: 5.w,
+                                        ),
+                                      ),
+                                      padding: EdgeInsets.all(5.w),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(15),
+                                        child: Opacity(
+                                          opacity: currentStep >= 0 ? 1 : 0.3,
+                                          child: Icon(
+                                            Icons.running_with_errors_rounded,
+                                            size: 30.sp,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    title: context
+                                        .read<OrderCubit>()
+                                        .getStatusMessage('6'),
+                                  ),
+                              ],
+                            ],
+                            onStepReached: (index) =>
+                                setState(() => currentStep = index),
                           ),
-                          stepShape: StepShape.rRectangle,
-                          stepBorderRadius: 15.r,
-                          borderThickness: 2,
-                          stepRadius: 25.r,
-                          finishedStepBorderColor: AppColors.kGreen,
-                          finishedStepTextColor: AppColors.kGreen,
-                          finishedStepBackgroundColor: AppColors.kLightGreen,
-                          activeStepBorderColor:
-                              AppColors.kBlack.withOpacity(0.7),
-                          activeStepTextColor:
-                              AppColors.kBlack.withOpacity(0.7),
-                          activeStepBackgroundColor: AppColors.kGrey,
-                          showLoadingAnimation: false,
-                          showTitle: false,
-                          steps: [
-                            if (!widget.isInOld) ...[
-                              EasyStep(
-                                lineText: "terst",
-                                customStep: ClipRRect(
-                                  borderRadius: BorderRadius.circular(15),
-                                  child: Opacity(
-                                    opacity: currentStep >= 0 ? 1 : 0.3,
-                                    child: Icon(
-                                      Icons.done,
-                                      size: 30.sp,
-                                    ),
-                                  ),
-                                ),
-                                title: context
-                                    .read<OrderCubit>()
-                                    .getStatusMessage('0'),
-                              ),
-                              EasyStep(
-                                customStep: ClipRRect(
-                                  borderRadius: BorderRadius.circular(15),
-                                  child: Opacity(
-                                    opacity: currentStep >= 0 ? 1 : 0.3,
-                                    child: Icon(
-                                      Icons.watch_later_outlined,
-                                      size: 30.sp,
-                                    ),
-                                  ),
-                                ),
-                                title: context
-                                    .read<OrderCubit>()
-                                    .getStatusMessage('1'),
-                              ),
-                              EasyStep(
-                                customStep: ClipRRect(
-                                  borderRadius: BorderRadius.circular(15),
-                                  child: Opacity(
-                                    opacity: currentStep >= 1 ? 1 : 0.3,
-                                    child: Icon(
-                                      Icons.food_bank_outlined,
-                                      size: 40.sp,
-                                    ),
-                                  ),
-                                ),
-                                title: context
-                                    .read<OrderCubit>()
-                                    .getStatusMessage('2'),
-                              ),
-                              EasyStep(
-                                customStep: ClipRRect(
-                                  borderRadius: BorderRadius.circular(15),
-                                  child: Opacity(
-                                    opacity: currentStep >= 2 ? 1 : 0.3,
-                                    child: Icon(
-                                      Icons.delivery_dining_outlined,
-                                      size: 40.sp,
-                                    ),
-                                  ),
-                                ),
-                                title: context
-                                    .read<OrderCubit>()
-                                    .getStatusMessage('3'),
-                              ),
-                            ],
-                            if (widget.isInOld) ...[
-                              if (int.parse(currentOrder.status!.toString()) ==
-                                  4)
-                                EasyStep(
-                                  customStep: ClipRRect(
-                                    borderRadius: BorderRadius.circular(15),
-                                    child: Opacity(
-                                      opacity: currentStep >= 3 ? 1 : 0.3,
-                                      child: Icon(
-                                        Icons.done_all_rounded,
-                                        size: 40.sp,
-                                      ),
-                                    ),
-                                  ),
-                                  title: context
-                                      .read<OrderCubit>()
-                                      .getStatusMessage('4'),
-                                ),
-                              if (int.parse(currentOrder.status!.toString()) ==
-                                  5)
-                                EasyStep(
-                                  customStep: ClipRRect(
-                                    borderRadius: BorderRadius.circular(15),
-                                    child: Opacity(
-                                      opacity: currentStep >= 3 ? 1 : 0.3,
-                                      child: Icon(
-                                        Icons.remove_done_rounded,
-                                        size: 40.sp,
-                                      ),
-                                    ),
-                                  ),
-                                  title: context
-                                      .read<OrderCubit>()
-                                      .getStatusMessage('5'),
-                                ),
-                              if (int.parse(currentOrder.status!.toString()) >
-                                  5)
-                                EasyStep(
-                                  customStep: ClipRRect(
-                                    borderRadius: BorderRadius.circular(15),
-                                    child: Opacity(
-                                      opacity: currentStep >= 3 ? 1 : 0.3,
-                                      child: Icon(
-                                        Icons.running_with_errors_rounded,
-                                        size: 40.sp,
-                                      ),
-                                    ),
-                                  ),
-                                  title: context
-                                      .read<OrderCubit>()
-                                      .getStatusMessage('6'),
-                                ),
-                            ],
-                          ],
-                          onStepReached: (index) =>
-                              setState(() => currentStep = index),
                         ),
                       ),
                     ],

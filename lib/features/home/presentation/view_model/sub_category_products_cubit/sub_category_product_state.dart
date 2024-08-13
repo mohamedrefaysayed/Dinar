@@ -15,3 +15,15 @@ final class SubCategoryProductFaliuer extends SubCategoryProductState {
   final String errMessage;
   SubCategoryProductFaliuer({required this.errMessage});
 }
+
+final class ProductLoading extends SubCategoryProductState {}
+
+final class ProductSuccess extends SubCategoryProductState {
+  final Products products;
+  ProductSuccess({required this.products});
+}
+
+final class ProductFaliuer extends SubCategoryProductState {
+  final String errMessage;
+  ProductFaliuer({required this.errMessage});
+}

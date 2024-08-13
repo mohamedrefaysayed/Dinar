@@ -1,13 +1,12 @@
 // ignore_for_file: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
 
 import 'package:dinar_store/core/animations/right_slide_transition.dart';
-import 'package:dinar_store/core/functions/future_delayed_navigator.dart';
 import 'package:dinar_store/core/utils/text_styles.dart';
 import 'package:dinar_store/features/home/data/models/categories_model.dart';
 import 'package:dinar_store/features/home/presentation/view/widgets/containers/sub_category_container_home.dart';
 import 'package:dinar_store/features/home/presentation/view/widgets/place_holders/categories_place_holder_home.dart';
 import 'package:dinar_store/features/home/presentation/view/widgets/search_rows/search_row.dart';
-import 'package:dinar_store/features/home/presentation/view/widgets/sub_sub_categories_view.dart';
+import 'package:dinar_store/features/home/presentation/view/widgets/whole_sub_category_view.dart';
 import 'package:dinar_store/features/home/presentation/view_model/sub_categories_cubit/sub_categories_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -139,14 +138,29 @@ class _SubCategoryViewState extends State<SubCategoryView> {
                                                   Navigator.push(
                                                     context,
                                                     RightSlideTransition(
-                                                      page: SubSubCategoryView(
-                                                        subcategory:
+                                                      page:
+                                                          WholeSubCategoryView(
+                                                        subCategory:
                                                             SubCategoriesCubit
                                                                     .subCategories[
                                                                 index],
+                                                        subCategories:
+                                                            SubCategoriesCubit
+                                                                .subCategories,
                                                       ),
                                                     ),
                                                   );
+                                                  // Navigator.push(
+                                                  //   context,
+                                                  //   RightSlideTransition(
+                                                  //     page: SubSubCategoryView(
+                                                  //       subcategory:
+                                                  //           SubCategoriesCubit
+                                                  //                   .subCategories[
+                                                  //               index],
+                                                  //     ),
+                                                  //   ),
+                                                  // );
                                                 },
                                               ),
                                             ],
@@ -189,18 +203,33 @@ class _SubCategoryViewState extends State<SubCategoryView> {
                                                 subCategory: SubCategoriesCubit
                                                     .subCategoriesSearch[index],
                                                 onPress: () {
-                                                  futureDelayedNavigator(() {
-                                                    Navigator.push(
-                                                        context,
-                                                        RightSlideTransition(
-                                                            page:
-                                                                SubSubCategoryView(
-                                                          subcategory:
-                                                              SubCategoriesCubit
-                                                                      .subCategories[
-                                                                  index],
-                                                        )));
-                                                  });
+                                                  Navigator.push(
+                                                    context,
+                                                    RightSlideTransition(
+                                                      page:
+                                                          WholeSubCategoryView(
+                                                        subCategory:
+                                                            SubCategoriesCubit
+                                                                    .subCategoriesSearch[
+                                                                index],
+                                                        subCategories:
+                                                            SubCategoriesCubit
+                                                                .subCategoriesSearch,
+                                                      ),
+                                                    ),
+                                                  );
+                                                  // futureDelayedNavigator(() {
+                                                  //   Navigator.push(
+                                                  //       context,
+                                                  //       RightSlideTransition(
+                                                  //           page:
+                                                  //               SubSubCategoryView(
+                                                  //         subcategory:
+                                                  //             SubCategoriesCubit
+                                                  //                     .subCategories[
+                                                  //                 index],
+                                                  //       )));
+                                                  // });
                                                 },
                                               ),
                                             ],

@@ -1,11 +1,15 @@
 // ignore_for_file: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member, use_build_context_synchronously
 
+import 'package:dinar_store/core/animations/left_slide_transition.dart';
+import 'package:dinar_store/core/helpers/app_cache/cahch_helper.dart';
 import 'package:dinar_store/core/utils/app_colors.dart';
+import 'package:dinar_store/core/utils/genrall.dart';
 import 'package:dinar_store/core/utils/text_styles.dart';
 import 'package:dinar_store/core/widgets/app_default_button.dart';
 import 'package:dinar_store/core/widgets/app_loading_button.dart';
 import 'package:dinar_store/core/widgets/message_snack_bar.dart';
 import 'package:dinar_store/features/home/data/models/sub_category_products_model.dart';
+import 'package:dinar_store/features/home/presentation/view/cart_view.dart';
 import 'package:dinar_store/features/home/presentation/view/widgets/cachedNetworkImage/my_cached_nework_Image.dart';
 import 'package:dinar_store/features/home/presentation/view/widgets/dividers/ginerall_divider.dart';
 import 'package:dinar_store/features/home/presentation/view/widgets/required_products_show.dart';
@@ -115,21 +119,21 @@ class _ProductViewState extends State<ProductView> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 30.w),
-                  child: Text(
-                    'النكهات',
-                    style: TextStyles.textStyle16.copyWith(
-                      fontWeight: FontWeight.w700,
-                      fontSize: 16.w,
-                    ),
-                    overflow: TextOverflow.ellipsis,
-                    textDirection: TextDirection.rtl,
-                  ),
-                ),
-                SizedBox(
-                  height: 10.h,
-                ),
+                // Padding(
+                //   padding: EdgeInsets.symmetric(horizontal: 30.w),
+                //   child: Text(
+                //     'النكهات',
+                //     style: TextStyles.textStyle16.copyWith(
+                //       fontWeight: FontWeight.w700,
+                //       fontSize: 16.w,
+                //     ),
+                //     overflow: TextOverflow.ellipsis,
+                //     textDirection: TextDirection.rtl,
+                //   ),
+                // ),
+                // SizedBox(
+                //   height: 10.h,
+                // ),
                 ProductAmountRow(
                   retailPrice: widget.product.retailPrice!.toString(),
                   wholeSalePrice: widget.product.wholeSalePrice!.toString(),
@@ -324,10 +328,12 @@ class _ProductViewState extends State<ProductView> {
                         child: BlocConsumer<CartCubit, CartState>(
                           listener: (context, state) {
                             if (state is AddToCartSuccess) {
-                              Navigator.pop(context);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  messageSnackBar(
-                                      message: "تمت الإضافة الى العربة"));
+                              cartNotEmpty.value = true;
+                              CahchHelper.saveData(
+                                  key: "cartNotEmpty", value: true);
+                              context.showMessageSnackBar(
+                                message: "تمت الإضافة الى العربة",
+                              );
                             }
                           },
                           builder: (context, state) {
@@ -387,8 +393,9 @@ class _ProductViewState extends State<ProductView> {
                                   }
                                   context.read<CartCubit>().getAllItems();
                                 } else {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                      messageSnackBar(message: "أختر الكمية"));
+                                  context.showMessageSnackBar(
+                                    message: "أختر الكمية",
+                                  );
                                 }
                               },
                               title: 'إضافة',
@@ -447,6 +454,39 @@ class _ProductViewState extends State<ProductView> {
             ),
           ],
         ),
+      ),
+      floatingActionButton: ValueListenableBuilder(
+        valueListenable: cartNotEmpty,
+        builder: (BuildContext context, bool value, Widget? child) => value
+            ? Stack(
+                children: [
+                  FloatingActionButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        LeftSlideTransition(
+                          page: const CartView(),
+                        ),
+                      );
+                    },
+                    backgroundColor: AppColors.primaryColor,
+                    child: Icon(
+                      Icons.shopping_cart_outlined,
+                      color: AppColors.kWhite,
+                      size: 30.sp,
+                    ),
+                  ),
+                  Container(
+                    height: 10.w,
+                    width: 10.w,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: AppColors.kRed,
+                    ),
+                  ),
+                ],
+              )
+            : const SizedBox(),
       ),
     );
   }
