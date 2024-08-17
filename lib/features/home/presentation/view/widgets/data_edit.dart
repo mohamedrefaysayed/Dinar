@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, deprecated_member_use
 
 import 'package:dinar_store/core/animations/right_slide_transition.dart';
 import 'package:dinar_store/core/utils/app_colors.dart';

@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:dinar_store/core/utils/app_colors.dart';
 import 'package:dinar_store/core/utils/app_images.dart';
 import 'package:dinar_store/core/utils/text_styles.dart';

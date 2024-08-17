@@ -40,6 +40,7 @@ class _ProductViewState extends State<ProductView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(),
       body: SizedBox(
         width: double.infinity,
         child: ListView(
@@ -328,6 +329,7 @@ class _ProductViewState extends State<ProductView> {
                         child: BlocConsumer<CartCubit, CartState>(
                           listener: (context, state) {
                             if (state is AddToCartSuccess) {
+                              Navigator.pop(context);
                               cartNotEmpty.value = true;
                               CahchHelper.saveData(
                                   key: "cartNotEmpty", value: true);

@@ -30,7 +30,7 @@ dependencies:
   bloc: ^8.1.2
   cached_network_image: ^3.3.1
   flutter_image_slideshow: ^0.1.6
-  carousel_slider: ^4.2.1
+  carousel_slider: ^5.0.0
   shimmer: ^3.0.0
   vertical_tabs_flutter: ^1.0.0
   dotted_border: ^2.1.0

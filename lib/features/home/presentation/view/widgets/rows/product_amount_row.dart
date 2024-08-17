@@ -273,7 +273,7 @@ class _ProductAmountRowState extends State<ProductAmountRow> {
                                   widget.totalRetailPrice.value =
                                       (widget.totalRetailPrice.value -
                                           (double.parse(widget.retailPrice) *
-                                              widget.maxRetail));
+                                              widget.minRetail));
                                 }
                               }
                             },

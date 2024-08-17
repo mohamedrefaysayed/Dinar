@@ -1,4 +1,4 @@
-// ignore_for_file: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member, deprecated_member_use
 
 import 'package:dinar_store/core/animations/left_slide_transition.dart';
 import 'package:dinar_store/core/utils/app_colors.dart';
@@ -116,18 +116,32 @@ class _WholeSubCategoryViewState extends State<WholeSubCategoryView>
                         widget.subCategories.length,
                         (index) => Tab(
                           height: 30.h,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: AppColors.primaryColor,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Center(
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 5.w),
-                                child: Text(
-                                  widget.subCategories[index].categoryName!,
-                                  style: TextStyles.textStyle14
-                                      .copyWith(color: Colors.white),
+                          child: ValueListenableBuilder(
+                            valueListenable: currentSubCategory,
+                            builder:
+                                (BuildContext context, value, Widget? child) =>
+                                    Container(
+                              decoration: BoxDecoration(
+                                color:
+                                    widget.subCategories.indexOf(value) == index
+                                        ? AppColors.primaryColor
+                                        : AppColors.kWhite,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Center(
+                                child: Padding(
+                                  padding:
+                                      EdgeInsets.symmetric(horizontal: 5.w),
+                                  child: Text(
+                                    widget.subCategories[index].categoryName!,
+                                    style: TextStyles.textStyle14.copyWith(
+                                      color:
+                                          widget.subCategories.indexOf(value) ==
+                                                  index
+                                              ? AppColors.kWhite
+                                              : AppColors.primaryColor,
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),

@@ -52,7 +52,7 @@ class OrdersServices implements OrdersRepo {
         endPoint: 'orders/$orderId',
       );
       List<DinarOrder> orders = [];
-       data["order"].forEach((element) {
+      data["order"].forEach((element) {
         orders.add(DinarOrder.fromJson(element));
       });
       return right(orders.firstWhere((element) => element.id == orderId));
@@ -73,11 +73,12 @@ class OrdersServices implements OrdersRepo {
     required SendOrderModel sendOrderModel,
   }) async {
     try {
-      await _dioHelper.postRequest(
+      Map<String, dynamic> data = await _dioHelper.postRequest(
         token: token,
         endPoint: 'orders',
         body: sendOrderModel.toJson(),
       );
+      print(data);
       return right(null);
     } on DioException catch (error) {
       return left(

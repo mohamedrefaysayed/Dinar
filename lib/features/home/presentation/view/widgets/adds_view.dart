@@ -19,7 +19,7 @@ class AddsView extends StatefulWidget {
 class _AddsViewState extends State<AddsView> {
   int _current = 0;
 
-  final CarouselController _controller = CarouselController();
+  final CarouselSliderController _controller = CarouselSliderController();
 
   @override
   void initState() {
