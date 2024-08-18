@@ -45,8 +45,8 @@ class OrderCubit extends Cubit<OrderState> {
       //success
       (orders) {
         ordersModel = OrdersModel(
-          currentOrders: orders.currentOrders!.reversed.toList(),
-          oldOrders: orders.oldOrders!,
+          currentOrders: orders.currentOrders,
+          oldOrders: orders.oldOrders,
         );
         emit(OrderSuccess(ordersModel: orders));
       },
@@ -113,7 +113,7 @@ class OrderCubit extends Cubit<OrderState> {
       },
     );
 
-    Either<ServerFailure, void> result = await _ordersServices.storeOrder(
+    Either<ServerFailure, DinarOrder> result = await _ordersServices.storeOrder(
       token: AppCubit.token!,
       sendOrderModel: sendOrderModel,
     );
@@ -126,9 +126,11 @@ class OrderCubit extends Cubit<OrderState> {
         );
       },
       //success
-      (orders) async {
+      (order) async {
         emit(
-          AddOrderSuccess(),
+          AddOrderSuccess(
+            dinarOrder: order,
+          ),
         );
       },
     );

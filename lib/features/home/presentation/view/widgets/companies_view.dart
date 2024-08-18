@@ -95,13 +95,15 @@ class _CompaniesViewState extends State<CompaniesView> {
                         onTap: () {
                           futureDelayedNavigator(() {
                             Navigator.push(
-                                context,
-                                RightSlideTransition(
-                                    page: ProductsView(
+                              context,
+                              RightSlideTransition(
+                                page: ProductsView(
                                   company:
                                       state.companiesModel.companies![index],
                                   isCategory: false,
-                                )));
+                                ),
+                              ),
+                            );
                           });
                         },
                         heroId: state.companiesModel.companies![index].id!,

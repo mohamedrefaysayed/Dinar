@@ -68,7 +68,7 @@ class OrdersServices implements OrdersRepo {
   }
 
   @override
-  Future<Either<ServerFailure, void>> storeOrder({
+  Future<Either<ServerFailure, DinarOrder>> storeOrder({
     required String token,
     required SendOrderModel sendOrderModel,
   }) async {
@@ -78,8 +78,10 @@ class OrdersServices implements OrdersRepo {
         endPoint: 'orders',
         body: sendOrderModel.toJson(),
       );
-      print(data);
-      return right(null);
+
+      return right(
+        DinarOrder.fromJson(data['orders'][0]),
+      );
     } on DioException catch (error) {
       return left(
         ServerFailure.fromDioException(dioException: error),

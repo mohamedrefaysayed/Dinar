@@ -335,7 +335,7 @@ class _WholeOrderViewState extends State<WholeOrderView> {
                                       child: Opacity(
                                         opacity: currentStep >= 0 ? 1 : 0.3,
                                         child: Icon(
-                                          Icons.food_bank_outlined,
+                                          Icons.fastfood,
                                           size: 30.sp,
                                         ),
                                       ),
@@ -360,7 +360,7 @@ class _WholeOrderViewState extends State<WholeOrderView> {
                                       child: Opacity(
                                         opacity: currentStep >= 0 ? 1 : 0.3,
                                         child: Icon(
-                                          Icons.delivery_dining_outlined,
+                                          Icons.delivery_dining_rounded,
                                           size: 30.sp,
                                         ),
                                       ),

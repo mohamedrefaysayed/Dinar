@@ -4,7 +4,7 @@ import 'package:dinar_store/core/utils/app_colors.dart';
 import 'package:dinar_store/core/utils/text_styles.dart';
 import 'package:dinar_store/features/home/data/models/categories_model.dart';
 import 'package:dinar_store/features/home/presentation/view/widgets/cachedNetworkImage/my_cached_nework_Image.dart';
-import 'package:dinar_store/features/home/presentation/view/widgets/sub_sub_categories_view.dart';
+import 'package:dinar_store/features/home/presentation/view/widgets/whole_sub_category_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -12,9 +12,11 @@ class SubCategoryContainer extends StatelessWidget {
   const SubCategoryContainer({
     super.key,
     required this.subCategory,
+    required this.subCategories,
   });
 
   final SubCategories subCategory;
+  final List<SubCategories> subCategories;
 
   @override
   Widget build(BuildContext context) {
@@ -75,12 +77,22 @@ class SubCategoryContainer extends StatelessWidget {
           color: AppColors.kTransparent,
           child: InkWell(
             onTap: () {
-              futureDelayedNavigator(() {
-                Navigator.push(
+              futureDelayedNavigator(
+                () {
+                  Navigator.push(
                     context,
                     RightSlideTransition(
-                        page: SubSubCategoryView(subcategory: subCategory)));
-              });
+                      page: WholeSubCategoryView(
+                        subCategory: subCategory,
+                        subCategories: subCategories,
+                      ),
+                    ),
+                    // RightSlideTransition(
+                    //   page: SubSubCategoryView(subcategory: subCategory),
+                    // ),
+                  );
+                },
+              );
             },
             borderRadius: BorderRadius.circular(15.w),
             child: SizedBox(height: 120.w, width: 250.w),

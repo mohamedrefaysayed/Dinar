@@ -36,6 +36,7 @@ class _ProductViewState extends State<ProductView> {
   ValueNotifier<int> wholeCount = ValueNotifier<int>(0);
   ValueNotifier<double> totalRetailPrice = ValueNotifier<double>(0);
   ValueNotifier<double> totalWholePrice = ValueNotifier<double>(0);
+  bool isBacked = false;
 
   @override
   Widget build(BuildContext context) {
@@ -329,7 +330,12 @@ class _ProductViewState extends State<ProductView> {
                         child: BlocConsumer<CartCubit, CartState>(
                           listener: (context, state) {
                             if (state is AddToCartSuccess) {
-                              Navigator.pop(context);
+                              if (!isBacked) {
+                                isBacked = true;
+                                Navigator.pop(context);
+                              } else {
+                                isBacked = false;
+                              }
                               cartNotEmpty.value = true;
                               CahchHelper.saveData(
                                   key: "cartNotEmpty", value: true);
@@ -369,28 +375,31 @@ class _ProductViewState extends State<ProductView> {
                                       },
                                     );
                                   } else {
-                                    if (retailCount.value > 0) {
-                                      await context.read<CartCubit>().storeItem(
-                                        productId: widget.product.id!,
-                                        quantity: retailCount.value,
-                                        unitId: widget.product.retailUnitId!,
-                                        price: totalRetailPrice.value,
-                                        isRequired: '0',
-                                        isLast: true,
-                                        requiredProducts: [],
-                                      );
-                                    }
-
-                                    if (wholeCount.value > 0) {
-                                      await context.read<CartCubit>().storeItem(
-                                        productId: widget.product.id!,
-                                        quantity: wholeCount.value,
-                                        unitId: widget.product.wholeUnitId!,
-                                        price: totalWholePrice.value,
-                                        isRequired: '0',
-                                        isLast: true,
-                                        requiredProducts: [],
-                                      );
+                                    if (retailCount.value > 0 ||
+                                        wholeCount.value > 0) {
+                                      await Future.wait([
+                                        if (retailCount.value > 0)
+                                          context.read<CartCubit>().storeItem(
+                                            productId: widget.product.id!,
+                                            quantity: retailCount.value,
+                                            unitId:
+                                                widget.product.retailUnitId!,
+                                            price: totalRetailPrice.value,
+                                            isRequired: '0',
+                                            isLast: true,
+                                            requiredProducts: [],
+                                          ),
+                                        if (wholeCount.value > 0)
+                                          context.read<CartCubit>().storeItem(
+                                            productId: widget.product.id!,
+                                            quantity: wholeCount.value,
+                                            unitId: widget.product.wholeUnitId!,
+                                            price: totalWholePrice.value,
+                                            isRequired: '0',
+                                            isLast: true,
+                                            requiredProducts: [],
+                                          ),
+                                      ]);
                                     }
                                   }
                                   context.read<CartCubit>().getAllItems();

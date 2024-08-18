@@ -1,8 +1,12 @@
 // ignore_for_file: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member, deprecated_member_use
 
+import 'package:dinar_store/core/animations/left_slide_transition.dart';
+import 'package:dinar_store/core/utils/app_colors.dart';
+import 'package:dinar_store/core/utils/genrall.dart';
 import 'package:dinar_store/core/utils/text_styles.dart';
 import 'package:dinar_store/features/home/data/models/categories_model.dart';
 import 'package:dinar_store/features/home/data/models/companies_model.dart';
+import 'package:dinar_store/features/home/presentation/view/cart_view.dart';
 import 'package:dinar_store/features/home/presentation/view/widgets/containers/product_container.dart';
 import 'package:dinar_store/features/home/presentation/view/widgets/place_holders/products_place_holder.dart';
 import 'package:dinar_store/features/home/presentation/view/widgets/search_rows/search_row.dart';
@@ -205,6 +209,39 @@ class _ProductsViewState extends State<ProductsView> {
               ],
             ),
           ),
+        ),
+        floatingActionButton: ValueListenableBuilder(
+          valueListenable: cartNotEmpty,
+          builder: (BuildContext context, bool value, Widget? child) => value
+              ? Stack(
+                  children: [
+                    FloatingActionButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          LeftSlideTransition(
+                            page: const CartView(),
+                          ),
+                        );
+                      },
+                      backgroundColor: AppColors.primaryColor,
+                      child: Icon(
+                        Icons.shopping_cart_outlined,
+                        color: AppColors.kWhite,
+                        size: 30.sp,
+                      ),
+                    ),
+                    Container(
+                      height: 10.w,
+                      width: 10.w,
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: AppColors.kRed,
+                      ),
+                    ),
+                  ],
+                )
+              : const SizedBox(),
         ),
       ),
     );

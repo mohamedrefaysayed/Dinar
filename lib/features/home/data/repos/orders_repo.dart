@@ -13,7 +13,7 @@ abstract class OrdersRepo {
     required int orderId,
   });
 
-  Future<Either<ServerFailure, void>> storeOrder({
+  Future<Either<ServerFailure, DinarOrder>> storeOrder({
     required String token,
     required SendOrderModel sendOrderModel,
   });

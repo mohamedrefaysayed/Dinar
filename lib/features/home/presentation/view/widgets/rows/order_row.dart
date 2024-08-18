@@ -133,10 +133,13 @@ class OrderRow extends StatelessWidget {
                       itemCount: (order.orderDetails!.length < 3 || isInDetails)
                           ? order.orderDetails!.length
                           : 3,
-                      itemBuilder: (context, index) => OrderProductRow(
-                        order: order,
-                        index: index,
-                      ),
+                      itemBuilder: (context, index) =>
+                          order.orderDetails![index].products != null
+                              ? OrderProductRow(
+                                  order: order,
+                                  index: index,
+                                )
+                              : const SizedBox(),
                     ),
                     if (order.orderDetails!.length > 3)
                       Text(

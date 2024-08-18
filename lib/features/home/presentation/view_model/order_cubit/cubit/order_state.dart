@@ -15,7 +15,10 @@ final class OrderSuccess extends OrderState {
   OrderSuccess({required this.ordersModel});
 }
 
-final class AddOrderSuccess extends OrderState {}
+final class AddOrderSuccess extends OrderState {
+  final DinarOrder dinarOrder;
+  AddOrderSuccess({required this.dinarOrder});
+}
 
 final class DeleteOrderSuccess extends OrderState {
   final OrdersModel ordersModel;

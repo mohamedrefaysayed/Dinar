@@ -14,6 +14,7 @@ import 'package:dinar_store/features/home/presentation/view/bottom_nav_view.dart
 import 'package:dinar_store/features/home/presentation/view/widgets/dividers/ginerall_divider.dart';
 import 'package:dinar_store/features/home/presentation/view/widgets/maps/order_location_map.dart';
 import 'package:dinar_store/features/home/presentation/view/widgets/rows/order_confirm_action_row.dart';
+import 'package:dinar_store/features/home/presentation/view/widgets/whole_order_view.dart';
 import 'package:dinar_store/features/home/presentation/view_model/cart_cubit/cubit/cart_cubit.dart';
 import 'package:dinar_store/features/home/presentation/view_model/order_cubit/cubit/order_cubit.dart';
 import 'package:flutter/material.dart';
@@ -280,6 +281,13 @@ class _OrderConfirmViewState extends State<OrderConfirmView> {
                             OrderCubit.markerPosition = null;
                             OrderCubit.pickedTime = null;
                             OrderCubit.currentAddress = "أختر عنوان";
+                            Navigator.push(
+                              context,
+                              RightSlideTransition(
+                                page: WholeOrderView(
+                                    order: state.dinarOrder, isInOld: false),
+                              ),
+                            );
                           }
                         },
                         builder: (context, state) {

@@ -59,6 +59,7 @@ class CategoriesPgeView extends StatelessWidget {
                           itemBuilder: (context, index) {
                             return SubCategoryContainer(
                               subCategory: category.subCategories![index],
+                              subCategories: category.subCategories!,
                             );
                           },
                         ),
