@@ -38,6 +38,7 @@ class CartItem {
   Unit? unit;
   bool loading = false;
   bool updating = false;
+  bool isRetailed = false;
 
   CartItem({
     this.id,
@@ -56,6 +57,7 @@ class CartItem {
     this.unit,
     required this.loading,
     required this.updating,
+    required this.isRetailed,
   });
 
   CartItem.fromJson(Map<String, dynamic> json) {

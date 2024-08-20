@@ -7,6 +7,7 @@ import 'package:dinar_store/core/utils/genrall.dart';
 import 'package:dinar_store/core/utils/text_styles.dart';
 import 'package:dinar_store/core/widgets/app_default_button.dart';
 import 'package:dinar_store/core/widgets/app_loading_button.dart';
+import 'package:dinar_store/core/widgets/defult_scaffold.dart';
 import 'package:dinar_store/core/widgets/message_snack_bar.dart';
 import 'package:dinar_store/features/home/data/models/sub_category_products_model.dart';
 import 'package:dinar_store/features/home/presentation/view/cart_view.dart';
@@ -48,7 +49,8 @@ class _ProductViewInAddsState extends State<ProductViewInAdds> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return DefultScaffold(
+      canPop: true,
       body: BlocBuilder<SubCategoryProductCubit, SubCategoryProductState>(
         builder: (context, state) {
           if (state is ProductSuccess) {
@@ -511,7 +513,9 @@ class _ProductViewInAddsState extends State<ProductViewInAdds> {
                       Navigator.push(
                         context,
                         LeftSlideTransition(
-                          page: const CartView(),
+                          page: const CartView(
+                            canPop: true,
+                          ),
                         ),
                       );
                     },

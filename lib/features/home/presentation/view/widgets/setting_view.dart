@@ -1,3 +1,4 @@
+import 'package:dinar_store/core/widgets/defult_scaffold.dart';
 import 'package:dinar_store/features/home/presentation/view/widgets/profile_container.dart';
 import 'package:dinar_store/features/home/presentation/view_model/profile_cubit/profile_cubit.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +10,8 @@ class SettingView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return DefultScaffold(
+      canPop: true,
       body: RefreshIndicator(
         onRefresh: () async {
           await context.read<ProfileCubit>().getProfile(context: context);

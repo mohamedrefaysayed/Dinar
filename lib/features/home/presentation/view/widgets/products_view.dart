@@ -220,7 +220,7 @@ class _ProductsViewState extends State<ProductsView> {
                         Navigator.push(
                           context,
                           LeftSlideTransition(
-                            page: const CartView(),
+                            page: const CartView(canPop: true,),
                           ),
                         );
                       },

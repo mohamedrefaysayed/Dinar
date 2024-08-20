@@ -4,6 +4,7 @@ import 'package:dinar_store/core/animations/left_slide_transition.dart';
 import 'package:dinar_store/core/utils/app_colors.dart';
 import 'package:dinar_store/core/utils/genrall.dart';
 import 'package:dinar_store/core/utils/text_styles.dart';
+import 'package:dinar_store/core/widgets/defult_scaffold.dart';
 import 'package:dinar_store/features/home/data/models/categories_model.dart';
 import 'package:dinar_store/features/home/presentation/view/cart_view.dart';
 import 'package:dinar_store/features/home/presentation/view/widgets/cachedNetworkImage/my_cached_nework_Image.dart';
@@ -43,18 +44,22 @@ class _WholeSubCategoryViewState extends State<WholeSubCategoryView>
   ValueNotifier<SubCategories> currentSubCategory =
       ValueNotifier(SubCategories());
 
+  List<SubCategories> taBarSubCategories = [];
+
   @override
   void initState() {
     super.initState();
+
+    taBarSubCategories = widget.subCategories;
     currentSubCategory.value = widget.subCategory;
-    for (int index = 0; index < widget.subCategories.length; index++) {
-      if (widget.subCategories[index].id == widget.subCategory.id) {
+    for (int index = 0; index < taBarSubCategories.length; index++) {
+      if (taBarSubCategories[index].id == widget.subCategory.id) {
         initialIndex = index;
       }
     }
     tabController = TabController(
       initialIndex: initialIndex,
-      length: widget.subCategories.length,
+      length: taBarSubCategories.length,
       vsync: this,
     );
     context
@@ -91,55 +96,66 @@ class _WholeSubCategoryViewState extends State<WholeSubCategoryView>
                   .getSubCategoryWithProduct(catId: widget.subCategory.id!);
             }
           },
-          child: Scaffold(
+          child: DefultScaffold(
+            canPop: true,
             body: SafeArea(
               child: DefaultTabController(
-                length: widget.subCategories.length,
+                length: taBarSubCategories.length,
                 initialIndex: initialIndex,
                 child: Column(
                   children: [
                     SizedBox(
                       height: 40.h,
                     ),
-                    TabBar(
-                      labelPadding: EdgeInsets.symmetric(horizontal: 5.w),
-                      isScrollable: true,
-                      onTap: (index) {
-                        context
-                            .read<SubCategoryProductCubit>()
-                            .getSubCategoryWithProduct(
-                                catId: widget.subCategories[index].id!);
-                        currentSubCategory.value = widget.subCategories[index];
-                        SubCategoryProductCubit.subCategoriesController.clear();
-                      },
-                      tabs: List.generate(
-                        widget.subCategories.length,
-                        (index) => Tab(
-                          height: 30.h,
-                          child: ValueListenableBuilder(
-                            valueListenable: currentSubCategory,
-                            builder:
-                                (BuildContext context, value, Widget? child) =>
+                    Padding(
+                      padding: EdgeInsets.only(right: 10.w),
+                      child: Directionality(
+                        textDirection: TextDirection.rtl,
+                        child: TabBar(
+                          dividerColor: AppColors.kWhite,
+                          tabAlignment: TabAlignment.start,
+                          labelPadding: EdgeInsets.symmetric(horizontal: 5.w),
+                          isScrollable: true,
+                          onTap: (index) {
+                            context
+                                .read<SubCategoryProductCubit>()
+                                .getSubCategoryWithProduct(
+                                    catId: taBarSubCategories[index].id!);
+                            currentSubCategory.value =
+                                taBarSubCategories[index];
+                            SubCategoryProductCubit.subCategoriesController
+                                .clear();
+                          },
+                          tabs: List.generate(
+                            taBarSubCategories.length,
+                            (index) => Tab(
+                              height: 25.h,
+                              child: ValueListenableBuilder(
+                                valueListenable: currentSubCategory,
+                                builder: (BuildContext context, value,
+                                        Widget? child) =>
                                     Container(
-                              decoration: BoxDecoration(
-                                color:
-                                    widget.subCategories.indexOf(value) == index
+                                  decoration: BoxDecoration(
+                                    color: taBarSubCategories.indexOf(value) ==
+                                            index
                                         ? AppColors.primaryColor
                                         : AppColors.kWhite,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Center(
-                                child: Padding(
-                                  padding:
-                                      EdgeInsets.symmetric(horizontal: 5.w),
-                                  child: Text(
-                                    widget.subCategories[index].categoryName!,
-                                    style: TextStyles.textStyle14.copyWith(
-                                      color:
-                                          widget.subCategories.indexOf(value) ==
+                                    borderRadius: BorderRadius.circular(6.r),
+                                  ),
+                                  child: Center(
+                                    child: Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 7.w),
+                                      child: Text(
+                                        taBarSubCategories[index].categoryName!,
+                                        style: TextStyles.textStyle14.copyWith(
+                                          color: taBarSubCategories
+                                                      .indexOf(value) ==
                                                   index
                                               ? AppColors.kWhite
                                               : AppColors.primaryColor,
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -148,6 +164,9 @@ class _WholeSubCategoryViewState extends State<WholeSubCategoryView>
                           ),
                         ),
                       ),
+                    ),
+                    SizedBox(
+                      height: 10.h,
                     ),
                     Expanded(
                       child: RefreshIndicator(
@@ -482,7 +501,9 @@ class _WholeSubCategoryViewState extends State<WholeSubCategoryView>
                                 Navigator.push(
                                   context,
                                   LeftSlideTransition(
-                                    page: const CartView(),
+                                    page: const CartView(
+                                      canPop: true,
+                                    ),
                                   ),
                                 );
                               },

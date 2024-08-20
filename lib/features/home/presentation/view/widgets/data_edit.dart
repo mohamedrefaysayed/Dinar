@@ -5,6 +5,7 @@ import 'package:dinar_store/core/utils/app_colors.dart';
 import 'package:dinar_store/core/utils/text_styles.dart';
 import 'package:dinar_store/core/widgets/app_default_button.dart';
 import 'package:dinar_store/core/widgets/app_loading_button.dart';
+import 'package:dinar_store/core/widgets/defult_scaffold.dart';
 import 'package:dinar_store/core/widgets/message_snack_bar.dart';
 import 'package:dinar_store/features/auth/presentation/view/widgets/text_field_data_builder.dart';
 import 'package:dinar_store/features/auth/presentation/view_model/store_data_cubit/store_data_cubit.dart';
@@ -33,7 +34,8 @@ class DataEdit extends StatelessWidget {
         StoreDataCubit.addressController.clear();
         StoreDataCubit.marketPhoneController.clear();
       },
-      child: Scaffold(
+      child: DefultScaffold(
+        canPop: true,
         body: ListView(
           padding: EdgeInsets.symmetric(
             horizontal: 30.w,

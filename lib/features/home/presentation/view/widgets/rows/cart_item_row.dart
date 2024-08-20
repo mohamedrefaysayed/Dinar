@@ -17,6 +17,16 @@ class CartItemRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        Text(
+          cartItem.isRetailed ? "مفرد" : "جملة",
+          style: TextStyles.textStyle16.copyWith(
+            fontWeight: FontWeight.w400,
+            color: AppColors.primaryColor,
+            fontSize: 16.w,
+          ),
+          textDirection: TextDirection.rtl,
+          maxLines: 3,
+        ),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 30.w),
           child: SizedBox(
@@ -213,13 +223,24 @@ class CartItemRow extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          "${cartItem.product!.retailPrice!}.د",
+                          "${(cartItem.isRetailed ? cartItem.product!.retailPrice : cartItem.product!.wholeSalePrice)}.د",
+                          style: TextStyles.textStyle12.copyWith(
+                            fontWeight: FontWeight.w400,
+                            color: AppColors.primaryColor,
+                            fontSize: 16.w,
+                          ),
+                          textDirection: TextDirection.rtl,
+                        ),
+                        Text(
+                          "م.ج : ${cartItem.price!}.د",
                           style: TextStyles.textStyle16.copyWith(
                             fontWeight: FontWeight.w400,
                             color: AppColors.primaryColor,
                             fontSize: 16.w,
                           ),
                           textDirection: TextDirection.rtl,
+                          maxLines: 3,
+                          softWrap: true,
                         ),
                       ],
                     ),
@@ -227,19 +248,20 @@ class CartItemRow extends StatelessWidget {
                       width: 5.w,
                     ),
                     ClipRRect(
-                        borderRadius: BorderRadius.circular(15.w),
-                        child: MyCachedNetworkImage(
-                          width: 70.w,
-                          height: 60.h,
-                          fit: BoxFit.contain,
-                          url: cartItem.product!.image!,
-                          errorIcon: Icon(
-                            Icons.image,
-                            size: 25.w,
-                            color: AppColors.primaryColor,
-                          ),
-                          loadingWidth: 10.w,
-                        )),
+                      borderRadius: BorderRadius.circular(15.w),
+                      child: MyCachedNetworkImage(
+                        width: 70.w,
+                        height: 60.h,
+                        fit: BoxFit.contain,
+                        url: cartItem.product!.image!,
+                        errorIcon: Icon(
+                          Icons.image,
+                          size: 25.w,
+                          color: AppColors.primaryColor,
+                        ),
+                        loadingWidth: 10.w,
+                      ),
+                    ),
                   ],
                 )
               ],
