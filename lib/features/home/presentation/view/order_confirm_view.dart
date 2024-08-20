@@ -8,6 +8,7 @@ import 'package:dinar_store/core/utils/text_styles.dart';
 import 'package:dinar_store/core/utils/time_date_handler.dart';
 import 'package:dinar_store/core/widgets/app_default_button.dart';
 import 'package:dinar_store/core/widgets/app_loading_button.dart';
+import 'package:dinar_store/core/widgets/defult_scaffold.dart';
 import 'package:dinar_store/core/widgets/message_snack_bar.dart';
 import 'package:dinar_store/features/auth/presentation/view_model/location_cubit/cubit/location_cubit.dart';
 import 'package:dinar_store/features/home/presentation/view/bottom_nav_view.dart';
@@ -40,7 +41,8 @@ class _OrderConfirmViewState extends State<OrderConfirmView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return DefultScaffold(
+      canPop: true,
       body: RefreshIndicator(onRefresh: () async {
         await context.read<CartCubit>().getAllItems();
         context.read<LocationCubit>().getCurrentLocation(context: context);

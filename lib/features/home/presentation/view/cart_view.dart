@@ -4,6 +4,7 @@ import 'package:dinar_store/core/utils/app_colors.dart';
 import 'package:dinar_store/core/utils/genrall.dart';
 import 'package:dinar_store/core/utils/text_styles.dart';
 import 'package:dinar_store/core/widgets/app_default_button.dart';
+import 'package:dinar_store/core/widgets/defult_scaffold.dart';
 import 'package:dinar_store/core/widgets/message_snack_bar.dart';
 import 'package:dinar_store/features/home/presentation/view/order_confirm_view.dart';
 import 'package:dinar_store/features/home/presentation/view/widgets/dividers/ginerall_divider.dart';
@@ -16,8 +17,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CartView extends StatefulWidget {
-  const CartView({super.key});
-
+  const CartView({
+    super.key,
+    this.canPop,
+  });
+  final bool? canPop;
   @override
   State<CartView> createState() => _CartViewState();
 }
@@ -33,7 +37,8 @@ class _CartViewState extends State<CartView>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return Scaffold(
+    return DefultScaffold(
+      canPop: widget.canPop,
       body: RefreshIndicator(
         onRefresh: () async {
           await context.read<CartCubit>().getAllItems();

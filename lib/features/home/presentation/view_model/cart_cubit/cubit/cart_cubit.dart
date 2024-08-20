@@ -40,8 +40,10 @@ class CartCubit extends Cubit<CartState> {
       },
       //success
       (cartItems) async {
-        await countTotal(items: cartItems.cart!);
         cartItemsModel = cartItems;
+        cartItems.cart = await summedItemsFunc(cartItems: cartItems.cart!);
+        await countTotal(items: cartItems.cart!);
+
         emit(GetCartSuccess(cartItemsModel: cartItems));
       },
     );
@@ -173,27 +175,78 @@ class CartCubit extends Cubit<CartState> {
     totalPrice = 0;
     totalDiscount = 0;
     for (var element in items) {
-      totalPrice = totalPrice + (element.price! * element.quantity!);
+      totalPrice = totalPrice + element.price!;
       totalDiscount = totalDiscount +
           (((element.price!) / 100) * element.product!.discount!) *
               element.quantity!;
     }
+
     finalPrice = totalPrice - totalDiscount;
   }
 
-  Future<void> mergeSameProducts({
-    required List<CartItem> items,
+  Future<List<CartItem>> summedItemsFunc({
+    required List<CartItem> cartItems,
   }) async {
-    Map<CartItem, int> uniqeItems = {};
+    // Create a new list of CartItem
+    List<CartItem> summedItems = [];
 
-    for (var element in items) {
-      uniqeItems[element] = uniqeItems.containsKey(element)
-          ? uniqeItems[element]! + element.quantity!
-          : element.quantity!;
+    // Iterate over the original list
+    for (var item in cartItems) {
+      // Check if the new list already contains an item with the same productId
+      item.isRetailed = item.quantity! <= item.product!.maxRetailQuantity!;
+      var existingItem = summedItems.firstWhere(
+        (i) => (i.productId == item.productId &&
+            i.unitId == item.unitId &&
+            i.isRetailed == item.isRetailed),
+        orElse: () =>
+            CartItem(updating: false, loading: false, isRetailed: false),
+      );
+
+      // If it does, increase the quantity of that item
+      if (existingItem.productId != null && existingItem.unitId != null) {
+        summedItems
+            .firstWhere(
+              (i) => (i.productId == item.productId &&
+                  i.unitId == item.unitId &&
+                  i.isRetailed == item.isRetailed),
+              orElse: () =>
+                  CartItem(updating: false, loading: false, isRetailed: false),
+            )
+            .quantity = summedItems
+                .firstWhere(
+                  (i) => (i.productId == item.productId &&
+                      i.unitId == item.unitId &&
+                      i.isRetailed == item.isRetailed),
+                  orElse: () => CartItem(
+                      updating: false, loading: false, isRetailed: false),
+                )
+                .quantity! +
+            item.quantity!;
+        summedItems
+            .firstWhere(
+              (i) => (i.productId == item.productId &&
+                  i.unitId == item.unitId &&
+                  i.isRetailed == item.isRetailed),
+              orElse: () =>
+                  CartItem(updating: false, loading: false, isRetailed: false),
+            )
+            .price = summedItems
+                .firstWhere(
+                  (i) => (i.productId == item.productId &&
+                      i.unitId == item.unitId &&
+                      i.isRetailed == item.isRetailed),
+                  orElse: () => CartItem(
+                      updating: false, loading: false, isRetailed: false),
+                )
+                .price! +
+            item.price!;
+      } else {
+        // If it doesn't, add the item to the new list
+        summedItems.add(item);
+      }
     }
-    uniqeItems.forEach((key, value) {
-      key.quantity = value;
-    });
-    cartItemsModel = CartItemsModel(cart: uniqeItems.keys.toList());
+
+    // Replace the original list with the new list
+    return summedItems;
   }
 }

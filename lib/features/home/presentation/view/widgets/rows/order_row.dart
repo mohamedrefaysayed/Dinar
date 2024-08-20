@@ -118,6 +118,18 @@ class OrderRow extends StatelessWidget {
                       ),
                     ],
                     Text(
+                      "المجموع : ${double.parse(order.total!)}",
+                      style: TextStyles.textStyle16.copyWith(
+                        fontWeight: FontWeight.w700,
+                      ),
+                      textDirection: TextDirection.rtl,
+                      softWrap: true,
+                      maxLines: 5,
+                    ),
+                    SizedBox(
+                      height: 10.h,
+                    ),
+                    Text(
                       order.address != null
                           ? "${order.address}"
                           : "لا يوجد عنوان",

@@ -2,6 +2,7 @@
 
 import 'package:dinar_store/core/utils/app_images.dart';
 import 'package:dinar_store/core/utils/text_styles.dart';
+import 'package:dinar_store/core/widgets/defult_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -10,7 +11,8 @@ class AboutApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return DefultScaffold(
+      canPop: true,
       body: Padding(
         padding: EdgeInsets.symmetric(
           horizontal: 20.w,

@@ -511,7 +511,7 @@ class _ProductViewInAddsState extends State<ProductViewInAdds> {
                       Navigator.push(
                         context,
                         LeftSlideTransition(
-                          page: const CartView(),
+                          page: const CartView(canPop: true,),
                         ),
                       );
                     },
