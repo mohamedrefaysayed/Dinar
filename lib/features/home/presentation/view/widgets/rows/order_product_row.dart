@@ -28,7 +28,7 @@ class OrderProductRow extends StatelessWidget {
               MyCachedNetworkImage(
                 height: 30.w,
                 width: 30.w,
-                fit: BoxFit.contain,
+                // fit: BoxFit.contain,
                 url: (order.orderDetails![index].products != null &&
                         order.orderDetails![index].products!.image != null)
                     ? order.orderDetails![index].products!.image!

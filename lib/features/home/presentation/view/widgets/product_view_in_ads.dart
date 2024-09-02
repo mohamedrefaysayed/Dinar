@@ -68,7 +68,7 @@ class _ProductViewInAddsState extends State<ProductViewInAdds> {
                     child: Hero(
                       tag: 'Product${product.id}',
                       child: MyCachedNetworkImage(
-                        fit: BoxFit.contain,
+                        // fit: BoxFit.contain,
                         url: product.image!,
                         errorIcon: Icon(
                           Icons.image,
@@ -394,6 +394,7 @@ class _ProductViewInAddsState extends State<ProductViewInAdds> {
                                             await context
                                                 .read<CartCubit>()
                                                 .storeItem(
+                                              isRetail: true,
                                               productId: product.id!,
                                               quantity: retailCount.value,
                                               unitId: product.retailUnitId!,
@@ -408,6 +409,7 @@ class _ProductViewInAddsState extends State<ProductViewInAdds> {
                                             await context
                                                 .read<CartCubit>()
                                                 .storeItem(
+                                              isRetail: false,
                                               productId: product.id!,
                                               quantity: wholeCount.value,
                                               unitId: product.wholeUnitId!,

@@ -252,7 +252,7 @@ class CartItemRow extends StatelessWidget {
                       child: MyCachedNetworkImage(
                         width: 70.w,
                         height: 60.h,
-                        fit: BoxFit.contain,
+                        // fit: BoxFit.contain,
                         url: cartItem.product!.image!,
                         errorIcon: Icon(
                           Icons.image,

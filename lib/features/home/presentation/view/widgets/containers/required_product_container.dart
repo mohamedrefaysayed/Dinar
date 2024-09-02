@@ -76,7 +76,7 @@ class _RequierdProductContainerState extends State<RequierdProductContainer> {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(15.w),
                     child: MyCachedNetworkImage(
-                      fit: BoxFit.contain,
+                      // fit: BoxFit.contain,
                       height: 50.h,
                       width: 70.w,
                       url: widget.product.image!,

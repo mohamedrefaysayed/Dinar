@@ -40,6 +40,7 @@ class CartServices implements CartRepo {
 
   @override
   Future<Either<ServerFailure, int>> storeItem({
+    required bool isRetail,
     required String token,
     required int productId,
     required int quantity,
@@ -53,6 +54,7 @@ class CartServices implements CartRepo {
         token: token,
         endPoint: 'cart',
         body: {
+          'unit_type' : isRetail ? 'retail' : 'whole',
           'product_id': productId,
           'quantity': quantity,
           'unit_id': unitId,

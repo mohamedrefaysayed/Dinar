@@ -36,6 +36,7 @@ class CartItem {
   int? refCartId;
   Product? product;
   Unit? unit;
+  String? unitType;
   bool loading = false;
   bool updating = false;
   bool isRetailed = false;
@@ -55,6 +56,7 @@ class CartItem {
     this.refCartId,
     this.product,
     this.unit,
+    this.unitType,
     required this.loading,
     required this.updating,
     required this.isRetailed,
@@ -73,6 +75,7 @@ class CartItem {
     updatedAt = json['updated_at'];
     isRequired = json['is_required'];
     refCartId = json['ref_cart_id'];
+    unitType = json['unit_type'];
     product =
         json['product'] != null ? Product.fromJson(json['product']) : null;
     unit = json['unit'] != null ? Unit.fromJson(json['unit']) : null;
@@ -92,6 +95,7 @@ class CartItem {
     data['updated_at'] = updatedAt;
     data['is_required'] = isRequired;
     data['ref_cart_id'] = refCartId;
+    data['unit_type'] = unitType;
     if (product != null) {
       data['product'] = product!.toJson();
     }

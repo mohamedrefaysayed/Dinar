@@ -177,6 +177,7 @@ class _RequiredProductsShowState extends State<RequiredProductsShow> {
                           CartCubit.retailIsDone = false;
 
                           await context.read<CartCubit>().storeItem(
+                                isRetail: true,
                                 productId: widget.product.id!,
                                 quantity: widget.retailCount.value,
                                 unitId: widget.product.retailUnitId!,
@@ -193,6 +194,7 @@ class _RequiredProductsShowState extends State<RequiredProductsShow> {
                           CartCubit.wholeIsDone = false;
 
                           await context.read<CartCubit>().storeItem(
+                                isRetail: false,
                                 productId: widget.product.id!,
                                 quantity: widget.wholeCount.value,
                                 unitId: widget.product.wholeUnitId!,

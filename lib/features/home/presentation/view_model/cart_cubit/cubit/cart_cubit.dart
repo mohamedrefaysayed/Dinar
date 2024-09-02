@@ -50,6 +50,7 @@ class CartCubit extends Cubit<CartState> {
   }
 
   Future<void> storeItem({
+    required bool isRetail,
     required int productId,
     required int quantity,
     required int unitId,
@@ -61,6 +62,7 @@ class CartCubit extends Cubit<CartState> {
   }) async {
     emit(AddToCartLoading());
     Either<ServerFailure, int> result = await _cartServices.storeItem(
+      isRetail: isRetail,
       token: AppCubit.token!,
       productId: productId,
       quantity: quantity,
@@ -90,6 +92,8 @@ class CartCubit extends Cubit<CartState> {
                     1.0);
 
             await storeItem(
+              isRetail: requiredProducts[i].pivot!.requiredUnitId! ==
+                  requiredProducts[i].retailUnit!.id,
               productId: requiredProducts[i].id!,
               quantity: productCount.toInt(),
               unitId: requiredProducts[i].pivot!.requiredUnitId!,
@@ -109,40 +113,40 @@ class CartCubit extends Cubit<CartState> {
     );
   }
 
-  updateItem({
-    required int productId,
-    required int quantity,
-    required int unitId,
-    required double price,
-    required String isRequired,
-    required int itemId,
-  }) async {
-    emit(UpdateItemLoading());
-    Either<ServerFailure, CartItemsModel> result =
-        await _cartServices.updateItem(
-      token: AppCubit.token!,
-      productId: productId,
-      quantity: quantity,
-      unitId: unitId,
-      price: price,
-      isRequired: isRequired,
-      itemId: itemId,
-    );
+  // updateItem({
+  //   required int productId,
+  //   required int quantity,
+  //   required int unitId,
+  //   required double price,
+  //   required String isRequired,
+  //   required int itemId,
+  // }) async {
+  //   emit(UpdateItemLoading());
+  //   Either<ServerFailure, CartItemsModel> result =
+  //       await _cartServices.updateItem(
+  //     token: AppCubit.token!,
+  //     productId: productId,
+  //     quantity: quantity,
+  //     unitId: unitId,
+  //     price: price,
+  //     isRequired: isRequired,
+  //     itemId: itemId,
+  //   );
 
-    result.fold(
-      //error
-      (serverFailure) {
-        emit(
-          UpdateItemFailuer(errMessage: serverFailure.errMessage),
-        );
-      },
-      //success
-      (cartItemsModel) async {
-        countTotal(items: cartItemsModel.cart!);
-        emit(UpdateItemSuccess(cartItemsModel: cartItemsModel));
-      },
-    );
-  }
+  //   result.fold(
+  //     //error
+  //     (serverFailure) {
+  //       emit(
+  //         UpdateItemFailuer(errMessage: serverFailure.errMessage),
+  //       );
+  //     },
+  //     //success
+  //     (cartItemsModel) async {
+  //       countTotal(items: cartItemsModel.cart!);
+  //       emit(UpdateItemSuccess(cartItemsModel: cartItemsModel));
+  //     },
+  //   );
+  // }
 
   deleteItem({
     required int itemId,
@@ -163,6 +167,7 @@ class CartCubit extends Cubit<CartState> {
       },
       //success
       (cartItemsModel) async {
+        cartItemsModel.cart = await summedItemsFunc(cartItems: cartItemsModel.cart!);
         countTotal(items: cartItemsModel.cart!);
         emit(DeleteItemSuccess(cartItemsModel: cartItemsModel));
       },
@@ -193,7 +198,7 @@ class CartCubit extends Cubit<CartState> {
     // Iterate over the original list
     for (var item in cartItems) {
       // Check if the new list already contains an item with the same productId
-      item.isRetailed = item.quantity! <= item.product!.maxRetailQuantity!;
+      item.isRetailed = item.unitType == 'retail';
       var existingItem = summedItems.firstWhere(
         (i) => (i.productId == item.productId &&
             i.unitId == item.unitId &&

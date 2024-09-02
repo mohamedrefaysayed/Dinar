@@ -55,7 +55,7 @@ class _ProductViewState extends State<ProductView> {
               child: Hero(
                 tag: 'Product${widget.product.id}',
                 child: MyCachedNetworkImage(
-                  fit: BoxFit.contain,
+                  // fit: BoxFit.contain,
                   url: widget.product.image!,
                   errorIcon: Icon(
                     Icons.image,
@@ -381,6 +381,7 @@ class _ProductViewState extends State<ProductView> {
                                       await Future.wait([
                                         if (retailCount.value > 0)
                                           context.read<CartCubit>().storeItem(
+                                            isRetail: true,
                                             productId: widget.product.id!,
                                             quantity: retailCount.value,
                                             unitId:
@@ -392,6 +393,7 @@ class _ProductViewState extends State<ProductView> {
                                           ),
                                         if (wholeCount.value > 0)
                                           context.read<CartCubit>().storeItem(
+                                            isRetail: false,
                                             productId: widget.product.id!,
                                             quantity: wholeCount.value,
                                             unitId: widget.product.wholeUnitId!,

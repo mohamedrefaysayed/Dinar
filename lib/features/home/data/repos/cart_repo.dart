@@ -8,6 +8,7 @@ abstract class CartRepo {
   });
 
   Future<Either<ServerFailure, void>> storeItem({
+    required bool isRetail,
     required String token,
     required int productId,
     required int quantity,

@@ -27,15 +27,16 @@ class SearchItem extends StatelessWidget {
               ClipRRect(
                 borderRadius: BorderRadius.circular(15.w),
                 child: MyCachedNetworkImage(
-                    fit: BoxFit.contain,
-                    height: 100.w,
-                    width: 150.w,
-                    url: imag,
-                    errorIcon: const Icon(
-                      Icons.image,
-                      color: AppColors.primaryColor,
-                    ),
-                    loadingWidth: 13.w),
+                  // fit: BoxFit.contain,
+                  height: 100.w,
+                  width: 150.w,
+                  url: imag,
+                  errorIcon: const Icon(
+                    Icons.image,
+                    color: AppColors.primaryColor,
+                  ),
+                  loadingWidth: 13.w,
+                ),
               ),
               SizedBox(
                 height: 10.h,
