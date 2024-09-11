@@ -67,9 +67,9 @@ class _ProfileViewState extends State<ProfileView>
             // ),
             ProfileSettingsRow(
               title: 'الدعم',
-              onTap: () {
-                launchUrlString(
-                  "whatsapp://send?phone=+9647849333099",
+              onTap: () async {
+                await launchUrlString(
+                  "sms:+9607869636020",
                   mode: LaunchMode.externalApplication,
                 );
               },
