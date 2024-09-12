@@ -2,6 +2,8 @@ abstract class AppImages {
   ///assets/images/asdc_logo.svg
   static const dinarLogo = "assets/images/dinar_logo.png";
 
+  static const dinarImage = "assets/images/dinar_image.png";
+
   ///assets/images/attendnce.svg
   static const loginCart = "assets/images/login_cart.png";
 

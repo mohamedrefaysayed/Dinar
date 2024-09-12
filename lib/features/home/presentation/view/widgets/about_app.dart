@@ -23,9 +23,8 @@ class AboutApp extends StatelessWidget {
             Padding(
               padding: EdgeInsets.all(3.w),
               child: Image.asset(
-                height: 150.w,
-                width: 150.w,
-                AppImages.dinarLogo,
+                height: 200.w,
+                AppImages.dinarImage,
                 fit: BoxFit.cover,
               ),
             ),

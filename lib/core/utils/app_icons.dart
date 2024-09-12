@@ -76,4 +76,5 @@ abstract class AppIcons {
 
   ///assets/icons/warning.svg
   static const iconsWarning = "assets/icons/warning.svg";
+  
 }

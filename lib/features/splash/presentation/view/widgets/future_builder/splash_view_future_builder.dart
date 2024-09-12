@@ -14,10 +14,13 @@ class SplashViewFutureBuilder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: Future.delayed(const Duration(seconds: 3), () async {
-        BlocProvider.of<ManageNavigationCubit>(context).getAppData(context);
-        context.checkInternet();
-      }),
+      future: Future.delayed(
+        const Duration(seconds: 3),
+        () async {
+          BlocProvider.of<ManageNavigationCubit>(context).getAppData(context);
+          context.checkInternet();
+        },
+      ),
       builder: (context, snapShot) => const Scaffold(
         backgroundColor: AppColors.primaryColor,
         body: SplashViewBody(),

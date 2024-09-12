@@ -1,6 +1,5 @@
 // ignore_for_file: invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member, use_build_context_synchronously
 
-import 'package:dinar_store/core/utils/app_colors.dart';
 import 'package:dinar_store/core/utils/app_images.dart';
 import 'package:dinar_store/core/widgets/message_snack_bar.dart';
 import 'package:dinar_store/features/auth/presentation/view/widgets/code_builder.dart';
@@ -80,10 +79,9 @@ class LogInView extends StatelessWidget {
                   tag: 'dinar_logo',
                   child: Center(
                     child: Image.asset(
-                      AppImages.dinarLogo,
-                      height: 40.w,
+                      AppImages.dinarImage,
+                      height: 70.w,
                       width: 177.w,
-                      color: AppColors.primaryColor,
                     ),
                   ),
                 ),
