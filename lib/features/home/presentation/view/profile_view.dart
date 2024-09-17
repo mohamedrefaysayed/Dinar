@@ -7,7 +7,6 @@ import 'package:dinar_store/features/home/presentation/view/widgets/rows/profile
 import 'package:dinar_store/features/home/presentation/view/widgets/setting_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class ProfileView extends StatefulWidget {
@@ -79,39 +78,39 @@ class _ProfileViewState extends State<ProfileView>
             const LogOutContainer(),
             const GeneralDivider(),
             const DeleteAccountContainer(),
-            const Spacer(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SvgPicture.asset(
-                  "assets/icons/facebook.svg",
-                  height: 20.w,
-                  width: 20.w,
-                  colorFilter: ColorFilter.mode(
-                      Colors.black.withOpacity(0.6), BlendMode.srcATop),
-                ),
-                SizedBox(
-                  width: 20.w,
-                ),
-                SvgPicture.asset(
-                  "assets/icons/instagram.svg",
-                  height: 20.w,
-                  width: 20.w,
-                  colorFilter: ColorFilter.mode(
-                      Colors.black.withOpacity(0.6), BlendMode.srcATop),
-                ),
-                SizedBox(
-                  width: 20.w,
-                ),
-                SvgPicture.asset(
-                  "assets/icons/globe.svg",
-                  height: 20.w,
-                  width: 20.w,
-                  colorFilter: ColorFilter.mode(
-                      Colors.black.withOpacity(0.6), BlendMode.srcATop),
-                ),
-              ],
-            ),
+            // const Spacer(),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.center,
+            //   children: [
+            //     SvgPicture.asset(
+            //       "assets/icons/facebook.svg",
+            //       height: 20.w,
+            //       width: 20.w,
+            //       colorFilter: ColorFilter.mode(
+            //           Colors.black.withOpacity(0.6), BlendMode.srcATop),
+            //     ),
+            //     SizedBox(
+            //       width: 20.w,
+            //     ),
+            //     SvgPicture.asset(
+            //       "assets/icons/instagram.svg",
+            //       height: 20.w,
+            //       width: 20.w,
+            //       colorFilter: ColorFilter.mode(
+            //           Colors.black.withOpacity(0.6), BlendMode.srcATop),
+            //     ),
+            //     SizedBox(
+            //       width: 20.w,
+            //     ),
+            //     SvgPicture.asset(
+            //       "assets/icons/globe.svg",
+            //       height: 20.w,
+            //       width: 20.w,
+            //       colorFilter: ColorFilter.mode(
+            //           Colors.black.withOpacity(0.6), BlendMode.srcATop),
+            //     ),
+            //   ],
+            // ),
           ],
         ),
       ),
