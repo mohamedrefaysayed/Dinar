@@ -195,6 +195,7 @@ class _WholeSubCategoryViewState extends State<WholeSubCategoryView>
                                       Hero(
                                         tag: 'SubCat${value.id}',
                                         child: MyCachedNetworkImage(
+                                          fit: BoxFit.fill,
                                           url: value.image!,
                                           height: imgHeightValue,
                                           width: double.infinity,

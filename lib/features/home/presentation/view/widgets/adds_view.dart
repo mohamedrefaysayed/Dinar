@@ -72,6 +72,7 @@ class _AddsViewState extends State<AddsView> {
                               loadingWidth: 30.w,
                             ),
                           ),
+                          
                         ),
                         options: CarouselOptions(
                             aspectRatio: 16 / 9,
