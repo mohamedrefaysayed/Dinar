@@ -54,6 +54,12 @@ class _BottomNavBarViewState extends State<BottomNavBarView>
   }
 
   @override
+  void dispose() {
+   internetTimer.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocBuilder<BottomNavBarCubit, BottomNavBarState>(
       builder: (context, state) {
