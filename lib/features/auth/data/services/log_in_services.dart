@@ -1,14 +1,17 @@
 import 'package:dartz/dartz.dart';
 import 'package:dinar_store/core/cubits/app_cubit/cubit/app_cubit_cubit.dart';
 import 'package:dinar_store/core/errors/server_failure.dart';
+import 'package:dinar_store/core/helpers/app_cache/cahch_helper.dart';
 import 'package:dinar_store/core/helpers/dio_helper.dart';
 import 'package:dinar_store/core/utils/constants.dart';
+import 'package:dinar_store/core/utils/genrall.dart';
 import 'package:dinar_store/features/auth/data/repos/log_in_repo.dart';
 import 'package:dinar_store/features/home/data/models/profile_model.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'dart:developer';
 
 class LogInServices implements LogInRepo {
   LogInServices({
@@ -62,6 +65,9 @@ class LogInServices implements LogInRepo {
         },
         endPoint: 'verify',
       );
+      role = data['user']['role'] ?? 0;
+      CahchHelper.saveData(key: 'role', value: role);
+      log(data.toString());
       return right(data);
     } on DioException catch (error) {
       return left(

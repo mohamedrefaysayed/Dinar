@@ -1,7 +1,9 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:dinar_store/core/utils/genrall.dart';
 import 'package:dinar_store/features/auth/presentation/view/login_view.dart';
 import 'package:dinar_store/features/home/presentation/view/bottom_nav_view.dart';
+import 'package:dinar_store/features/home/presentation/view/delevry_orders.dart';
 import 'package:dinar_store/features/splash/presentation/view/widgets/columns/splash_view_body_column.dart';
 import 'package:dinar_store/features/splash/presentation/view_model/manage_navigation_cubit/manage_navigation_cubit.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +25,11 @@ class _SplashViewBlocListenerState extends State<SplashViewBlocListener> {
           Navigator.pushReplacementNamed(context, LogInView.id);
         }
         if (state is NavigateToNavBarView) {
-          Navigator.pushReplacementNamed(context, BottomNavBarView.id);
+          if (role == 0) {
+            Navigator.pushReplacementNamed(context, BottomNavBarView.id);
+          } else {
+            Navigator.pushReplacementNamed(context, DelevryOrders.id);
+          }
         }
         // else if (state is NavigateToLogInView) {
         //   Navigator.pushReplacementNamed(context, LogInView.id);

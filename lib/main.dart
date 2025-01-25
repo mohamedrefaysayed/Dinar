@@ -1,4 +1,3 @@
-import 'package:device_preview/device_preview.dart';
 import 'package:dinar_store/core/data/services/firebase_services.dart';
 import 'package:dinar_store/core/helpers/app_cache/cahch_helper.dart';
 import 'package:dinar_store/core/helpers/notifications.dart';
@@ -6,8 +5,8 @@ import 'package:dinar_store/core/main_muli_bloc_provider.dart';
 import 'package:dinar_store/core/utils/app_colors.dart';
 import 'package:dinar_store/core/utils/app_routes.dart';
 import 'package:dinar_store/core/utils/constants.dart';
+import 'package:dinar_store/core/utils/genrall.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -21,13 +20,13 @@ void main() async {
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
   Notifications.initilization(FlutterLocalNotificationsPlugin());
-
+  role = CahchHelper.getData(key: 'role') ?? 0;
   runApp(
-    DevicePreview(
-      enabled: !kReleaseMode,
-      builder: (context) => const MyApp(), // Wrap your app
-    ),
-    // const MyApp(),
+    // DevicePreview(
+    //   enabled: !kReleaseMode,
+    //   builder: (context) => const MyApp(), // Wrap your app
+    // ),
+    const MyApp(),
   );
 }
 
