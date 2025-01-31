@@ -60,10 +60,10 @@ class LogInServices implements LogInRepo {
       fcmToken = await FirebaseMessaging.instance.getToken();
       Map<String, dynamic> data = await _dioHelper.postRequest(
         body: {
-          'fcm': fcmToken,
-          'verification_code': code,
-        },
-        endPoint: 'verify',
+            'fcm': fcmToken,
+            'verification_code': code,
+          },
+          endPoint: 'verify',
       );
       role = data['user']['role'] ?? 0;
       CahchHelper.saveData(key: 'role', value: role);

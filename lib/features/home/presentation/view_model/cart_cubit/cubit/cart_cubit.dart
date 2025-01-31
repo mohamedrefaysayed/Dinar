@@ -42,7 +42,8 @@ class CartCubit extends Cubit<CartState> {
       (cartItems) async {
         cartItemsModel = cartItems;
         cartItems.cart = await summedItemsFunc(cartItems: cartItems.cart!);
-        await countTotal(items: cartItems.cart!);
+        await countTotal(
+            items: cartItems.cart!, deliveryFees: cartItems.deliveryFees!);
 
         emit(GetCartSuccess(cartItemsModel: cartItems));
       },
@@ -167,8 +168,11 @@ class CartCubit extends Cubit<CartState> {
       },
       //success
       (cartItemsModel) async {
-        cartItemsModel.cart = await summedItemsFunc(cartItems: cartItemsModel.cart!);
-        countTotal(items: cartItemsModel.cart!);
+        cartItemsModel.cart =
+            await summedItemsFunc(cartItems: cartItemsModel.cart!);
+        countTotal(
+            items: cartItemsModel.cart!,
+            deliveryFees: cartItemsModel.deliveryFees!);
         emit(DeleteItemSuccess(cartItemsModel: cartItemsModel));
       },
     );
@@ -176,6 +180,7 @@ class CartCubit extends Cubit<CartState> {
 
   Future<void> countTotal({
     required List<CartItem> items,
+    required String deliveryFees,
   }) async {
     totalPrice = 0;
     totalDiscount = 0;
@@ -186,7 +191,7 @@ class CartCubit extends Cubit<CartState> {
               element.quantity!;
     }
 
-    finalPrice = totalPrice - totalDiscount;
+    finalPrice = totalPrice + int.parse(deliveryFees) - totalDiscount;
   }
 
   Future<List<CartItem>> summedItemsFunc({

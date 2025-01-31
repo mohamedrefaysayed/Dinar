@@ -112,7 +112,9 @@ class _OrdersViewState extends State<OrdersView>
                                       (OrderCubit.ordersModel != null &&
                                               OrderCubit.ordersModel!.oldOrders!
                                                   .isNotEmpty)
-                                          ? const OldOrdersView()
+                                          ? const OldOrdersView(
+                                              isDelivery: false,
+                                            )
                                           : ListView(
                                               children: [
                                                 SizedBox(
@@ -152,6 +154,7 @@ class _OrdersViewState extends State<OrdersView>
                                         .ordersModel!.currentOrders![index],
                                     isInDetails: false,
                                     isInOld: false,
+                                    isDelivery: false,
                                   );
                                 },
                               ),

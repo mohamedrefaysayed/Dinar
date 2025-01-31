@@ -6,6 +6,7 @@ class SendOrderModel {
   String? location;
   String? deliveryTime;
   String? paymentMethod;
+  String? deliveryFees;
 
   List<SendOrderDetails>? orderDetails;
 
@@ -18,6 +19,7 @@ class SendOrderModel {
     this.location,
     this.deliveryTime,
     this.paymentMethod,
+    this.deliveryFees,
   });
 
   SendOrderModel.fromJson(Map<String, dynamic> json) {
@@ -28,6 +30,7 @@ class SendOrderModel {
     location = json['location'];
     deliveryTime = json['delivery_time'];
     paymentMethod = json['payment_method'];
+    deliveryFees = json['delivery_fees'];
     if (json['order_details'] != null) {
       orderDetails = <SendOrderDetails>[];
       json['order_details'].forEach((v) {
@@ -45,6 +48,7 @@ class SendOrderModel {
     data['location'] = location;
     data['delivery_time'] = deliveryTime;
     data['payment_method'] = paymentMethod;
+    data['delivery_fees'] = deliveryFees;
     if (orderDetails != null) {
       data['order_details'] = orderDetails!.map((v) => v.toJson()).toList();
     }

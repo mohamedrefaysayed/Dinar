@@ -8,7 +8,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class OldOrdersView extends StatelessWidget {
   const OldOrdersView({
     super.key,
+    required this.isDelivery,
   });
+  final bool isDelivery;
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +37,7 @@ class OldOrdersView extends StatelessWidget {
                 order: OrderCubit.ordersModel!.oldOrders![index],
                 isInDetails: false,
                 isInOld: true,
+                isDelivery: isDelivery,
               );
             },
           ),

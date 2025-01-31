@@ -4,6 +4,7 @@ import 'package:dinar_store/features/home/presentation/view_model/profile_cubit/
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class SettingView extends StatelessWidget {
   const SettingView({super.key});
@@ -14,6 +15,15 @@ class SettingView extends StatelessWidget {
       canPop: true,
       body: RefreshIndicator(
         onRefresh: () async {
+          bool locationsIsGranted = await Permission.location.status.isGranted;
+          if (!locationsIsGranted) {
+            await Permission.location.request();
+          }
+          bool locationWhenInUse =
+              await Permission.locationWhenInUse.status.isGranted;
+          if (!locationWhenInUse) {
+            await Permission.locationWhenInUse.request();
+          }
           await context.read<ProfileCubit>().getProfile(context: context);
         },
         child: ListView(

@@ -1,11 +1,199 @@
+import 'package:dinar_store/core/utils/text_styles.dart';
+import 'package:dinar_store/core/widgets/app_default_button.dart';
+import 'package:dinar_store/core/widgets/message_snack_bar.dart';
+import 'package:dinar_store/features/home/presentation/view/widgets/dividers/ginerall_divider.dart';
+import 'package:dinar_store/features/home/presentation/view/widgets/old_orders_view.dart';
+import 'package:dinar_store/features/home/presentation/view/widgets/place_holders/all_companies_place_holder.dart';
+import 'package:dinar_store/features/home/presentation/view/widgets/rows/order_row.dart';
+import 'package:dinar_store/features/home/presentation/view_model/order_cubit/cubit/order_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class DelevryOrders extends StatelessWidget {
+class DelevryOrders extends StatefulWidget {
   const DelevryOrders({super.key});
   static const id = '/DelevryOrders';
 
   @override
-  Widget build(BuildContext context) {
-    return const Text('DelevryOrders');
+  State<DelevryOrders> createState() => _OrdersViewState();
+}
+
+class _OrdersViewState extends State<DelevryOrders>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  void initState() {
+    context.read<OrderCubit>().getAllOrdersForDelevry();
+    super.initState();
   }
+
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    return Scaffold(
+      body: RefreshIndicator(
+        onRefresh: () async {
+          await context.read<OrderCubit>().getAllOrdersForDelevry();
+        },
+        child: BlocConsumer<OrderCubit, OrderState>(
+          listener: (context, state) {
+            if (state is OrderFailuer) {
+              context.showMessageSnackBar(
+                message: state.errMessage,
+              );
+            }
+            if (state is AddOrderFailuer) {
+              context.showMessageSnackBar(
+                message: state.errMessage,
+              );
+            }
+            if (state is DeleteOrderSuccess) {
+              OrderCubit.ordersModel = state.ordersModel;
+              context.showMessageSnackBar(
+                message: "تم الحذف",
+              );
+            }
+            if (state is DeleteOrderFailuer) {
+              context.showMessageSnackBar(
+                message: state.errMessage,
+              );
+            }
+          },
+          builder: (context, state) {
+            if (state is OrderFailuer) {
+              return ListView(
+                children: [
+                  SizedBox(
+                    height: 300.h,
+                    child: Center(
+                      child: Text(
+                        "لا توجد طلبات",
+                        style: TextStyles.textStyle18,
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            }
+            if (state is OrderLoading) {
+              return Padding(
+                padding: EdgeInsets.symmetric(horizontal: 30.w),
+                child: const AllCompaniesPlaceHolder(),
+              );
+            }
+            return (OrderCubit.ordersModel != null &&
+                    (OrderCubit.ordersModel!.currentOrders!.isNotEmpty ||
+                        OrderCubit.ordersModel!.oldOrders!.isNotEmpty))
+                ? Column(
+                    children: [
+                      Padding(
+                        padding:
+                            EdgeInsets.only(right: 30.w, left: 30.w, top: 40.h),
+                        child: Text(
+                          'الطلبــــــات',
+                          style: TextStyles.textStyle16.copyWith(
+                            fontWeight: FontWeight.w700,
+                            fontSize: 16.w,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 30.w),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            AppDefaultButton(
+                              width: 30.w,
+                              height: 30.w,
+                              onPressed: () {
+                                showModalBottomSheet(
+                                  context: context,
+                                  builder: (context) =>
+                                      (OrderCubit.ordersModel != null &&
+                                              OrderCubit.ordersModel!.oldOrders!
+                                                  .isNotEmpty)
+                                          ? const OldOrdersView(
+                                              isDelivery: true,
+                                            )
+                                          : ListView(
+                                              children: [
+                                                SizedBox(
+                                                  height: 300.h,
+                                                ),
+                                                Center(
+                                                  child: Text(
+                                                    "لا توجد طلبات سابقة",
+                                                    style:
+                                                        TextStyles.textStyle18,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                );
+                              },
+                              title: '',
+                              icon: Icon(
+                                Icons.history,
+                                size: 25.w,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const GeneralDivider(),
+                      OrderCubit.ordersModel!.currentOrders!.isNotEmpty
+                          ? Expanded(
+                              child: ListView.builder(
+                                padding: EdgeInsets.zero,
+                                shrinkWrap: true,
+                                itemCount: OrderCubit
+                                    .ordersModel!.currentOrders!.length,
+                                itemBuilder: (context, index) {
+                                  return OrderRow(
+                                    order: OrderCubit
+                                        .ordersModel!.currentOrders![index],
+                                    isInDetails: false,
+                                    isInOld: false,
+                                    isDelivery: true,
+                                  );
+                                },
+                              ),
+                            )
+                          : Expanded(
+                              child: ListView(
+                                children: [
+                                  SizedBox(
+                                    height: 300.h,
+                                  ),
+                                  Center(
+                                    child: Text(
+                                      "لا توجد طلبات",
+                                      style: TextStyles.textStyle18,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                    ],
+                  )
+                : ListView(
+                    children: [
+                      SizedBox(
+                        height: 300.h,
+                      ),
+                      Center(
+                        child: Text(
+                          "لا توجد طلبات",
+                          style: TextStyles.textStyle18,
+                        ),
+                      ),
+                    ],
+                  );
+          },
+        ),
+      ),
+    );
+  }
+
+  @override
+  bool get wantKeepAlive => true;
 }

@@ -8,6 +8,10 @@ abstract class OrdersRepo {
     required String token,
   });
 
+  Future<Either<ServerFailure, OrdersModel>> getAllOrdersForDelevry({
+    required String token,
+  });
+
   Future<Either<ServerFailure, DinarOrder>> getOrder({
     required String token,
     required int orderId,

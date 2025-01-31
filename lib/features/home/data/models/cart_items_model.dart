@@ -1,7 +1,11 @@
 class CartItemsModel {
   List<CartItem>? cart;
+  String? deliveryFees;
 
-  CartItemsModel({this.cart});
+  CartItemsModel({
+    this.cart,
+    this.deliveryFees,
+  });
 
   CartItemsModel.fromJson(Map<String, dynamic> json) {
     if (json['cart'] != null) {
@@ -10,6 +14,7 @@ class CartItemsModel {
         cart!.add(CartItem.fromJson(v));
       });
     }
+    deliveryFees = json['delivery_fees'];
   }
 
   Map<String, dynamic> toJson() {

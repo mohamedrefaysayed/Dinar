@@ -203,15 +203,19 @@ class CartItemRow extends StatelessWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        Text(
-                          cartItem.product!.productName!,
-                          style: TextStyles.textStyle12.copyWith(
-                            fontWeight: FontWeight.w400,
+                        SizedBox(
+                          width: 150.w,
+                          child: Text(
+                            cartItem.product!.productName!,
+                            style: TextStyles.textStyle12.copyWith(
+                              fontWeight: FontWeight.w400,
+                            ),
+                            textDirection: TextDirection.rtl,
+                            overflow: TextOverflow.ellipsis,
                           ),
-                          textDirection: TextDirection.rtl,
                         ),
                         SizedBox(
-                          width: 100.w,
+                          width: 150.w,
                           child: Text(
                             cartItem.product!.description!,
                             style: TextStyles.textStyle10.copyWith(

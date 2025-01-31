@@ -6,6 +6,7 @@ import 'package:dinar_store/features/home/data/models/orders_model.dart';
 import 'package:dinar_store/features/home/data/models/send_order_model.dart';
 import 'package:dinar_store/features/home/data/repos/orders_repo.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 
 class OrdersServices implements OrdersRepo {
   OrdersServices({
@@ -27,6 +28,29 @@ class OrdersServices implements OrdersRepo {
       Map<String, dynamic> data = await _dioHelper.getRequest(
         token: token,
         endPoint: 'orders',
+      );
+      ordersModel = OrdersModel.fromJson(data);
+      return right(ordersModel);
+    } on DioException catch (error) {
+      return left(
+        ServerFailure.fromDioException(dioException: error),
+      );
+    } catch (error) {
+      return left(
+        ServerFailure(errMessage: error.toString()),
+      );
+    }
+  }
+
+  @override
+  Future<Either<ServerFailure, OrdersModel>> getAllOrdersForDelevry({
+    required String token,
+  }) async {
+    OrdersModel ordersModel = OrdersModel();
+    try {
+      Map<String, dynamic> data = await _dioHelper.getRequest(
+        token: token,
+        endPoint: 'agent/get_agent_orders',
       );
       ordersModel = OrdersModel.fromJson(data);
       return right(ordersModel);
@@ -73,6 +97,11 @@ class OrdersServices implements OrdersRepo {
     required SendOrderModel sendOrderModel,
   }) async {
     try {
+      if (kDebugMode) {
+        print(
+          sendOrderModel.toJson(),
+        );
+      }
       Map<String, dynamic> data = await _dioHelper.postRequest(
         token: token,
         endPoint: 'orders',

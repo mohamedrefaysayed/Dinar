@@ -11,6 +11,10 @@ showPermissions() async {
 
   bool locationsIsGranted = await Permission.location.status.isGranted;
   if (!locationsIsGranted) {
-    locationsIsGranted = await Permission.location.request().isGranted;
+    await Permission.location.request();
+  }
+  bool locationWhenInUse = await Permission.locationWhenInUse.status.isGranted;
+  if (!locationWhenInUse) {
+    await Permission.locationWhenInUse.request();
   }
 }

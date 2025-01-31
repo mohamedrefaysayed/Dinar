@@ -287,7 +287,9 @@ class _OrderConfirmViewState extends State<OrderConfirmView> {
                               context,
                               RightSlideTransition(
                                 page: WholeOrderView(
-                                    order: state.dinarOrder, isInOld: false),
+                                  order: state.dinarOrder,
+                                  isInOld: false,
+                                ),
                               ),
                             );
                           }
@@ -311,6 +313,8 @@ class _OrderConfirmViewState extends State<OrderConfirmView> {
                                         tax: 0,
                                         price: CartCubit.totalPrice,
                                         paymentMethod: 'عند الاستلام',
+                                        deliveryFees: CartCubit
+                                            .cartItemsModel!.deliveryFees!,
                                       );
                                 } else {
                                   context.showMessageSnackBar(

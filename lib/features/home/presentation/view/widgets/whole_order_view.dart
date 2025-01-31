@@ -217,6 +217,7 @@ class _WholeOrderViewState extends State<WholeOrderView> {
                                   order: currentOrder,
                                   isInDetails: true,
                                   isInOld: false,
+                                  isDelivery: false,
                                 )
                               : const SizedBox(),
                         ],

@@ -6,6 +6,7 @@ import 'package:dinar_store/features/home/data/models/orders_model.dart';
 import 'package:dinar_store/features/home/data/models/send_order_model.dart';
 import 'package:dinar_store/features/home/data/services/orders_services.dart';
 import 'package:dinar_store/features/home/presentation/view_model/cart_cubit/cubit/cart_cubit.dart';
+import 'package:flutter/foundation.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -32,6 +33,31 @@ class OrderCubit extends Cubit<OrderState> {
     ordersModel == null ? emit(OrderLoading()) : null;
     Either<ServerFailure, OrdersModel> result =
         await _ordersServices.getAllOrders(
+      token: AppCubit.token!,
+    );
+
+    result.fold(
+      //error
+      (serverFailure) {
+        emit(
+          OrderFailuer(errMessage: serverFailure.errMessage),
+        );
+      },
+      //success
+      (orders) {
+        ordersModel = OrdersModel(
+          currentOrders: orders.currentOrders,
+          oldOrders: orders.oldOrders,
+        );
+        emit(OrderSuccess(ordersModel: orders));
+      },
+    );
+  }
+
+  getAllOrdersForDelevry() async {
+    ordersModel == null ? emit(OrderLoading()) : null;
+    Either<ServerFailure, OrdersModel> result =
+        await _ordersServices.getAllOrdersForDelevry(
       token: AppCubit.token!,
     );
 
@@ -80,6 +106,7 @@ class OrderCubit extends Cubit<OrderState> {
     required double tax,
     required double price,
     required String paymentMethod,
+    required String deliveryFees,
   }) async {
     emit(AddToOrdersLoading());
 
@@ -110,6 +137,7 @@ class OrderCubit extends Cubit<OrderState> {
             "https://www.google.com/maps?q=${markerPosition!.latitude},${markerPosition!.longitude}",
         'delivery_time': date,
         'address': currentAddress,
+        'delivery_fees': deliveryFees,
       },
     );
 
@@ -121,10 +149,14 @@ class OrderCubit extends Cubit<OrderState> {
     result.fold(
       //error
       (serverFailure) {
+        if (kDebugMode) {
+          print(serverFailure.errMessage);
+        }
         emit(
           AddOrderFailuer(errMessage: serverFailure.errMessage),
         );
       },
+      
       //success
       (order) async {
         emit(

@@ -25,18 +25,23 @@ class LocationCubit extends Cubit<LocationState> {
     emit(LocationLoading());
     bool locationsIsGranted = await Permission.location.status.isGranted;
     if (!locationsIsGranted) {
-      locationsIsGranted = await Permission.location.request().isDenied;
-    } else {
-      try {
-        currentPosition = await Geolocator.getCurrentPosition(
-            desiredAccuracy: LocationAccuracy.bestForNavigation);
-        emit(LocationSuccess(position: currentPosition!));
-      } catch (error) {
-        emit(LocationFailuer());
-        context.showMessageSnackBar(
-          message: "أفتح الموقع",
-        );
-      }
+      await Permission.location.request();
+    }
+    bool locationWhenInUse =
+        await Permission.locationWhenInUse.status.isGranted;
+    if (!locationWhenInUse) {
+      await Permission.locationWhenInUse.request();
+    }
+
+    try {
+      currentPosition = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.bestForNavigation);
+      emit(LocationSuccess(position: currentPosition!));
+    } catch (error) {
+      emit(LocationFailuer());
+      context.showMessageSnackBar(
+        message: "أفتح الموقع",
+      );
     }
 
     // When we reach here, permissions are granted and we can

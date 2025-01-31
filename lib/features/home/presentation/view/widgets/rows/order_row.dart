@@ -6,6 +6,7 @@ import 'package:dinar_store/features/home/data/models/orders_model.dart';
 import 'package:dinar_store/features/home/presentation/view/widgets/dividers/ginerall_divider.dart';
 import 'package:dinar_store/features/home/presentation/view/widgets/rows/order_product_row.dart';
 import 'package:dinar_store/features/home/presentation/view/widgets/whole_order_view.dart';
+import 'package:dinar_store/features/home/presentation/view/widgets/whole_order_view_delivry.dart';
 import 'package:dinar_store/features/home/presentation/view_model/order_cubit/cubit/order_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,11 +18,13 @@ class OrderRow extends StatelessWidget {
     required this.order,
     required this.isInDetails,
     required this.isInOld,
+    required this.isDelivery,
   });
 
   final DinarOrder order;
   final bool isInDetails;
   final bool isInOld;
+  final bool isDelivery;
 
   @override
   Widget build(BuildContext context) {
@@ -175,15 +178,24 @@ class OrderRow extends StatelessWidget {
                   child: InkWell(
                     onTap: !isInDetails
                         ? () {
-                            Navigator.push(
-                              context,
-                              RightSlideTransition(
-                                page: WholeOrderView(
-                                  order: order,
-                                  isInOld: isInOld,
-                                ),
-                              ),
-                            );
+                            isDelivery
+                                ? Navigator.push(
+                                    context,
+                                    RightSlideTransition(
+                                        page: WholeOrderViewDelivry(
+                                      order: order,
+                                      isInOld: isInOld,
+                                    )),
+                                  )
+                                : Navigator.push(
+                                    context,
+                                    RightSlideTransition(
+                                      page: WholeOrderView(
+                                        order: order,
+                                        isInOld: isInOld,
+                                      ),
+                                    ),
+                                  );
                           }
                         : null,
                   ),

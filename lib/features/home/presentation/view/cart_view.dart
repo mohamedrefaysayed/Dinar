@@ -270,7 +270,7 @@ class _CartViewState extends State<CartView>
                                   Row(
                                     children: [
                                       Text(
-                                        '0.00.د',
+                                        "${CartCubit.cartItemsModel!.deliveryFees}.د",
                                         style: TextStyles.textStyle14.copyWith(
                                           fontWeight: FontWeight.w700,
                                         ),
@@ -332,9 +332,11 @@ class _CartViewState extends State<CartView>
                                   AppDefaultButton(
                                     onPressed: () {
                                       Navigator.push(
-                                          context,
-                                          RightSlideTransition(
-                                              page: const OrderConfirmView()));
+                                        context,
+                                        RightSlideTransition(
+                                          page: const OrderConfirmView(),
+                                        ),
+                                      );
                                     },
                                     color: AppColors.primaryColor,
                                     title: "إتمام الطلب",
