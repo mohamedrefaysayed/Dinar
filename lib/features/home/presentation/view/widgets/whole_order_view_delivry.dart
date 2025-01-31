@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:async';
+import 'package:dinar_store/core/functions/show_alert_dialog.dart';
 import 'package:dinar_store/core/utils/app_colors.dart';
 import 'package:dinar_store/core/utils/text_styles.dart';
 import 'package:dinar_store/core/widgets/app_default_button.dart';
@@ -62,6 +63,13 @@ class _WholeOrderViewDelivryState extends State<WholeOrderViewDelivry> {
           },
           child: BlocListener<OrderCubit, OrderState>(
             listener: (context, state) {
+              if (state is ChangeStatusSuccess) {
+                Navigator.pop(context);
+                context.showMessageSnackBar(
+                  message: "تم تغيير حالة الطلب",
+                );
+                context.read<OrderCubit>().getAllOrdersForDelevry();
+              }
               if (state is UpdateOrderSuccess) {
                 currentOrder = state.order;
                 activeStep.value = 0;
@@ -247,7 +255,48 @@ class _WholeOrderViewDelivryState extends State<WholeOrderViewDelivry> {
                       SizedBox(
                         height: 20.h,
                       ),
-                     
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 30.w),
+                        child: AppDefaultButton(
+                          color: AppColors.primaryColor,
+                          height: 48.w,
+                          onPressed: () {
+                            showAlertDialog(context,
+                                child: AlertDialog(
+                                  title: const Text('تأكيد التوصيل'),
+                                  content:
+                                      const Text('هل تريد تأكيد توصيل الطلب؟'),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: const Text('إلغاء'),
+                                    ),
+                                    TextButton(
+                                      onPressed: () async {
+                                        Navigator.of(context).pop();
+                                        await context
+                                            .read<OrderCubit>()
+                                            .changeOrderStatus(
+                                              order: currentOrder,
+                                            );
+                                      },
+                                      child: const Text('تأكيد'),
+                                    ),
+                                  ],
+                                ));
+                          },
+                          title: 'تم التوصيل',
+                          icon: Icon(
+                            Icons.check,
+                            size: 25.w,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 50.h,
+                      ),
                     ],
                   ),
               ],

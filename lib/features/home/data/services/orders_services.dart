@@ -48,9 +48,10 @@ class OrdersServices implements OrdersRepo {
   }) async {
     OrdersModel ordersModel = OrdersModel();
     try {
-      Map<String, dynamic> data = await _dioHelper.getRequest(
+      Map<String, dynamic> data = await _dioHelper.postRequest(
         token: token,
-        endPoint: 'agent/get_agent_orders',
+        endPoint: 'orders/get_agent_orders',
+        body: {},
       );
       ordersModel = OrdersModel.fromJson(data);
       return right(ordersModel);
@@ -144,6 +145,37 @@ class OrdersServices implements OrdersRepo {
         ServerFailure.fromDioException(dioException: error),
       );
     } catch (error) {
+      return left(
+        ServerFailure(errMessage: error.toString()),
+      );
+    }
+  }
+
+  @override
+  Future<Either<ServerFailure, void>> changeOrderStatus({
+    required String token,
+    required String status,
+    required int orderId,
+  }) async {
+    try {
+      print("starts");
+      await _dioHelper.getRequestWithoutReturn(
+        token: token,
+        endPoint: 'agents/change_status',
+        body: {
+          'status': status,
+          'id': orderId,
+        },
+      );
+      print("دن");
+      return right(null);
+    } on DioException catch (error) {
+      print(error);
+      return left(
+        ServerFailure.fromDioException(dioException: error),
+      );
+    } catch (error) {
+      print(error);
       return left(
         ServerFailure(errMessage: error.toString()),
       );

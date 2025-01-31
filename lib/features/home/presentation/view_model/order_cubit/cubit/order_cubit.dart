@@ -156,13 +156,40 @@ class OrderCubit extends Cubit<OrderState> {
           AddOrderFailuer(errMessage: serverFailure.errMessage),
         );
       },
-      
+
       //success
       (order) async {
         emit(
           AddOrderSuccess(
             dinarOrder: order,
           ),
+        );
+      },
+    );
+  }
+
+  changeOrderStatus({
+    required DinarOrder order,
+  }) async {
+    emit(UpdateOrderLoading());
+    Either<ServerFailure, void> result =
+        await _ordersServices.changeOrderStatus(
+      token: AppCubit.token!,
+      orderId: order.id!,
+      status: "4",
+    );
+
+    result.fold(
+      //error
+      (serverFailure) {
+        emit(
+          UpdateOrderFailuer(errMessage: serverFailure.errMessage),
+        );
+      },
+      //success
+      (_) {
+        emit(
+          ChangeStatusSuccess(),
         );
       },
     );

@@ -26,4 +26,9 @@ abstract class OrdersRepo {
     required String token,
     required int itemId,
   });
+  Future<Either<ServerFailure, void>> changeOrderStatus({
+    required String token,
+    required String status,
+    required int orderId,
+  });
 }

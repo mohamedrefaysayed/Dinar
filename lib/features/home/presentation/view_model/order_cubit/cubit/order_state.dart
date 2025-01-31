@@ -51,3 +51,7 @@ final class UpdateOrderFailuer extends OrderState {
   final String errMessage;
   UpdateOrderFailuer({required this.errMessage});
 }
+
+final class ChangeStatusSuccess extends OrderState {
+  ChangeStatusSuccess();
+}

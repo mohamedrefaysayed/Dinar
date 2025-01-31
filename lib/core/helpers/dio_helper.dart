@@ -21,6 +21,7 @@ class DioHelper {
     required String endPoint,
     Map<String, dynamic>? queryParameters,
     String? token,
+    Object? body,
   }) async {
     Map<String, dynamic>? headers;
 
@@ -29,12 +30,35 @@ class DioHelper {
     }
     Response response = await _dio.get(
       endPoint,
+      data: body ?? {},
       queryParameters: queryParameters,
       options: Options(
         headers: headers,
       ),
     );
-    return response.data;
+    return response.data ?? {};
+  }
+
+  /// http get request
+  Future<void> getRequestWithoutReturn({
+    required String endPoint,
+    Map<String, dynamic>? queryParameters,
+    String? token,
+    Object? body,
+  }) async {
+    Map<String, dynamic>? headers;
+
+    if (token != null) {
+      headers = {'Authorization': 'Bearer $token'};
+    }
+    await _dio.get(
+      endPoint,
+      data: body ?? {},
+      queryParameters: queryParameters,
+      options: Options(
+        headers: headers,
+      ),
+    );
   }
 
   ///http post request
