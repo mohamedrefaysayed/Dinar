@@ -61,12 +61,14 @@ class SendOrderDetails {
   int? unitId;
   int? qty;
   int? price;
+  String? unitType;
 
   SendOrderDetails({
     this.productId,
     this.unitId,
     this.qty,
     this.price,
+    this.unitType,
   });
 
   SendOrderDetails.fromJson(Map<String, dynamic> json) {
@@ -74,6 +76,7 @@ class SendOrderDetails {
     unitId = json['unit_id'];
     qty = json['qty'];
     price = json['price'];
+    unitType = json['unit_type'];
   }
 
   Map<String, dynamic> toJson() {
@@ -82,6 +85,7 @@ class SendOrderDetails {
     data['unit_id'] = unitId;
     data['qty'] = qty;
     data['price'] = price;
+    data['unit_type'] = unitType;
     return data;
   }
 }

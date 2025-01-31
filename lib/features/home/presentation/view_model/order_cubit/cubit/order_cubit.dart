@@ -123,6 +123,7 @@ class OrderCubit extends Cubit<OrderState> {
           unitId: cartItem.unitId!,
           qty: cartItem.quantity!,
           price: cartItem.price!,
+          unitType: cartItem.unitType!,
         ).toJson(),
       );
     }
