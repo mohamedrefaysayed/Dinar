@@ -1,6 +1,7 @@
 // ignore_for_file: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member, use_build_context_synchronously
 
 import 'package:dinar_store/core/animations/left_slide_transition.dart';
+import 'package:dinar_store/core/cubits/app_cubit/cubit/app_cubit_cubit.dart';
 import 'package:dinar_store/core/helpers/app_cache/cahch_helper.dart';
 import 'package:dinar_store/core/utils/app_colors.dart';
 import 'package:dinar_store/core/utils/genrall.dart';
@@ -9,6 +10,7 @@ import 'package:dinar_store/core/widgets/app_default_button.dart';
 import 'package:dinar_store/core/widgets/app_loading_button.dart';
 import 'package:dinar_store/core/widgets/defult_scaffold.dart';
 import 'package:dinar_store/core/widgets/message_snack_bar.dart';
+import 'package:dinar_store/features/auth/presentation/view/login_view.dart';
 import 'package:dinar_store/features/home/data/models/sub_category_products_model.dart';
 import 'package:dinar_store/features/home/presentation/view/cart_view.dart';
 import 'package:dinar_store/features/home/presentation/view/widgets/cachedNetworkImage/my_cached_nework_Image.dart';
@@ -357,59 +359,69 @@ class _ProductViewState extends State<ProductView> {
                                 size: 20.w,
                               ),
                               onPressed: () async {
-                                if ((totalRetailPrice.value +
-                                        totalWholePrice.value) >
-                                    0) {
-                                  if (widget.product.requiredProducts != null &&
-                                      widget.product.requiredProducts!
-                                          .isNotEmpty) {
-                                    await showModalBottomSheet(
-                                      context: context,
-                                      builder: (context) {
-                                        return RequiredProductsShow(
-                                          product: widget.product,
-                                          retailCount: retailCount,
-                                          totalRetailPrice: totalRetailPrice,
-                                          wholeCount: wholeCount,
-                                          totalWholePrice: totalWholePrice,
-                                        );
-                                      },
-                                    );
-                                  } else {
-                                    if (retailCount.value > 0 ||
-                                        wholeCount.value > 0) {
-                                      await Future.wait([
-                                        if (retailCount.value > 0)
-                                          context.read<CartCubit>().storeItem(
-                                            isRetail: true,
-                                            productId: widget.product.id!,
-                                            quantity: retailCount.value,
-                                            unitId:
-                                                widget.product.retailUnitId!,
-                                            price: totalRetailPrice.value,
-                                            isRequired: '0',
-                                            isLast: true,
-                                            requiredProducts: [],
-                                          ),
-                                        if (wholeCount.value > 0)
-                                          context.read<CartCubit>().storeItem(
-                                            isRetail: false,
-                                            productId: widget.product.id!,
-                                            quantity: wholeCount.value,
-                                            unitId: widget.product.wholeUnitId!,
-                                            price: totalWholePrice.value,
-                                            isRequired: '0',
-                                            isLast: true,
-                                            requiredProducts: [],
-                                          ),
-                                      ]);
+                                if (AppCubit.token != null) {
+                                  if ((totalRetailPrice.value +
+                                          totalWholePrice.value) >
+                                      0) {
+                                    if (widget.product.requiredProducts !=
+                                            null &&
+                                        widget.product.requiredProducts!
+                                            .isNotEmpty) {
+                                      await showModalBottomSheet(
+                                        context: context,
+                                        builder: (context) {
+                                          return RequiredProductsShow(
+                                            product: widget.product,
+                                            retailCount: retailCount,
+                                            totalRetailPrice: totalRetailPrice,
+                                            wholeCount: wholeCount,
+                                            totalWholePrice: totalWholePrice,
+                                          );
+                                        },
+                                      );
+                                    } else {
+                                      if (retailCount.value > 0 ||
+                                          wholeCount.value > 0) {
+                                        await Future.wait([
+                                          if (retailCount.value > 0)
+                                            context.read<CartCubit>().storeItem(
+                                              isRetail: true,
+                                              productId: widget.product.id!,
+                                              quantity: retailCount.value,
+                                              unitId:
+                                                  widget.product.retailUnitId!,
+                                              price: totalRetailPrice.value,
+                                              isRequired: '0',
+                                              isLast: true,
+                                              requiredProducts: [],
+                                            ),
+                                          if (wholeCount.value > 0)
+                                            context.read<CartCubit>().storeItem(
+                                              isRetail: false,
+                                              productId: widget.product.id!,
+                                              quantity: wholeCount.value,
+                                              unitId:
+                                                  widget.product.wholeUnitId!,
+                                              price: totalWholePrice.value,
+                                              isRequired: '0',
+                                              isLast: true,
+                                              requiredProducts: [],
+                                            ),
+                                        ]);
+                                      }
                                     }
+                                    context.read<CartCubit>().getAllItems();
+                                  } else {
+                                    context.showMessageSnackBar(
+                                      message: "أختر الكمية",
+                                    );
                                   }
-                                  context.read<CartCubit>().getAllItems();
                                 } else {
                                   context.showMessageSnackBar(
-                                    message: "أختر الكمية",
+                                    message: "يجب تسجيل الدخول أولا",
                                   );
+                                  Navigator.pushNamedAndRemoveUntil(
+                                      context, LogInView.id, (route) => false);
                                 }
                               },
                               title: 'إضافة',

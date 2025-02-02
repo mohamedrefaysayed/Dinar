@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:dinar_store/core/cubits/app_cubit/cubit/app_cubit_cubit.dart';
 import 'package:dinar_store/core/errors/server_failure.dart';
 import 'package:dinar_store/features/auth/data/services/log_in_services.dart';
+import 'package:dinar_store/features/home/presentation/view_model/bottom_nav_cubit.dart/cubit/bottton_nav_bar_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -21,6 +22,8 @@ class LogOutCubit extends Cubit<LogOutState> {
 
     AppCubit.token = null;
     await const FlutterSecureStorage().deleteAll();
+    BottomNavBarCubit.dIndex = 1;
+    BottomNavBarCubit.index = 4;
 
     loading == null ? emit(LogOutSuccess()) : null;
   }
@@ -39,6 +42,8 @@ class LogOutCubit extends Cubit<LogOutState> {
       },
       //success
       (data) async {
+        BottomNavBarCubit.dIndex = 1;
+        BottomNavBarCubit.index = 4;
         emit(DeleteAccountSuccess());
         await logOut();
       },

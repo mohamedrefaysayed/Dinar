@@ -10,7 +10,7 @@ import 'package:dinar_store/core/widgets/message_snack_bar.dart';
 import 'package:dinar_store/features/auth/presentation/view/login_data.dart';
 import 'package:dinar_store/features/auth/presentation/view_model/log_in_cubit/log_in_cubit.dart';
 import 'package:dinar_store/features/home/presentation/view/bottom_nav_view.dart';
-import 'package:dinar_store/features/home/presentation/view/delevry_orders.dart';
+import 'package:dinar_store/features/home/presentation/view/bottom_nav_view_Delevry.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -46,14 +46,14 @@ class CodeBuilder extends StatelessWidget {
         SizedBox(
           height: 20.h,
         ),
-        if (LogInCubit.fakeCode != null && LogInCubit.fakeCode != "null")
-          Text(
-            LogInCubit.fakeCode!,
-            style: TextStyles.textStyle16.copyWith(
-              fontWeight: FontWeight.w900,
-              fontSize: 16.w,
-            ),
-          ),
+        // if (LogInCubit.fakeCode != null && LogInCubit.fakeCode != "null")
+        //   Text(
+        //     LogInCubit.fakeCode!,
+        //     style: TextStyles.textStyle16.copyWith(
+        //       fontWeight: FontWeight.w900,
+        //       fontSize: 16.w,
+        //     ),
+        //   ),
         SizedBox(
           height: 50.h,
         ),
@@ -94,7 +94,7 @@ class CodeBuilder extends StatelessWidget {
                         )
                       : Navigator.pushNamedAndRemoveUntil(
                           context,
-                          DelevryOrders.id,
+                          BottomNavBarViewDelevry.id,
                           (route) => false,
                         );
             }

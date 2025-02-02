@@ -12,7 +12,7 @@ import 'package:dinar_store/features/auth/presentation/view_model/location_cubit
 import 'package:dinar_store/features/auth/presentation/view_model/log_in_cubit/log_in_cubit.dart';
 import 'package:dinar_store/features/auth/presentation/view_model/store_data_cubit/store_data_cubit.dart';
 import 'package:dinar_store/features/home/presentation/view/bottom_nav_view.dart';
-import 'package:dinar_store/features/home/presentation/view/delevry_orders.dart';
+import 'package:dinar_store/features/home/presentation/view/bottom_nav_view_Delevry.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -166,8 +166,8 @@ class LoginData extends StatelessWidget {
                             Navigator.pushNamedAndRemoveUntil(
                                 context, BottomNavBarView.id, (route) => false);
                           } else {
-                            Navigator.pushNamedAndRemoveUntil(
-                                context, DelevryOrders.id, (route) => false);
+                            Navigator.pushNamedAndRemoveUntil(context,
+                                BottomNavBarViewDelevry.id, (route) => false);
                           }
 
                           context.showMessageSnackBar(

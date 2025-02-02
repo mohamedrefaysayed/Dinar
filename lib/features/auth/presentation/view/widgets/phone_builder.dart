@@ -7,6 +7,8 @@ import 'package:dinar_store/core/widgets/app_loading_button.dart';
 import 'package:dinar_store/core/widgets/message_snack_bar.dart';
 import 'package:dinar_store/features/auth/presentation/view/widgets/phone_text_field_builder.dart';
 import 'package:dinar_store/features/auth/presentation/view_model/log_in_cubit/log_in_cubit.dart';
+import 'package:dinar_store/features/home/presentation/view/bottom_nav_view.dart';
+import 'package:dinar_store/features/home/presentation/view_model/bottom_nav_cubit.dart/cubit/bottton_nav_bar_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -51,6 +53,8 @@ class PhoneBuilder extends StatelessWidget {
             return AppDefaultButton(
               height: 50.h,
               onPressed: () async {
+                BottomNavBarCubit.dIndex = 1;
+                BottomNavBarCubit.index = 4;
                 HapticFeedback.lightImpact();
                 if (LogInCubit.phoneNumber != null) {
                   try {
@@ -78,6 +82,28 @@ class PhoneBuilder extends StatelessWidget {
               ),
             );
           },
+        ),
+        SizedBox(
+          height: 10.h,
+        ),
+        AppDefaultButton(
+          height: 50.h,
+          onPressed: () async {
+            BottomNavBarCubit.dIndex = 1;
+            BottomNavBarCubit.index = 4;
+            HapticFeedback.lightImpact();
+            Navigator.pushNamedAndRemoveUntil(
+                context, BottomNavBarView.id, (route) => false);
+          },
+          title: 'التسجيل لاحقا',
+          color: AppColors.primaryColor,
+          borderRadius: BorderRadius.circular(15.w),
+          width: double.infinity,
+          textStyle: TextStyles.textStyle16.copyWith(
+            color: Colors.white,
+            fontWeight: FontWeight.w700,
+            fontSize: 16.w,
+          ),
         ),
       ],
     );

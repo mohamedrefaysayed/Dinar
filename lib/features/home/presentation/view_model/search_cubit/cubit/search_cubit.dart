@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
-import 'package:dinar_store/core/cubits/app_cubit/cubit/app_cubit_cubit.dart';
 import 'package:dinar_store/core/errors/server_failure.dart';
 import 'package:dinar_store/features/home/data/models/search_model.dart';
 import 'package:dinar_store/features/home/data/services/search_services.dart';
@@ -27,7 +26,7 @@ class SearchCubit extends Cubit<SearchState> {
   search({required String keyWord}) async {
     searchModel == null ? emit(SearchLoading()) : null;
     Either<ServerFailure, SearchModel> result = await _searchServices.search(
-      token: AppCubit.token!,
+      token: "AppCubit.token!",
       keyWord: keyWord,
     );
 

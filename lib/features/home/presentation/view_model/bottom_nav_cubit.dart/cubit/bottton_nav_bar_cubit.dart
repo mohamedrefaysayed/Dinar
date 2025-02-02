@@ -8,6 +8,8 @@ class BottomNavBarCubit extends Cubit<BottomNavBarState> {
   BottomNavBarCubit() : super(BottomNavBarInitial());
 
   static int index = 4;
+  static int dIndex = 1;
+
   static PageController controller = PageController(
     initialPage: 5,
   );
@@ -31,6 +33,17 @@ class BottomNavBarCubit extends Cubit<BottomNavBarState> {
     const TabItem(
       icon: Icons.home_rounded,
       title: 'الرئيسية',
+    ),
+  ];
+
+  static List<TabItem> dItems = [
+    const TabItem(
+      icon: Icons.person_2_rounded,
+      title: 'البروفايل',
+    ),
+    const TabItem(
+      icon: Icons.receipt_long_rounded,
+      title: 'الطلبات',
     ),
   ];
 }

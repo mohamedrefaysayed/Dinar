@@ -21,6 +21,7 @@ class _OrdersViewState extends State<OrdersView>
     with AutomaticKeepAliveClientMixin {
   @override
   void initState() {
+    
     context.read<OrderCubit>().getAllOrders();
     super.initState();
   }

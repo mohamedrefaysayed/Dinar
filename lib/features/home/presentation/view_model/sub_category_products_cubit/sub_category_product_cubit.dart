@@ -2,7 +2,6 @@
 
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
-import 'package:dinar_store/core/cubits/app_cubit/cubit/app_cubit_cubit.dart';
 import 'package:dinar_store/core/errors/server_failure.dart';
 import 'package:dinar_store/features/home/data/models/sub_category_products_model.dart';
 import 'package:dinar_store/features/home/data/services/sub_categories_services.dart';
@@ -30,7 +29,7 @@ class SubCategoryProductCubit extends Cubit<SubCategoryProductState> {
     emit(SubCategoryProductLoading());
     Either<ServerFailure, SubCategoryProductsModel> result =
         await _subCategoriesServices.getSubCategoryWithProduct(
-            token: AppCubit.token!, catId: catId);
+            token: "AppCubit.token!", catId: catId);
 
     result.fold(
       //error
@@ -51,7 +50,7 @@ class SubCategoryProductCubit extends Cubit<SubCategoryProductState> {
   getCompanyWithProduct({required int companyId}) async {
     emit(SubCategoryProductLoading());
     Either<ServerFailure, List<Products>> result = await _subCategoriesServices
-        .getComapnyWithProduct(token: AppCubit.token!, companyId: companyId);
+        .getComapnyWithProduct(token: "AppCubit.token!", companyId: companyId);
 
     result.fold(
       //error
@@ -72,7 +71,7 @@ class SubCategoryProductCubit extends Cubit<SubCategoryProductState> {
   getProduct({required int productId}) async {
     emit(SubCategoryProductLoading());
     Either<ServerFailure, Products> result = await _subCategoriesServices
-        .getProduct(token: AppCubit.token!, productId: productId);
+        .getProduct(token: "AppCubit.token!", productId: productId);
 
     result.fold(
       //error

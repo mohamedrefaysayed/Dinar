@@ -158,7 +158,6 @@ class OrdersServices implements OrdersRepo {
     required int orderId,
   }) async {
     try {
-      print("starts");
       await _dioHelper.getRequestWithoutReturn(
         token: token,
         endPoint: 'agents/change_status',
@@ -167,15 +166,12 @@ class OrdersServices implements OrdersRepo {
           'id': orderId,
         },
       );
-      print("دن");
       return right(null);
     } on DioException catch (error) {
-      print(error);
       return left(
         ServerFailure.fromDioException(dioException: error),
       );
     } catch (error) {
-      print(error);
       return left(
         ServerFailure(errMessage: error.toString()),
       );

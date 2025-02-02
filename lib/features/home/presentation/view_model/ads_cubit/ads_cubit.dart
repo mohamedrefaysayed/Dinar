@@ -2,7 +2,6 @@
 
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
-import 'package:dinar_store/core/cubits/app_cubit/cubit/app_cubit_cubit.dart';
 import 'package:dinar_store/core/errors/server_failure.dart';
 import 'package:dinar_store/features/home/data/models/ads_model.dart';
 import 'package:dinar_store/features/home/data/services/ads_services.dart';
@@ -19,7 +18,7 @@ class AdsCubit extends Cubit<AdsState> {
   getAllAds() async {
     emit(AdsLoading());
     Either<ServerFailure, AdsModel> result =
-        await _adsServices.getAllAds(token: AppCubit.token!);
+        await _adsServices.getAllAds(token: "AppCubit.token!");
 
     result.fold(
       //error
