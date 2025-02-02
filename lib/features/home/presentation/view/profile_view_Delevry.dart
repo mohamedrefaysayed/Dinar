@@ -1,10 +1,11 @@
+// ignore_for_file: file_names
+
 import 'package:dinar_store/core/animations/right_slide_transition.dart';
 import 'package:dinar_store/features/home/presentation/view/widgets/about_app.dart';
 import 'package:dinar_store/features/home/presentation/view/widgets/containers/delete_account_container.dart';
 import 'package:dinar_store/features/home/presentation/view/widgets/containers/log_out_container.dart';
 import 'package:dinar_store/features/home/presentation/view/widgets/dividers/ginerall_divider.dart';
 import 'package:dinar_store/features/home/presentation/view/widgets/rows/profile_settings_row.dart';
-import 'package:dinar_store/features/home/presentation/view/widgets/setting_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:url_launcher/url_launcher_string.dart';
