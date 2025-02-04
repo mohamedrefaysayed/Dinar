@@ -79,7 +79,7 @@ class CodeBuilder extends StatelessWidget {
         BlocConsumer<LogInCubit, LogInState>(
           listener: (context, state) {
             if (state is VerficationSuccess) {
-              state.firstTime
+              (state.firstTime && role == 0)
                   ? Navigator.push(
                       context,
                       LeftSlideTransition(
