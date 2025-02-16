@@ -2,6 +2,7 @@
 
 import 'package:dinar_store/core/animations/left_slide_transition.dart';
 import 'package:dinar_store/core/utils/app_colors.dart';
+import 'package:dinar_store/core/utils/constants.dart';
 import 'package:dinar_store/core/utils/genrall.dart';
 import 'package:dinar_store/core/utils/text_styles.dart';
 import 'package:dinar_store/core/widgets/defult_scaffold.dart';
@@ -70,7 +71,7 @@ class _WholeSubCategoryViewState extends State<WholeSubCategoryView>
       if (SubCategoryProductCubit.subCategoryProductsModel.products!.length >
           5) {
         if (scrollController.value.offset > 100) {
-          imageHight.value = 0;
+          imageHight.value = 0.h;
         }
         if (scrollController.value.offset == 0) {
           imageHight.value = 250.h;
@@ -186,10 +187,15 @@ class _WholeSubCategoryViewState extends State<WholeSubCategoryView>
                                         SubCategories value, Widget? child) =>
                                     AnimatedContainer(
                                   decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(15.w),
+                                    image: DecorationImage(
+                                      image: NetworkImage(
+                                          "${appDomain.replaceAll("index.php/api", "storage")}${value.image!}"),
+                                      fit: BoxFit.fill,
+                                    ),
                                   ),
                                   height: imgHeightValue,
                                   duration: const Duration(milliseconds: 800),
+                                  curve: Curves.easeInOut,
                                   child: Stack(
                                     children: [
                                       Hero(
