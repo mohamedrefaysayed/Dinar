@@ -331,12 +331,23 @@ class _CartViewState extends State<CartView>
                                   const GeneralDivider(),
                                   AppDefaultButton(
                                     onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        RightSlideTransition(
-                                          page: const OrderConfirmView(),
-                                        ),
-                                      );
+                                      print(CartCubit.totalPrice);
+                                      if (CartCubit.finalPrice >=
+                                          int.parse((CartCubit
+                                                  .cartItemsModel!.minOrder) ??
+                                              "0")) {
+                                        Navigator.push(
+                                          context,
+                                          RightSlideTransition(
+                                            page: const OrderConfirmView(),
+                                          ),
+                                        );
+                                      } else {
+                                        context.showMessageSnackBar(
+                                          message:
+                                              "الحد الأدنى للطلب ${CartCubit.cartItemsModel!.minOrder}.د",
+                                        );
+                                      }
                                     },
                                     color: AppColors.primaryColor,
                                     title: "إتمام الطلب",

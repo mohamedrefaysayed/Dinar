@@ -1,10 +1,12 @@
 class CartItemsModel {
   List<CartItem>? cart;
   String? deliveryFees;
+  String? minOrder;
 
   CartItemsModel({
     this.cart,
     this.deliveryFees,
+    this.minOrder,
   });
 
   CartItemsModel.fromJson(Map<String, dynamic> json) {
@@ -15,6 +17,7 @@ class CartItemsModel {
       });
     }
     deliveryFees = json['delivery_fees'];
+    minOrder = json['min_order'];
   }
 
   Map<String, dynamic> toJson() {
@@ -22,6 +25,8 @@ class CartItemsModel {
     if (cart != null) {
       data['cart'] = cart!.map((v) => v.toJson()).toList();
     }
+    data['delivery_fees'] = deliveryFees;
+    data['min_order'] = minOrder;
     return data;
   }
 }
