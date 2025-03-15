@@ -1,4 +1,4 @@
-package com.iraq.dinar
+package com.iraq.newdinar
 
 import io.flutter.embedding.android.FlutterActivity
 
