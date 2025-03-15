@@ -331,7 +331,6 @@ class _CartViewState extends State<CartView>
                                   const GeneralDivider(),
                                   AppDefaultButton(
                                     onPressed: () {
-                                      print(CartCubit.totalPrice);
                                       if (CartCubit.finalPrice >=
                                           int.parse((CartCubit
                                                   .cartItemsModel!.minOrder) ??
