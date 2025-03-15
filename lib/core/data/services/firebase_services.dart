@@ -21,10 +21,10 @@ class FirebaseServices {
         .doc("App-Info")
         .get();
     if (kDebugMode) {
-      print(appInfo.data()!["domain"]);
+      print(appInfo.data()!["domain2"]);
     }
 
-    appDomain = appInfo.data()!["domain"] ?? appDomain;
+    appDomain = appInfo.data()!["domain2"] ?? appDomain;
 
     CahchHelper.saveData(key: "appDomain", value: appDomain);
 
