@@ -52,9 +52,9 @@ class MyApp extends StatelessWidget {
           textDirection: TextDirection.rtl,
           child: MaterialApp(
             debugShowCheckedModeBanner: false,
-            title: 'Dinar',
+            title: 'Euphrates Eye',
             theme: ThemeData(
-              fontFamily: 'SegoeUI',
+              fontFamily: 'Khebrat_Musamim',
               scaffoldBackgroundColor: Colors.white,
               colorScheme:
                   ColorScheme.fromSeed(seedColor: AppColors.primaryColor),

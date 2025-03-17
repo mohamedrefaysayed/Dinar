@@ -7,43 +7,39 @@ part 'bottton_nav_bar_state.dart';
 class BottomNavBarCubit extends Cubit<BottomNavBarState> {
   BottomNavBarCubit() : super(BottomNavBarInitial());
 
-  static int index = 4;
+  static int index = 3;
   static int dIndex = 1;
 
   static PageController controller = PageController(
-    initialPage: 5,
+    initialPage: 4,
   );
   static List<TabItem> items = [
     const TabItem(
-      icon: Icons.person_2_rounded,
-      title: 'البروفايل',
+      icon: Icons.person_4_outlined,
+      // title: 'بياناتي',
     ),
     const TabItem(
-      icon: Icons.receipt_long_rounded,
-      title: 'الطلبات',
+      icon: Icons.delivery_dining_outlined,
+      // title: 'طلباتي',
     ),
     const TabItem(
-      icon: Icons.shopping_cart_rounded,
-      title: 'العربة',
+      icon: Icons.shopping_bag_outlined,
+      // title: 'العربة',
     ),
     const TabItem(
-      icon: Icons.category_rounded,
-      title: 'الأقسام',
-    ),
-    const TabItem(
-      icon: Icons.home_rounded,
-      title: 'الرئيسية',
+      icon: Icons.store,
+      // title: 'الرئيسية',
     ),
   ];
 
   static List<TabItem> dItems = [
     const TabItem(
       icon: Icons.person_2_rounded,
-      title: 'البروفايل',
+      // title: 'البروفايل',
     ),
     const TabItem(
       icon: Icons.receipt_long_rounded,
-      title: 'الطلبات',
+      // title: 'الطلبات',
     ),
   ];
 }

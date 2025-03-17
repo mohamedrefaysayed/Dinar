@@ -65,23 +65,12 @@ class LogInView extends StatelessWidget {
                 SizedBox(
                   height: 30.h,
                 ),
-                Center(
-                  child: Image.asset(
-                    AppImages.loginCart,
-                    height: 177.w,
-                    width: 177.w,
-                  ),
-                ),
-                SizedBox(
-                  height: 20.h,
-                ),
                 Hero(
                   tag: 'dinar_logo',
                   child: Center(
                     child: Image.asset(
-                      AppImages.dinarImage,
-                      height: 70.w,
-                      width: 177.w,
+                      AppImages.euphratesEye,
+                      height: 200.w,
                     ),
                   ),
                 ),

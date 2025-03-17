@@ -23,7 +23,7 @@ class PhoneBuilder extends StatelessWidget {
     return Column(
       children: [
         Text(
-          " يجب ان يكون رقم الهاتف مسجل بالواتساب",
+          "تأكد من هذا الرقم مسجل بتطبيق الواتساب",
           style: TextStyles.textStyle16.copyWith(
             fontWeight: FontWeight.w900,
             color: Colors.black,
@@ -41,6 +41,28 @@ class PhoneBuilder extends StatelessWidget {
         ),
         SizedBox(
           height: 70.h,
+        ),
+        AppDefaultButton(
+          height: 50.h,
+          onPressed: () async {
+            BottomNavBarCubit.dIndex = 1;
+            BottomNavBarCubit.index = 4;
+            HapticFeedback.lightImpact();
+            Navigator.pushNamedAndRemoveUntil(
+                context, BottomNavBarView.id, (route) => false);
+          },
+          title: 'الدخول بدون تسجيل',
+          color: AppColors.kTransparent,
+          borderRadius: BorderRadius.circular(15.w),
+          width: double.infinity,
+          textStyle: TextStyles.textStyle16.copyWith(
+            color: AppColors.primaryColor,
+            fontWeight: FontWeight.w700,
+            fontSize: 16.w,
+          ),
+        ),
+        SizedBox(
+          height: 10.h,
         ),
         BlocBuilder<LogInCubit, LogInState>(
           builder: (context, state) {
@@ -71,7 +93,7 @@ class PhoneBuilder extends StatelessWidget {
                   );
                 }
               },
-              title: 'أرسال',
+              title: 'المتابعة',
               color: AppColors.primaryColor,
               borderRadius: BorderRadius.circular(15.w),
               width: double.infinity,
@@ -82,28 +104,6 @@ class PhoneBuilder extends StatelessWidget {
               ),
             );
           },
-        ),
-        SizedBox(
-          height: 10.h,
-        ),
-        AppDefaultButton(
-          height: 50.h,
-          onPressed: () async {
-            BottomNavBarCubit.dIndex = 1;
-            BottomNavBarCubit.index = 4;
-            HapticFeedback.lightImpact();
-            Navigator.pushNamedAndRemoveUntil(
-                context, BottomNavBarView.id, (route) => false);
-          },
-          title: 'التسجيل لاحقا',
-          color: AppColors.primaryColor,
-          borderRadius: BorderRadius.circular(15.w),
-          width: double.infinity,
-          textStyle: TextStyles.textStyle16.copyWith(
-            color: Colors.white,
-            fontWeight: FontWeight.w700,
-            fontSize: 16.w,
-          ),
         ),
       ],
     );

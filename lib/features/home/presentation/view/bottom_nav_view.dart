@@ -11,7 +11,6 @@ import 'package:dinar_store/core/utils/text_styles.dart';
 import 'package:dinar_store/core/widgets/message_snack_bar.dart';
 import 'package:dinar_store/features/auth/presentation/view/login_view.dart';
 import 'package:dinar_store/features/home/presentation/view/cart_view.dart';
-import 'package:dinar_store/features/home/presentation/view/categories_view.dart';
 import 'package:dinar_store/features/home/presentation/view/home_view.dart';
 import 'package:dinar_store/features/home/presentation/view/orders_view.dart';
 import 'package:dinar_store/features/home/presentation/view/profile_view.dart';
@@ -71,11 +70,13 @@ class _BottomNavBarViewState extends State<BottomNavBarView>
                   ProfileView(),
                   OrdersView(),
                   CartView(),
-                  CategoriesView(),
                   HomeView(),
                 ],
               ),
               bottomNavigationBar: BottomBarDefault(
+                borderRadius: BorderRadius.circular(20.w),
+                top: 16.h,
+                bottom: 16.h,
                 iconSize: 25.w,
                 items: BottomNavBarCubit.items,
                 backgroundColor: Colors.white,
@@ -106,7 +107,7 @@ class _BottomNavBarViewState extends State<BottomNavBarView>
                   BoxShadow(
                     blurRadius: 8.w,
                     spreadRadius: 0.5.w,
-                    color: Colors.grey,
+                    color: AppColors.primaryColor.withOpacity(0.5),
                   ),
                 ],
               ),

@@ -1,14 +1,9 @@
-import 'dart:math';
-
 import 'package:dinar_store/core/functions/future_delayed_navigator.dart';
 import 'package:dinar_store/core/utils/app_colors.dart';
-import 'package:dinar_store/core/utils/app_icons.dart';
-import 'package:dinar_store/core/utils/constants.dart';
 import 'package:dinar_store/core/utils/text_styles.dart';
 import 'package:dinar_store/features/home/presentation/view/widgets/cachedNetworkImage/my_cached_nework_Image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 
 class CompanyContainer extends StatelessWidget {
   const CompanyContainer({
@@ -35,27 +30,27 @@ class CompanyContainer extends StatelessWidget {
         Container(
           height: 75.w,
           width: 75.w,
-          decoration: BoxDecoration(
-            color: (isMore != null && isMore!)
-                ? const Color(0xffE7F2EC)
-                : comapniesBgColor[Random().nextInt(4)],
-            borderRadius: BorderRadius.circular(15.w),
-            boxShadow: [
-              BoxShadow(
-                  color: Colors.black.withOpacity(0.161),
-                  blurRadius: 6.w,
-                  offset: Offset(0, 3.h)),
-            ],
+          decoration: const BoxDecoration(
+            shape: BoxShape.circle,
+            // color: (isMore != null && isMore!)
+            //     ? AppColors.primaryColor
+            //     : AppColors.kWhite,
+            // boxShadow: [
+            //   BoxShadow(
+            //       color: Colors.black.withOpacity(0.161),
+            //       blurRadius: 6.w,
+            //       offset: Offset(0, 3.h)),
+            // ],
           ),
           child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 (isMore != null && isMore!)
-                    ? SvgPicture.asset(
-                        height: 25.w,
-                        width: 25.w,
-                        AppIcons.more,
+                    ? Icon(
+                        Icons.clear_all_rounded,
+                        color: AppColors.primaryColor,
+                        size: 30.w,
                       )
                     : Hero(
                         tag: "Company$heroId",
@@ -79,8 +74,11 @@ class CompanyContainer extends StatelessWidget {
                 ),
                 Text(
                   companyName,
-                  style: TextStyles.textStyle10
-                      .copyWith(fontWeight: FontWeight.w400),
+                  style: TextStyles.textStyle10.copyWith(
+                      fontWeight: FontWeight.w400,
+                      color: (isMore != null && isMore!)
+                          ? AppColors.primaryColor
+                          : AppColors.kBlack),
                 ),
               ],
             ),

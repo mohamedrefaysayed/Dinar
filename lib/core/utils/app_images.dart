@@ -4,6 +4,8 @@ abstract class AppImages {
 
   static const dinarImage = "assets/images/dinar_image.png";
 
+    static const euphratesEye = "assets/images/Euphrates_Eye.png";
+
   ///assets/images/attendnce.svg
   static const loginCart = "assets/images/login_cart.png";
 

@@ -3,7 +3,6 @@ import 'package:dinar_store/core/utils/app_colors.dart';
 import 'package:dinar_store/core/utils/text_styles.dart';
 import 'package:dinar_store/features/home/data/models/categories_model.dart';
 import 'package:dinar_store/features/home/presentation/view/widgets/containers/sub_category_container_home.dart';
-import 'package:dinar_store/features/home/presentation/view/widgets/dividers/ginerall_divider.dart';
 import 'package:dinar_store/features/home/presentation/view/widgets/sub_category_view.dart';
 import 'package:dinar_store/features/home/presentation/view/widgets/whole_sub_category_view.dart';
 import 'package:flutter/material.dart';
@@ -20,43 +19,46 @@ class CategoryContainer extends StatelessWidget {
       color: AppColors.kWhite,
       child: Column(
         children: [
-          Row(
-            children: [
-              TextButton.icon(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      RightSlideTransition(
-                        page: SubCategoryView(
-                          category: category,
+          Padding(
+            padding: EdgeInsets.only(right: 20.w),
+            child: Row(
+              children: [
+                TextButton.icon(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        RightSlideTransition(
+                          page: SubCategoryView(
+                            category: category,
+                          ),
                         ),
-                      ),
-                    );
-                  },
-                  icon: Icon(
-                    Icons.arrow_back_ios_new_rounded,
-                    size: 10.w,
-                    color: Colors.grey,
+                      );
+                    },
+                    icon: Icon(
+                      Icons.arrow_back_ios_new_rounded,
+                      size: 10.w,
+                      color: Colors.grey,
+                    ),
+                    label: Text(
+                      'عرض المزيد',
+                      style: TextStyles.textStyle10.copyWith(
+                          fontWeight: FontWeight.w400, color: Colors.grey),
+                    )),
+                const Spacer(),
+                SizedBox(
+                  width: 200.w,
+                  child: Text(
+                    category.categoryName!,
+                    style: TextStyles.textStyle16.copyWith(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 16.w,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                    textDirection: TextDirection.rtl,
                   ),
-                  label: Text(
-                    'عرض المزيد',
-                    style: TextStyles.textStyle10.copyWith(
-                        fontWeight: FontWeight.w400, color: Colors.grey),
-                  )),
-              const Spacer(),
-              SizedBox(
-                width: 200.w,
-                child: Text(
-                  category.categoryName!,
-                  style: TextStyles.textStyle16.copyWith(
-                    fontWeight: FontWeight.w700,
-                    fontSize: 16.w,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                  textDirection: TextDirection.rtl,
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
           SizedBox(
             width: 300.w,
@@ -115,7 +117,6 @@ class CategoryContainer extends StatelessWidget {
                     },
                   ),
           ),
-          const GeneralDivider(),
         ],
       ),
     );

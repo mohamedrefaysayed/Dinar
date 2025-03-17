@@ -74,4 +74,8 @@ flutter:
     - family: SegoeUI
       fonts:
         - asset: assets/fonts/SegoeUI.ttf
+    - family: Khebrat_Musamim
+      fonts:
+        - asset: assets/fonts/Khebrat_Musamim.ttf
+
 

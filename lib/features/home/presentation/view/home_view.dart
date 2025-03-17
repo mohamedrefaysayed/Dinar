@@ -44,9 +44,10 @@ class _HomeViewState extends State<HomeView>
                   Hero(
                     tag: "HomeSearch",
                     child: Material(
+                      color: AppColors.kTransparent,
                       child: SearchRow(
                         textEditingController: TextEditingController(),
-                        hintText: 'إبحث عن المتجر او القطعة',
+                        hintText: 'إبحث عن البراندات او الاجهزة',
                         canGoBack: false,
                         whenBack: () {},
                         haveFilter: true,
@@ -86,10 +87,7 @@ class _HomeViewState extends State<HomeView>
                       child: const CompaniesView(),
                     ),
                     const GeneralDivider(),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20.w),
-                      child: const CategoriesViewHome(),
-                    ),
+                    const CategoriesViewHome(),
                   ],
                 ),
               ),

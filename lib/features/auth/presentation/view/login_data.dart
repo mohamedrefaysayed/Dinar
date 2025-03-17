@@ -41,43 +41,21 @@ class LoginData extends StatelessWidget {
               child: ListView(
                 children: [
                   SizedBox(
-                    height: 70.h,
+                    height: 40.h,
                   ),
                   Hero(
                     tag: 'dinar_logo',
                     child: Center(
                       child: Image.asset(
-                        AppImages.dinarLogo,
-                        height: 40.w,
+                        AppImages.euphratesEye,
+                        height: 100.w,
                         width: 177.w,
                         color: AppColors.primaryColor,
                       ),
                     ),
                   ),
                   SizedBox(
-                    height: 50.h,
-                  ),
-                  TextFieldDataBulder(
-                    controller: StoreDataCubit.nameController,
-                    title: 'الاسم الثلاثي لصاحب العمل',
-                    onChanged: (value) {},
-                    validator: (v) {
-                      if (v == null || v.isEmpty) {
-                        return 'أدخل الأسم';
-                      }
-                      return null;
-                    },
-                  ),
-                  TextFieldDataBulder(
-                    controller: StoreDataCubit.marketNameController,
-                    title: 'أسم الماركت ',
-                    onChanged: (value) {},
-                    validator: (v) {
-                      if (v == null || v.isEmpty) {
-                        return 'أدخل أسم الماركت ';
-                      }
-                      return null;
-                    },
+                    height: 20.h,
                   ),
                   TextFieldDataBulder(
                     controller: StoreDataCubit.govController,
@@ -102,9 +80,31 @@ class LoginData extends StatelessWidget {
                     },
                   ),
                   TextFieldDataBulder(
+                    controller: StoreDataCubit.nameController,
+                    title: 'أسم صاحب العمل',
+                    onChanged: (value) {},
+                    validator: (v) {
+                      if (v == null || v.isEmpty) {
+                        return 'أدخل الأسم';
+                      }
+                      return null;
+                    },
+                  ),
+                  TextFieldDataBulder(
+                    controller: StoreDataCubit.marketNameController,
+                    title: 'أسم الماركت ',
+                    onChanged: (value) {},
+                    validator: (v) {
+                      if (v == null || v.isEmpty) {
+                        return 'أدخل أسم الماركت ';
+                      }
+                      return null;
+                    },
+                  ),
+                  TextFieldDataBulder(
                     keyType: TextInputType.number,
                     controller: StoreDataCubit.marketPhoneController,
-                    title: 'رقم هاتف الماركت(العمل)',
+                    title: 'رقم هاتف العمل',
                     onChanged: (value) {},
                     validator: (v) {
                       if (v == null || v.isEmpty) {

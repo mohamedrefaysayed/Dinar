@@ -19,7 +19,7 @@ class PropertyRightsRichText extends StatelessWidget {
             ),
           ),
           TextSpan(
-            text: 'Dinar',
+            text: 'Mohamed Refay',
             style: TextStyles.textStyle16.copyWith(
               color: Colors.white,
               fontSize: 16.w,

@@ -30,8 +30,8 @@ class _LogoAnimatedOpacityState extends State<LogoAnimatedOpacity> {
           opacity: opacity,
           duration: const Duration(milliseconds: 1500),
           child: Image.asset(
-            AppImages.dinarImage,
-            height: 190.w,
+            AppImages.euphratesEye,
+            height: 300.w,
             width: 300.w,
             fit: BoxFit.fill,
           ),

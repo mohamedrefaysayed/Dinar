@@ -41,6 +41,7 @@ class _SearchViewState extends State<SearchView> {
                 child: Hero(
                   tag: "HomeSearch",
                   child: Material(
+                    color: AppColors.kTransparent,
                     child: SearchRow(
                       textEditingController: SearchCubit.searchController,
                       hintText: 'إبحث عن المتجر او القطعة',

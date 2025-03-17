@@ -2,7 +2,6 @@ import 'package:dinar_store/core/utils/app_colors.dart';
 import 'package:dinar_store/core/utils/text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 
 class SearchRow extends StatelessWidget {
   const SearchRow({
@@ -35,10 +34,10 @@ class SearchRow extends StatelessWidget {
         if (haveFilter)
           IconButton(
             onPressed: onFilter,
-            icon: SvgPicture.asset(
-              'assets/icons/search_Filter.svg',
-              height: 20.w,
-              width: 20.w,
+            icon: Icon(
+              Icons.filter_list_rounded,
+              color: AppColors.primaryColor,
+              size: 30.w,
             ),
           ),
         SizedBox(
@@ -57,24 +56,25 @@ class SearchRow extends StatelessWidget {
               controller: textEditingController,
               textDirection: TextDirection.rtl,
               decoration: InputDecoration(
-                contentPadding: EdgeInsets.symmetric(vertical: 5.h),
+                contentPadding:
+                    EdgeInsets.symmetric(vertical: 5.h, horizontal: 10.w),
                 hintText: hintText,
                 hintTextDirection: TextDirection.rtl,
                 hintStyle: TextStyles.textStyle10,
                 filled: true,
                 fillColor: AppColors.primaryColor.withOpacity(0.09),
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15.w),
+                  borderRadius: BorderRadius.circular(8.w),
                   borderSide: BorderSide.none,
                 ),
-                suffixIcon: Padding(
-                  padding: EdgeInsets.all(5.w),
-                  child: Icon(
-                    Icons.search_rounded,
-                    color: AppColors.primaryColor,
-                    size: 30.w,
-                  ),
-                ),
+                // suffixIcon: Padding(
+                //   padding: EdgeInsets.all(5.w),
+                //   child: Icon(
+                //     Icons.manage_search_rounded,
+                //     color: AppColors.primaryColor,
+                //     size: 30.w,
+                //   ),
+                // ),
               ),
               onChanged: onChanged,
             ),
@@ -86,7 +86,7 @@ class SearchRow extends StatelessWidget {
             icon: Transform.flip(
               flipX: true,
               child: Icon(
-                Icons.arrow_back_rounded,
+                Icons.arrow_back_ios_new,
                 size: 30.w,
                 color: AppColors.primaryColor,
               ),

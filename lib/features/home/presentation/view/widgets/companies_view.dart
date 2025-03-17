@@ -47,10 +47,11 @@ class _CompaniesViewState extends State<CompaniesView> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Text(
-                      'الشركـــــــــــات',
+                      'البرانــــــدات',
                       style: TextStyles.textStyle16.copyWith(
                         fontWeight: FontWeight.w700,
                         fontSize: 16.w,
+                        color: AppColors.primaryColor,
                       ),
                     ),
                   ],
@@ -74,7 +75,7 @@ class _CompaniesViewState extends State<CompaniesView> {
                         return CompanyContainer(
                           index: index,
                           isMore: true,
-                          companyName: 'عرض المزيد',
+                          companyName: 'عرض الكل',
                           onTap: () {
                             Navigator.push(
                                 context,

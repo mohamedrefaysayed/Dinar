@@ -2,6 +2,7 @@ import 'package:dinar_store/core/utils/app_colors.dart';
 import 'package:dinar_store/core/widgets/message_snack_bar.dart';
 import 'package:dinar_store/features/home/data/models/categories_model.dart';
 import 'package:dinar_store/features/home/presentation/view/widgets/containers/category_container.dart';
+import 'package:dinar_store/features/home/presentation/view/widgets/dividers/ginerall_divider.dart';
 import 'package:dinar_store/features/home/presentation/view/widgets/place_holders/categories_place_holder_home.dart';
 import 'package:dinar_store/features/home/presentation/view_model/categories_cubit/categories_cubit.dart';
 import 'package:flutter/material.dart';
@@ -43,8 +44,14 @@ class _CategoriesViewHomeState extends State<CategoriesViewHome> {
               final Categories category =
                   state.categoriesModel.categories![index];
 
-              return CategoryContainer(
-                category: category,
+              return Column(
+                children: [
+                  CategoryContainer(
+                    category: category,
+                  ),
+                  if (state.categoriesModel.categories!.length - 1 != index)
+                    const GeneralDivider(),
+                ],
               );
             },
           );

@@ -23,10 +23,10 @@ const String kSecureStorageKey = 'secureStorageKey';
 const String kThemeBox = 'themeBox';
 
 final List<Color> comapniesBgColor = [
-  const Color(0xffF0FCFF),
-  const Color(0xffFCE3E2),
-  const Color(0xffFEF1DB),
-  const Color(0xffF5FCE9),
+  const Color(0xffe8e4e4),
+  const Color(0xffFAECD7),
+  const Color(0xffF3E5AB),
+  const Color(0xffF1DDCF),
 ];
 
 String appDomain = "https://api.dinnari.com/public/index.php/api/";
