@@ -54,7 +54,7 @@ class CartServices implements CartRepo {
         token: token,
         endPoint: 'cart',
         body: {
-          'unit_type' : isRetail ? 'retail' : 'whole',
+          'unit_type': isRetail ? 'retail' : 'whole',
           'product_id': productId,
           'quantity': quantity,
           'unit_id': unitId,
@@ -90,6 +90,7 @@ class CartServices implements CartRepo {
           'id': itemId,
         },
       );
+      print(data);
       cartItemsModel = CartItemsModel.fromJson(data);
       return right(cartItemsModel);
     } on DioException catch (error) {

@@ -18,9 +18,7 @@ class CartCubit extends Cubit<CartState> {
 
   static double totalPrice = 0;
   static double totalDiscount = 0;
-
   static double finalPrice = 0;
-
   static bool retailIsDone = true;
   static bool wholeIsDone = true;
 
@@ -172,7 +170,7 @@ class CartCubit extends Cubit<CartState> {
             await summedItemsFunc(cartItems: cartItemsModel.cart!);
         countTotal(
             items: cartItemsModel.cart!,
-            deliveryFees: cartItemsModel.deliveryFees!);
+            deliveryFees: cartItemsModel.deliveryFees ?? "0");
         emit(DeleteItemSuccess(cartItemsModel: cartItemsModel));
       },
     );

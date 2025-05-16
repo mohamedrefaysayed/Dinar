@@ -306,7 +306,8 @@ class _OrderConfirmViewState extends State<OrderConfirmView> {
                                     context
                                         .read<OrderCubit>()
                                         .isTimeGreaterBy24Hour(
-                                            OrderCubit.pickedTime!)) {
+                                          OrderCubit.pickedTime!,
+                                        )) {
                                   await context.read<OrderCubit>().storeOrder(
                                         status: 1,
                                         discount: CartCubit.totalDiscount,

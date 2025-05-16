@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 import 'package:dinar_store/core/cubits/app_cubit/cubit/app_cubit_cubit.dart';
 import 'package:dinar_store/core/errors/server_failure.dart';
@@ -57,13 +59,13 @@ class LogInServices implements LogInRepo {
     required String code,
   }) async {
     try {
-      fcmToken = await FirebaseMessaging.instance.getToken();
+      fcmToken =  Platform.isIOS ? await FirebaseMessaging.instance.getAPNSToken() : await FirebaseMessaging.instance.getToken();
       Map<String, dynamic> data = await _dioHelper.postRequest(
         body: {
-            'fcm': fcmToken,
-            'verification_code': code,
-          },
-          endPoint: 'verify',
+          'fcm': fcmToken,
+          'verification_code': code,
+        },
+        endPoint: 'verify',
       );
       role = data['user']['role'] ?? 0;
       CahchHelper.saveData(key: 'role', value: role);

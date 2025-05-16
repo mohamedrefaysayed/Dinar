@@ -21,4 +21,4 @@ final class AddressFailuer extends LocationState {
   AddressFailuer({required this.errorMessage});
 }
 
-final class LocationFailuer extends LocationState {}
+final class LocationFailure extends LocationState {}

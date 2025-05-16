@@ -44,7 +44,8 @@ class _SearchViewState extends State<SearchView> {
                     child: SearchRow(
                       textEditingController: SearchCubit.searchController,
                       hintText: 'إبحث عن المتجر او القطعة',
-                      canGoBack: false,
+                      canGoBack: true,
+                      whenBack: () => Navigator.pop(context),
                       onChanged: (newKeyWord) {
                         context.read<SearchCubit>().search(keyWord: newKeyWord);
                       },

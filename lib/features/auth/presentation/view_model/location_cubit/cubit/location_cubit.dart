@@ -8,8 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:permission_handler/permission_handler.dart';
-
 part 'location_state.dart';
 
 class LocationCubit extends Cubit<LocationState> {
@@ -21,31 +19,48 @@ class LocationCubit extends Cubit<LocationState> {
 
   static Position? currentPosition;
 
-  Future getCurrentLocation({required BuildContext context}) async {
+  Future<void> getCurrentLocation({required BuildContext context}) async {
     emit(LocationLoading());
-    bool locationsIsGranted = await Permission.location.status.isGranted;
-    if (!locationsIsGranted) {
-      await Permission.location.request();
+
+    // Check location permission status
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.deniedForever) {
+      // Permissions are denied forever, show guidance to open app settings
+      emit(LocationFailure());
+      context.showMessageSnackBar(
+        message:
+            "Location permissions permanently denied. Please enable in app settings.",
+      );
+      return;
     }
-    bool locationWhenInUse =
-        await Permission.locationWhenInUse.status.isGranted;
-    if (!locationWhenInUse) {
-      await Permission.locationWhenInUse.request();
+
+    if (permission == LocationPermission.denied) {
+      // Request permissions if denied
+      permission = await Geolocator.requestPermission();
+      if (permission != LocationPermission.whileInUse &&
+          permission != LocationPermission.always) {
+        // User denied the request
+        emit(LocationFailure());
+        context.showMessageSnackBar(
+          message: "Location permissions are required to use this feature.",
+        );
+        return;
+      }
     }
 
     try {
-      currentPosition = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.bestForNavigation);
-      emit(LocationSuccess(position: currentPosition!));
+      // Get current position
+      Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.bestForNavigation,
+      );
+      emit(LocationSuccess(position: position));
     } catch (error) {
-      emit(LocationFailuer());
+      emit(LocationFailure());
       context.showMessageSnackBar(
-        message: "أفتح الموقع",
+        message:
+            "Failed to get location. Please ensure location services are enabled.",
       );
     }
-
-    // When we reach here, permissions are granted and we can
-    // continue accessing the position of the device.
   }
 
   Future<void> getAddress(double lat, double lng) async {
