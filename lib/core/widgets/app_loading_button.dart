@@ -30,7 +30,7 @@ class AppLoadingButton extends StatelessWidget {
             : null,
         color: Colors.white,
       ),
-      child: SpinKitThreeBounce(
+      child: SpinKitSpinningLines(
         color: AppColors.primaryColor,
         size: 24.w,
       ),

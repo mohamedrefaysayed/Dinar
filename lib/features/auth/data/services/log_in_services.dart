@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 import 'package:dinar_store/core/cubits/app_cubit/cubit/app_cubit_cubit.dart';
 import 'package:dinar_store/core/errors/server_failure.dart';
@@ -24,7 +26,6 @@ class LogInServices implements LogInRepo {
 
   late DioHelper _dioHelper;
   late FlutterSecureStorage _secureStorage;
-  String? fcmToken;
 
   @override
   Future<Either<ServerFailure, Map<String, dynamic>>> register({
@@ -57,11 +58,26 @@ class LogInServices implements LogInRepo {
     required String code,
   }) async {
     try {
-      fcmToken = await FirebaseMessaging.instance.getToken();
+      FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+// Request permissions
+      await messaging.requestPermission(
+        alert: true,
+        badge: true,
+        sound: true,
+      );
+
+// Get the APNs token
+      String? apnsToken = await messaging.getAPNSToken();
+      print("APNs Token: $apnsToken");
+
+// Get the FCM token
+      String? fcmToken = await messaging.getToken();
+      print("FCM Token: $fcmToken");
 
       Map<String, dynamic> data = await _dioHelper.postRequest(
         body: {
-          'fcm': fcmToken,
+          'fcm': Platform.isIOS ? apnsToken : fcmToken,
           'verification_code': code,
         },
         endPoint: 'verify',

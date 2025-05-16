@@ -1,5 +1,6 @@
 // ignore_for_file: invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member, use_build_context_synchronously
 
+import 'package:dinar_store/core/utils/app_colors.dart';
 import 'package:dinar_store/core/utils/app_images.dart';
 import 'package:dinar_store/core/widgets/message_snack_bar.dart';
 import 'package:dinar_store/features/auth/presentation/view/widgets/code_builder.dart';
@@ -24,86 +25,99 @@ class LogInView extends StatelessWidget {
         canPop: false,
         child: Scaffold(
             body: SafeArea(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 30.w),
-            child: ListView(
-              children: [
-                Row(
+          child: Stack(
+            children: [
+              Image.asset(
+                AppImages.loginbackground,
+                width: double.infinity,
+                height: double.infinity,
+                fit: BoxFit.cover,
+                color: AppColors.primaryColor.withOpacity(0.15),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 30.w),
+                child: ListView(
                   children: [
-                    BlocBuilder<LogInCubit, LogInState>(
+                    Row(
+                      children: [
+                        BlocBuilder<LogInCubit, LogInState>(
+                          builder: (context, state) {
+                            if (state is SendCodeSuccess ||
+                                state is VerficationLoading) {
+                              return IconButton(
+                                  onPressed: () {
+                                    context
+                                        .read<LogInCubit>()
+                                        .emit(LogInInitial());
+                                    LogInCubit.phoneNumber = null;
+                                  },
+                                  icon: Icon(
+                                    Icons.arrow_back_rounded,
+                                    size: 25.w,
+                                  ));
+                            }
+                            return SizedBox(
+                              height: 45.h,
+                            );
+                          },
+                        ),
+                        const Spacer(),
+                        // TextButton(
+                        //     onPressed: () {
+                        //       Navigator.pushNamedAndRemoveUntil(
+                        //           context, '/BottomNavBarView', (route) => false);
+                        //     },
+                        //     child: Text(
+                        //       "تخطى",
+                        //       style: TextStyles.textStyle18
+                        //           .copyWith(color: Colors.grey),
+                        //     ))
+                      ],
+                    ),
+                    SizedBox(
+                      height: 30.h,
+                    ),
+                    Hero(
+                      tag: 'dinar_logo',
+                      child: Center(
+                        child: Image.asset(
+                          AppImages.euphratesEye,
+                          height: 200.w,
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 70.h,
+                    ),
+                    BlocConsumer<LogInCubit, LogInState>(
+                      listener: (context, state) {
+                        if (state is LogInFailure) {
+                          context.showMessageSnackBar(
+                            message: state.errMessage,
+                          );
+                        }
+                        if (state is SendCodeSuccess) {
+                          context.showMessageSnackBar(
+                            message: state.message,
+                          );
+                        }
+                      },
                       builder: (context, state) {
                         if (state is SendCodeSuccess ||
                             state is VerficationLoading) {
-                          return IconButton(
-                              onPressed: () {
-                                context.read<LogInCubit>().emit(LogInInitial());
-                                LogInCubit.phoneNumber = null;
-                              },
-                              icon: Icon(
-                                Icons.arrow_back_rounded,
-                                size: 25.w,
-                              ));
+                          return const CodeBuilder();
+                        } else {
+                          return const PhoneBuilder();
                         }
-                        return SizedBox(
-                          height: 45.h,
-                        );
                       },
                     ),
-                    const Spacer(),
-                    // TextButton(
-                    //     onPressed: () {
-                    //       Navigator.pushNamedAndRemoveUntil(
-                    //           context, '/BottomNavBarView', (route) => false);
-                    //     },
-                    //     child: Text(
-                    //       "تخطى",
-                    //       style: TextStyles.textStyle18
-                    //           .copyWith(color: Colors.grey),
-                    //     ))
+                    SizedBox(
+                      height: 50.h,
+                    ),
                   ],
                 ),
-                SizedBox(
-                  height: 30.h,
-                ),
-                Hero(
-                  tag: 'dinar_logo',
-                  child: Center(
-                    child: Image.asset(
-                      AppImages.euphratesEye,
-                      height: 200.w,
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 70.h,
-                ),
-                BlocConsumer<LogInCubit, LogInState>(
-                  listener: (context, state) {
-                    if (state is LogInFailure) {
-                      context.showMessageSnackBar(
-                        message: state.errMessage,
-                      );
-                    }
-                    if (state is SendCodeSuccess) {
-                      context.showMessageSnackBar(
-                        message: state.message,
-                      );
-                    }
-                  },
-                  builder: (context, state) {
-                    if (state is SendCodeSuccess ||
-                        state is VerficationLoading) {
-                      return const CodeBuilder();
-                    } else {
-                      return const PhoneBuilder();
-                    }
-                  },
-                ),
-                SizedBox(
-                  height: 50.h,
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         )),
       ),

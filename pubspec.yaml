@@ -40,13 +40,14 @@ dependencies:
   device_preview: ^1.2.0
   google_places_flutter: ^2.0.8
   map_location_picker: ^1.2.8+3
-  flutter_keyboard_visibility: ^5.4.1
   firebase_core: ^3.1.0
-  firebase_messaging: ^15.0.1
+  firebase_messaging: ^15.2.5
   flutter_local_notifications: ^17.1.1
   easy_stepper: ^0.8.5
   cloud_firestore: ^5.0.1
-  open_file: ^3.5.3
+  open_file: ^3.5.10
+  flutter_launcher_icons: ^0.14.3
+  rename_app: ^1.6.2
 
 
 dev_dependencies:
@@ -56,7 +57,7 @@ dev_dependencies:
   flutter_lints: ^2.0.0
 
 flutter_launcher_icons:
-  image_path: "assets/images/dinar_logo.png"
+  image_path: "assets/images/euphrateseye_logo.jpeg"
   android: true
   ios: true
   adaptive_icon_background: "#00784a"

@@ -16,7 +16,7 @@ class SplashViewBodyColumn extends StatelessWidget {
           const LogoAnimatedOpacity(),
           const Spacer(),
           const PropertyRightsRichText(),
-          SizedBox(height: 5.h),
+          SizedBox(height: 20.h),
         ],
       ),
     );

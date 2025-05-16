@@ -1,3 +1,4 @@
+import 'package:dinar_store/core/utils/app_colors.dart';
 import 'package:dinar_store/core/utils/app_images.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -34,6 +35,7 @@ class _LogoAnimatedOpacityState extends State<LogoAnimatedOpacity> {
             height: 300.w,
             width: 300.w,
             fit: BoxFit.fill,
+            color: AppColors.kWhite,
           ),
         ),
       ),

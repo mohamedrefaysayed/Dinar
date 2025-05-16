@@ -1,10 +1,10 @@
 abstract class AppImages {
   ///assets/images/asdc_logo.svg
-  static const dinarLogo = "assets/images/dinar_logo.png";
+  static const euphrateseyeLogo = "assets/images/euphrateseye_logo.jpeg";
 
   static const dinarImage = "assets/images/dinar_image.png";
 
-    static const euphratesEye = "assets/images/Euphrates_Eye.png";
+  static const euphratesEye = "assets/images/Euphrates_Eye.png";
 
   ///assets/images/attendnce.svg
   static const loginCart = "assets/images/login_cart.png";
@@ -65,4 +65,6 @@ abstract class AppImages {
 
   ///assets/icons/language.svg
   static const imagesLanguages = "assets/icons/language.svg";
+
+  static const loginbackground = "assets/images/background.png";
 }

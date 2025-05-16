@@ -1,3 +1,4 @@
+import 'package:dinar_store/core/utils/app_colors.dart';
 import 'package:dinar_store/core/utils/text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -12,7 +13,7 @@ extension SnackbarContext on BuildContext {
   }) {
     OverlayEntry overlayEntry = OverlayEntry(
       builder: (context) => Positioned(
-        top: 40.h,
+        top: 60.h,
         left: 20.w,
         right: 20.w,
         child: Material(
@@ -26,6 +27,10 @@ extension SnackbarContext on BuildContext {
             margin: EdgeInsets.only(right: 24.w, left: 24.w),
             padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 12.h),
             width: MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(
+              color: AppColors.primaryColor.withOpacity(0.2),
+              borderRadius: BorderRadius.circular(20.w),
+            ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -55,7 +60,7 @@ extension SnackbarContext on BuildContext {
                   height: 10.w,
                   width: 10.w,
                   decoration: BoxDecoration(
-                    color: color ?? Colors.white,
+                    color: color ?? AppColors.primaryColor.withOpacity(0),
                     shape: BoxShape.circle,
                   ),
                 ),
