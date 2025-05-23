@@ -3,7 +3,7 @@ description: "A new Flutter project."
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.0.15+15
+version: 1.0.16+16
 
 environment:
   sdk: '>=3.2.2 <4.0.0'
@@ -40,13 +40,13 @@ dependencies:
   device_preview: ^1.2.0
   google_places_flutter: ^2.0.8
   map_location_picker: ^1.2.8+3
-  flutter_keyboard_visibility: ^5.4.1
   firebase_core: ^3.13.0
   firebase_messaging: ^15.2.5
   flutter_local_notifications: ^17.1.1
   easy_stepper: ^0.8.5
   cloud_firestore: ^5.0.1
   open_file: ^3.5.10
+  flutter_keyboard_visibility: ^6.0.0
 
 
 dev_dependencies:

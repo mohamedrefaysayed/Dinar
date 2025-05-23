@@ -8,7 +8,6 @@ extension SnackbarContext on BuildContext {
     required String message,
     Color? color,
     String? imagePath,
-    bool? isBottomNavBar,
   }) {
     OverlayEntry overlayEntry = OverlayEntry(
       builder: (context) => Positioned(

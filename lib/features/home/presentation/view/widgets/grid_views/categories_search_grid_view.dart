@@ -7,7 +7,6 @@ import 'package:dinar_store/features/home/data/models/search_model.dart';
 import 'package:dinar_store/features/home/presentation/view/widgets/dividers/ginerall_divider.dart';
 import 'package:dinar_store/features/home/presentation/view/widgets/rows/search_item_row.dart';
 import 'package:dinar_store/features/home/presentation/view/widgets/sub_category_view.dart';
-import 'package:dinar_store/features/home/presentation/view/widgets/sub_sub_categories_view.dart';
 import 'package:dinar_store/features/home/presentation/view/widgets/whole_sub_category_view.dart';
 import 'package:dinar_store/features/home/presentation/view_model/sub_categories_cubit/sub_categories_cubit.dart';
 import 'package:flutter/material.dart';

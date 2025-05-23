@@ -24,8 +24,11 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView>
     with AutomaticKeepAliveClientMixin {
+
+
   @override
   Widget build(BuildContext context) {
+     
     super.build(context);
     return RefreshIndicator(
       onRefresh: () async {

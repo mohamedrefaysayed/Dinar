@@ -53,6 +53,7 @@ class _BottomNavBarViewState extends State<BottomNavBarView>
     internetTimer = Timer.periodic(const Duration(seconds: 2), (timer) {
       context.checkInternet();
     });
+
     super.initState();
   }
 

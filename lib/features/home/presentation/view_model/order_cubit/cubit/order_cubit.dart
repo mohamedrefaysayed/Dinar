@@ -295,8 +295,7 @@ class OrderCubit extends Cubit<OrderState> {
       case OrderStatus.cancelled:
         return "تم الغاء الطلب";
       case OrderStatus.returned:
-      default:
-        return "تم الإراجاع";
+      return "تم الإراجاع";
     }
   }
 

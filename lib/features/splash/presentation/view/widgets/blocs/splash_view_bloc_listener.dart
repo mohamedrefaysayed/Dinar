@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:dinar_store/core/utils/genrall.dart';
+import 'package:dinar_store/core/widgets/message_snack_bar.dart';
 import 'package:dinar_store/features/auth/presentation/view/login_view.dart';
 import 'package:dinar_store/features/home/presentation/view/bottom_nav_view.dart';
 import 'package:dinar_store/features/home/presentation/view/bottom_nav_view_Delevry.dart';
@@ -26,6 +27,10 @@ class _SplashViewBlocListenerState extends State<SplashViewBlocListener> {
         }
         if (state is NavigateToNavBarView) {
           if (role == 0) {
+            context.showMessageSnackBar(
+              message:
+                  "اعزاءنا مشركتين تطبيق دينار  التوصيل لمناطق الكرخ فقط. قريباً سيتم شمول كل مناطق بغداد الحبيبة",
+            );
             Navigator.pushReplacementNamed(context, BottomNavBarView.id);
           } else {
             Navigator.pushReplacementNamed(context, BottomNavBarViewDelevry.id);

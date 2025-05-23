@@ -1,0 +1,2 @@
+/Users/refay/Development/Projects/Dinar/android/app/.cxx/Debug/4p4h1a2d/x86/CMakeFiles/edit_cache.dir
+/Users/refay/Development/Projects/Dinar/android/app/.cxx/Debug/4p4h1a2d/x86/CMakeFiles/rebuild_cache.dir

@@ -15,17 +15,16 @@ extension InternetConnection on BuildContext {
           message: "online",
           color: Colors.green,
           imagePath: "assets/images/retriveConnection.svg",
-          isBottomNavBar: true,
         );
         noConnection.value = false;
       }
     } else {
       if (!noConnection.value) {
         showMessageSnackBar(
-            message: "offline",
-            color: Colors.red,
-            imagePath: "assets/images/lostConnection.svg",
-            isBottomNavBar: true);
+          message: "offline",
+          color: Colors.red,
+          imagePath: "assets/images/lostConnection.svg",
+        );
         noConnection.value = true;
       }
     }
@@ -33,9 +32,9 @@ extension InternetConnection on BuildContext {
 
   noConnectionMessage() {
     showMessageSnackBar(
-        message: "offline",
-        color: Colors.red,
-        imagePath: "assets/images/lostConnection.svg",
-        isBottomNavBar: true);
+      message: "offline",
+      color: Colors.red,
+      imagePath: "assets/images/lostConnection.svg",
+    );
   }
 }

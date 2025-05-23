@@ -90,7 +90,6 @@ class CartServices implements CartRepo {
           'id': itemId,
         },
       );
-      print(data);
       cartItemsModel = CartItemsModel.fromJson(data);
       return right(cartItemsModel);
     } on DioException catch (error) {
