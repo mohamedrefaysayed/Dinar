@@ -50,10 +50,10 @@ class LocationCubit extends Cubit<LocationState> {
 
     try {
       // Get current position
-      Position position = await Geolocator.getCurrentPosition(
+      currentPosition = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.bestForNavigation,
       );
-      emit(LocationSuccess(position: position));
+      emit(LocationSuccess(position: currentPosition!));
     } catch (error) {
       emit(LocationFailure());
       context.showMessageSnackBar(
