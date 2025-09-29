@@ -334,7 +334,7 @@ class _CartViewState extends State<CartView>
                                       if (CartCubit.finalPrice >=
                                           int.parse((CartCubit
                                                   .cartItemsModel!.minOrder) ??
-                                              "0")) {
+                                              "400000")) {
                                         Navigator.push(
                                           context,
                                           RightSlideTransition(

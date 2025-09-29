@@ -39,6 +39,8 @@ class _OrderConfirmViewState extends State<OrderConfirmView> {
     super.initState();
   }
 
+  String notes = "";
+
   @override
   Widget build(BuildContext context) {
     return DefultScaffold(
@@ -175,6 +177,7 @@ class _OrderConfirmViewState extends State<OrderConfirmView> {
                             onTapOutside: (event) {
                               FocusScope.of(context).unfocus();
                             },
+                            onChanged: (value) => notes = value,
                             decoration: InputDecoration(
                                 hintTextDirection: TextDirection.rtl,
                                 hintText: 'أضف ملاحظاتك',
@@ -316,6 +319,7 @@ class _OrderConfirmViewState extends State<OrderConfirmView> {
                                         paymentMethod: 'عند الاستلام',
                                         deliveryFees: CartCubit
                                             .cartItemsModel!.deliveryFees!,
+                                        notes: notes,
                                       );
                                 } else {
                                   context.showMessageSnackBar(

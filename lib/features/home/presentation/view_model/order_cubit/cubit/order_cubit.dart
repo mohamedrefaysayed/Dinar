@@ -107,6 +107,7 @@ class OrderCubit extends Cubit<OrderState> {
     required double price,
     required String paymentMethod,
     required String deliveryFees,
+    required String notes,
   }) async {
     emit(AddToOrdersLoading());
 
@@ -139,6 +140,7 @@ class OrderCubit extends Cubit<OrderState> {
         'delivery_time': date,
         'address': currentAddress,
         'delivery_fees': deliveryFees,
+        'notes': notes,
       },
     );
 
@@ -295,7 +297,7 @@ class OrderCubit extends Cubit<OrderState> {
       case OrderStatus.cancelled:
         return "تم الغاء الطلب";
       case OrderStatus.returned:
-      return "تم الإراجاع";
+        return "تم الإراجاع";
     }
   }
 
