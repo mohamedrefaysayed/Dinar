@@ -41,6 +41,14 @@ class OrderRow extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
+              if (order.deliveryTime != null)
+                Text(MyTimeDate.getMessageTimeArabic(
+                    time: DateTime.parse(order.deliveryTime!)
+                        .millisecondsSinceEpoch
+                        .toString())),
+              SizedBox(
+                height: 5.h,
+              ),
               Center(
                 child: Text(
                   context

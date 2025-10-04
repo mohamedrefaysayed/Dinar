@@ -133,4 +133,161 @@ class MyTimeDate {
     }
     return 'Mon';
   }
+
+  // Arabic datetime functions
+
+  // Get Arabic formatted time from milliSecondsSinceEpochs String
+  static String getFormattedTimeArabic({required String time}) {
+    final date = DateTime.fromMillisecondsSinceEpoch(int.parse(time));
+    final hour = date.hour;
+    final minute = date.minute;
+    final period = hour >= 12 ? 'مساءً' : 'صباحاً';
+    final hour12 = hour > 12 ? hour - 12 : (hour == 0 ? 12 : hour);
+
+    return '${hour12.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')} $period';
+  }
+
+  // Get Arabic formatted datetime for messages
+  static String getMessageTimeArabic({required String time}) {
+    final DateTime sent = DateTime.fromMillisecondsSinceEpoch(int.parse(time));
+    final DateTime now = DateTime.now();
+
+    final formattedTime = getFormattedTimeArabic(time: time);
+
+    if (now.day == sent.day &&
+        now.month == sent.month &&
+        now.year == sent.year) {
+      return formattedTime;
+    }
+
+    if (now.day == sent.day + 1 &&
+        now.month == sent.month &&
+        now.year == sent.year) {
+      return 'أمس في $formattedTime';
+    }
+
+    if (now.day - 6 < sent.day &&
+        now.month == sent.month &&
+        now.year == sent.year) {
+      return '${_getWeekArabic(sent.weekday)} في $formattedTime';
+    }
+
+    return now.year == sent.year
+        ? '${sent.day} ${_getMonthArabic(sent)} في $formattedTime'
+        : '${sent.day} ${_getMonthArabic(sent)} ${sent.year} في $formattedTime';
+  }
+
+  // Get Arabic last message time (used in chat user card)
+  static String getLastMessageTimeArabic(
+      {required String time, bool showYear = false}) {
+    final DateTime sent = DateTime.fromMillisecondsSinceEpoch(int.parse(time));
+    final DateTime now = DateTime.now();
+
+    if (now.day == sent.day &&
+        now.month == sent.month &&
+        now.year == sent.year) {
+      return getFormattedTimeArabic(time: time);
+    }
+
+    return showYear
+        ? '${sent.day} ${_getMonthArabic(sent)} ${sent.year}'
+        : '${sent.day} ${_getMonthArabic(sent)}';
+  }
+
+  // Get Arabic formatted last active time of user in chat screen
+  static String getLastActiveTimeArabic({required String lastActive}) {
+    final int i = int.tryParse(lastActive) ?? -1;
+
+    if (i == -1) return 'آخر ظهور غير متاح';
+
+    DateTime time = DateTime.fromMillisecondsSinceEpoch(i);
+    DateTime now = DateTime.now();
+
+    String formattedTime = getFormattedTimeArabic(time: lastActive);
+
+    if (time.day == now.day &&
+        time.month == now.month &&
+        time.year == time.year) {
+      return 'آخر ظهور اليوم في $formattedTime';
+    }
+
+    if ((now.difference(time).inHours / 24).round() == 1) {
+      return 'آخر ظهور أمس في $formattedTime';
+    }
+
+    String month = _getMonthArabic(time);
+    return 'آخر ظهور في ${time.day} $month في $formattedTime';
+  }
+
+  // Get Arabic month name from DateTime
+  static String _getMonthArabic(DateTime date) {
+    switch (date.month) {
+      case 1:
+        return 'يناير';
+      case 2:
+        return 'فبراير';
+      case 3:
+        return 'مارس';
+      case 4:
+        return 'أبريل';
+      case 5:
+        return 'مايو';
+      case 6:
+        return 'يونيو';
+      case 7:
+        return 'يوليو';
+      case 8:
+        return 'أغسطس';
+      case 9:
+        return 'سبتمبر';
+      case 10:
+        return 'أكتوبر';
+      case 11:
+        return 'نوفمبر';
+      case 12:
+        return 'ديسمبر';
+    }
+    return 'غير متاح';
+  }
+
+  // Get Arabic day name from weekday number
+  static String _getWeekArabic(int day) {
+    switch (day) {
+      case 1:
+        return 'الاثنين';
+      case 2:
+        return 'الثلاثاء';
+      case 3:
+        return 'الأربعاء';
+      case 4:
+        return 'الخميس';
+      case 5:
+        return 'الجمعة';
+      case 6:
+        return 'السبت';
+      case 7:
+        return 'الأحد';
+    }
+    return 'الاثنين';
+  }
+
+  // Get current datetime in Arabic format
+  static String getCurrentDateTimeArabic() {
+    final now = DateTime.now();
+    final weekday = _getWeekArabic(now.weekday);
+    final month = _getMonthArabic(now);
+    final time =
+        getFormattedTimeArabic(time: now.millisecondsSinceEpoch.toString());
+
+    return '$weekday، ${now.day} $month ${now.year} - $time';
+  }
+
+  // Get date only in Arabic format
+  static String getDateOnlyArabic({required String time}) {
+    final date = DateTime.fromMillisecondsSinceEpoch(int.parse(time));
+    final weekday = _getWeekArabic(date.weekday);
+    final month = _getMonthArabic(date);
+
+    return '$weekday، ${date.day} $month ${date.year}';
+  }
 }
