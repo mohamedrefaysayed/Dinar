@@ -27,10 +27,10 @@ class _SplashViewBlocListenerState extends State<SplashViewBlocListener> {
         }
         if (state is NavigateToNavBarView) {
           if (role == 0) {
-            context.showMessageSnackBar(
-              message:
-                  "اعزاءنا مشركتين تطبيق دينار  التوصيل لمناطق الكرخ فقط. قريباً سيتم شمول كل مناطق بغداد الحبيبة",
-            );
+            // context.showMessageSnackBar(
+            //   message:
+            //       "اعزاءنا مشركتين تطبيق دينار  التوصيل لمناطق الكرخ فقط. قريباً سيتم شمول كل مناطق بغداد الحبيبة",
+            // );
             Navigator.pushReplacementNamed(context, BottomNavBarView.id);
           } else {
             Navigator.pushReplacementNamed(context, BottomNavBarViewDelevry.id);

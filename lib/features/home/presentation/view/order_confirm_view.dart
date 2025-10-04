@@ -303,7 +303,7 @@ class _OrderConfirmViewState extends State<OrderConfirmView> {
                           }
                           return AppDefaultButton(
                             onPressed: () async {
-                              OrderCubit.pickedTime = OrderCubit.initialTime;
+                              // OrderCubit.pickedTime = OrderCubit.initialTime;
                               if (OrderCubit.markerPosition != null) {
                                 if (OrderCubit.pickedTime != null &&
                                     context
