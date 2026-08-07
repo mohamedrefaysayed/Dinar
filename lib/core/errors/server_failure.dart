@@ -11,11 +11,12 @@ class ServerFailure {
   }) {
     if (statusCode == 400 ||
         statusCode == 401 ||
-        statusCode == 403) {
+        statusCode == 403 ||
+        statusCode == 422) {
       return ServerFailure(
-          errMessage: (response['message'] is String)
-              ? response['message']
-              : response['message'][0]);
+        errMessage: _readErrorMessage(response) ??
+            'Oops unexpected error occurred, Please try again',
+      );
     }else if (statusCode == 500){
       return ServerFailure(errMessage: 'Internal Server Error');
     } else if (statusCode == 404) {
@@ -25,6 +26,34 @@ class ServerFailure {
         errMessage: 'Oops unexpected error occurred, Please try again',
       );
     }
+  }
+
+  ///pull a readable message out of an error body.
+  ///the backend answers with 'message' ({"message":"Unauthenticated"}),
+  ///with 'error' ({"error":"كود التفعيل خاطيء"}) or with laravel's validation
+  ///bag ({"errors":{"phone":["..."]}}), and old code assumed 'message' always
+  ///existed, which turned a wrong verification code into a raw dart error
+  static String? _readErrorMessage(dynamic response) {
+    if (response is String) {
+      return response.trim().isEmpty ? null : response;
+    }
+    if (response is! Map) return null;
+
+    for (final String key in const ['message', 'error', 'msg']) {
+      final dynamic value = response[key];
+      if (value is String && value.trim().isNotEmpty) return value;
+      if (value is List && value.isNotEmpty) return value.first.toString();
+    }
+
+    final dynamic errors = response['errors'];
+    if (errors is Map && errors.isNotEmpty) {
+      final dynamic first = errors.values.first;
+      if (first is List && first.isNotEmpty) return first.first.toString();
+      if (first is String && first.trim().isNotEmpty) return first;
+    }
+    if (errors is List && errors.isNotEmpty) return errors.first.toString();
+
+    return null;
   }
 
   factory ServerFailure.fromDioException({
@@ -60,8 +89,8 @@ class ServerFailure {
       //the error have a response
       case DioExceptionType.badResponse:
         return ServerFailure._badResponse(
-          statusCode: dioException.response!.statusCode!,
-          response: dioException.response!.data,
+          statusCode: dioException.response?.statusCode ?? 0,
+          response: dioException.response?.data,
         );
       //there is a security or privacy issues
       case DioExceptionType.badCertificate:

@@ -189,7 +189,7 @@ class _WholeSubCategoryViewState extends State<WholeSubCategoryView>
                                   decoration: BoxDecoration(
                                     image: DecorationImage(
                                       image: NetworkImage(
-                                          "${appDomain.replaceAll("index.php/api", "storage")}${value.image!}"),
+                                          buildImageUrl(value.image)),
                                       fit: BoxFit.fill,
                                     ),
                                   ),

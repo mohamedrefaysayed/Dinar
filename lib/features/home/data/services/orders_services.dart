@@ -109,8 +109,23 @@ class OrdersServices implements OrdersRepo {
         body: sendOrderModel.toJson(),
       );
 
+      final dynamic rawOrders = data['orders'] ?? data['order'];
+      final Map<String, dynamic>? rawOrder = rawOrders is List
+          ? rawOrders.isNotEmpty && rawOrders.first is Map<String, dynamic>
+              ? rawOrders.first as Map<String, dynamic>
+              : null
+          : rawOrders is Map<String, dynamic>
+              ? rawOrders
+              : null;
+
+      if (rawOrder == null) {
+        return left(
+          ServerFailure(errMessage: 'Unexpected order response'),
+        );
+      }
+
       return right(
-        DinarOrder.fromJson(data['orders'][0]),
+        DinarOrder.fromJson(rawOrder),
       );
     } on DioException catch (error) {
       return left(

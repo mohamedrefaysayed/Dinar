@@ -34,6 +34,7 @@ class _OrderConfirmViewState extends State<OrderConfirmView> {
   @override
   void initState() {
     OrderCubit.initialTime = context.read<OrderCubit>().add24Hours();
+    OrderCubit.pickedTime = OrderCubit.initialTime;
     context.read<LocationCubit>().getCurrentLocation(context: context);
 
     super.initState();
@@ -48,9 +49,9 @@ class _OrderConfirmViewState extends State<OrderConfirmView> {
       body: RefreshIndicator(onRefresh: () async {
         await context.read<CartCubit>().getAllItems();
         context.read<LocationCubit>().getCurrentLocation(context: context);
-        OrderCubit.pickedTime = null;
         OrderCubit.initialTime = DateTime.now();
         OrderCubit.initialTime = context.read<OrderCubit>().add24Hours();
+        OrderCubit.pickedTime = OrderCubit.initialTime;
 
         context.read<OrderCubit>().emit(OrderInitial());
       }, child: BlocBuilder<OrderCubit, OrderState>(
@@ -79,7 +80,9 @@ class _OrderConfirmViewState extends State<OrderConfirmView> {
                         onTap: () async {
                           DateTime? date = await showDatePicker(
                             context: context,
-                            firstDate: context.read<OrderCubit>().add24Hours(),
+                            firstDate:
+                                context.read<OrderCubit>().minimumDeliveryTime(),
+                            initialDate: OrderCubit.initialTime,
                             lastDate: OrderCubit.initialTime!
                                 .add(const Duration(days: 9)),
                           );
@@ -303,13 +306,14 @@ class _OrderConfirmViewState extends State<OrderConfirmView> {
                           }
                           return AppDefaultButton(
                             onPressed: () async {
-                              // OrderCubit.pickedTime = OrderCubit.initialTime;
+                              final DateTime? selectedTime =
+                                  OrderCubit.pickedTime ?? OrderCubit.initialTime;
                               if (OrderCubit.markerPosition != null) {
-                                if (OrderCubit.pickedTime != null &&
+                                if (selectedTime != null &&
                                     context
                                         .read<OrderCubit>()
                                         .isTimeGreaterBy24Hour(
-                                          OrderCubit.pickedTime!,
+                                          selectedTime,
                                         )) {
                                   await context.read<OrderCubit>().storeOrder(
                                         status: 1,

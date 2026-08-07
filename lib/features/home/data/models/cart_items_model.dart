@@ -1,3 +1,5 @@
+import 'package:dinar_store/core/utils/json_parse.dart';
+
 class CartItemsModel {
   List<CartItem>? cart;
   String? deliveryFees;
@@ -9,15 +11,35 @@ class CartItemsModel {
     this.minOrder,
   });
 
+  ///'cart' is force unwrapped by every caller (`cartItems.cart!` in
+  ///CartCubit.getAllItems/deleteItem, `cartItemsModel!.cart!.isNotEmpty` in
+  ///cart_view), so an omitted key has to degrade to an empty list rather than
+  ///null. a single object is accepted too: forEach on a map passes two
+  ///arguments to a one argument closure and throws.
+  ///
+  ///'delivery_fees' is force unwrapped as well (`cartItems.deliveryFees!`) and
+  ///is posted back to the api as an order field, so it falls back to '0'
+  ///instead of '' - '' would both render as an empty price and be rejected by
+  ///the numeric column on POST /orders.
   CartItemsModel.fromJson(Map<String, dynamic> json) {
-    if (json['cart'] != null) {
+    final dynamic rawCart = json['cart'];
+    if (rawCart is List) {
+      cart = rawCart
+          .whereType<Map<String, dynamic>>()
+          .map(CartItem.fromJson)
+          .toList();
+    } else if (rawCart is Map<String, dynamic>) {
+      cart = <CartItem>[CartItem.fromJson(rawCart)];
+    } else {
       cart = <CartItem>[];
-      json['cart'].forEach((v) {
-        cart!.add(CartItem.fromJson(v));
-      });
     }
-    deliveryFees = json['delivery_fees'];
-    minOrder = json['min_order'];
+
+    deliveryFees = asString(json['delivery_fees'], fallback: '0');
+
+    ///left nullable on purpose: cart_view reads it as
+    ///`int.parse(minOrder ?? "400000")`, so a null selects the 400000 default
+    ///while an empty string would throw a FormatException on checkout
+    minOrder = asStringOrNull(json['min_order']);
   }
 
   Map<String, dynamic> toJson() {
@@ -72,23 +94,53 @@ class CartItem {
     required this.isRetailed,
   });
 
+  ///id/product_id/unit_id/quantity/price/unit_type are all force unwrapped
+  ///downstream - `cartItem.id!` when deleting a row, and
+  ///`productId!/unitId!/quantity!/price!/unitType!` when the cart is turned
+  ///into order details - so they default instead of staying null.
+  ///
+  ///defaulting product_id/unit_id does not break the "was a match found"
+  ///check in CartCubit.summedItemsFunc (`existingItem.productId != null`):
+  ///that sentinel is built by the CartItem() constructor, not by fromJson, so
+  ///it still carries null and is still distinguishable from a parsed row.
+  ///
+  ///prices are declared int here while the api sends them as "1500.00" style
+  ///strings; asInt parses through double and truncates rather than throwing
+  ///"type 'String' is not a subtype of type 'int'". the declared type cannot
+  ///change without breaking the callers that pass price! into an int field.
   CartItem.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    productId = json['product_id'];
-    userId = json['user_id'];
-    unitId = json['unit_id'];
-    quantity = json['quantity'];
-    price = json['price'];
-    status = json['status'];
-    deletedAt = json['deleted_at'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
-    isRequired = json['is_required'];
-    refCartId = json['ref_cart_id'];
-    unitType = json['unit_type'];
+    id = asInt(json['id']);
+    productId = asInt(json['product_id']);
+    userId = asIntOrNull(json['user_id']);
+    unitId = asInt(json['unit_id']);
+    quantity = asInt(json['quantity']);
+    price = asInt(json['price']);
+    status = asIntOrNull(json['status']);
+
+    ///null means "not deleted", so this one keeps its null
+    deletedAt = asStringOrNull(json['deleted_at']);
+    createdAt = asStringOrNull(json['created_at']);
+    updatedAt = asStringOrNull(json['updated_at']);
+
+    ///cart_item_row branches on `isRequired == 0` to decide whether the row
+    ///can be deleted. 0 is the api's value for a normal, user added line, so a
+    ///missing key has to read as 0 - falling through to the "required" branch
+    ///would hide the delete button on every row in the cart
+    isRequired = asInt(json['is_required']);
+
+    ///null here means "this line was not pulled in by another product"
+    refCartId = asIntOrNull(json['ref_cart_id']);
+    unitType = asString(json['unit_type']);
+
+    ///kept nullable: CartCubit reads `element.product?.discount ?? 0`.
+    ///the type guard also covers the api sending an id or a list here instead
+    ///of an object, which would throw inside fromJson
+    final dynamic rawProduct = json['product'];
     product =
-        json['product'] != null ? Product.fromJson(json['product']) : null;
-    unit = json['unit'] != null ? Unit.fromJson(json['unit']) : null;
+        rawProduct is Map<String, dynamic> ? Product.fromJson(rawProduct) : null;
+
+    final dynamic rawUnit = json['unit'];
+    unit = rawUnit is Map<String, dynamic> ? Unit.fromJson(rawUnit) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -166,30 +218,46 @@ class Product {
       this.maxWholeQuantity,
       this.maxRetailQuantity});
 
+  ///cart_item_row prints `product!.productName!`, `product!.description!` and
+  ///feeds `product!.image!` to the network image, so the three text fields
+  ///default to ''. the current backend sends no 'description' at all.
+  ///
+  ///the prices are interpolated straight into the row and 'discount' is not
+  ///sent by this backend at all, so the money fields default to 0 - null
+  ///rendered as the literal text "null.د" and made the cart total unreadable
   Product.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    productName = json['product_name'];
-    description = json['description'];
-    image = json['image'];
-    wholeSalePrice = json['whole_sale_price'];
-    retailPrice = json['retail_price'];
-    vipPrice = json['vip_price'];
-    categoryId = json['category_id'];
-    companyId = json['company_id'];
-    unitGroupId = json['unit_group_id'];
-    wholeUnitId = json['whole_unit_id'];
-    retailUnitId = json['retail_unit_id'];
-    vipUnitId = json['vip_unit_id'];
-    discount = json['discount'];
-    status = json['status'];
-    deletedAt = json['deleted_at'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
-    minWholeQuantity = json['min_whole_quantity'];
-    minRetailQuantity = json['min_retail_quantity'];
-    minVipQuantity = json['min_vip_quantity'];
-    maxWholeQuantity = json['max_whole_quantity'];
-    maxRetailQuantity = json['max_retail_quantity'];
+    id = asIntOrNull(json['id']);
+    productName = asString(json['product_name'] ?? json['name']);
+    description = asString(json['description']);
+    image = asString(json['image']);
+    wholeSalePrice = asInt(json['whole_sale_price']);
+    retailPrice = asInt(json['retail_price']);
+    vipPrice = asInt(json['vip_price']);
+
+    ///foreign keys: nothing reads them off a cart line, and a fabricated 0
+    ///would look like a real row id, so these stay null when absent
+    categoryId = asIntOrNull(json['category_id']);
+    companyId = asIntOrNull(json['company_id']);
+    unitGroupId = asIntOrNull(json['unit_group_id']);
+    wholeUnitId = asIntOrNull(json['whole_unit_id']);
+    retailUnitId = asIntOrNull(json['retail_unit_id']);
+    vipUnitId = asIntOrNull(json['vip_unit_id']);
+    discount = asInt(json['discount']);
+    status = asIntOrNull(json['status']);
+
+    ///null means "not deleted"
+    deletedAt = asStringOrNull(json['deleted_at']);
+    createdAt = asStringOrNull(json['created_at']);
+    updatedAt = asStringOrNull(json['updated_at']);
+
+    ///order limits are not applied to an existing cart line; null keeps
+    ///"no limit configured" distinct from a limit of 0, which would read as
+    ///"nothing may be ordered"
+    minWholeQuantity = asIntOrNull(json['min_whole_quantity']);
+    minRetailQuantity = asIntOrNull(json['min_retail_quantity']);
+    minVipQuantity = asIntOrNull(json['min_vip_quantity']);
+    maxWholeQuantity = asIntOrNull(json['max_whole_quantity']);
+    maxRetailQuantity = asIntOrNull(json['max_retail_quantity']);
   }
 
   Map<String, dynamic> toJson() {
@@ -241,15 +309,20 @@ class Unit {
       this.createdAt,
       this.updatedAt});
 
+  ///`cartItem.unit!.unitName!` is printed on every cart row, so the name
+  ///defaults to ''. 'eq' arrives as "1.000000" from this backend, which is why
+  ///it is parsed rather than read straight into an int
   Unit.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    unitName = json['unit_name'];
-    eq = json['eq'];
-    unitGroupId = json['unit_group_id'];
-    status = json['status'];
-    deletedAt = json['deleted_at'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
+    id = asIntOrNull(json['id']);
+    unitName = asString(json['unit_name'] ?? json['name']);
+    eq = asIntOrNull(json['eq']);
+    unitGroupId = asIntOrNull(json['unit_group_id']);
+    status = asIntOrNull(json['status']);
+
+    ///null means "not deleted"
+    deletedAt = asStringOrNull(json['deleted_at']);
+    createdAt = asStringOrNull(json['created_at']);
+    updatedAt = asStringOrNull(json['updated_at']);
   }
 
   Map<String, dynamic> toJson() {

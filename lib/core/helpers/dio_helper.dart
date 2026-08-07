@@ -6,7 +6,7 @@ class DioHelper {
     if (dio == null) {
       _dio = Dio(
         BaseOptions(
-          baseUrl: appDomain,
+          baseUrl: normalizeAppDomain(appDomain),
         ),
       );
     } else {
@@ -15,6 +15,10 @@ class DioHelper {
   }
 
   late Dio _dio;
+
+  ///the configured client, so tests can assert the resolved base url and
+  ///swap in an adapter instead of reaching the network
+  Dio get dio => _dio;
 
   /// http get request
   Future<Map<String, dynamic>> getRequest({
@@ -25,12 +29,15 @@ class DioHelper {
   }) async {
     Map<String, dynamic>? headers;
 
-    if (token != null) {
+    if (token != null && token.isNotEmpty) {
       headers = {'Authorization': 'Bearer $token'};
     }
     Response response = await _dio.get(
       endPoint,
-      data: body ?? {},
+
+      ///never send an empty body on a GET. the server rejects any GET that
+      ///carries one with a 403, which used to fail every read in the app
+      data: body,
       queryParameters: queryParameters,
       options: Options(
         headers: headers,
@@ -48,12 +55,14 @@ class DioHelper {
   }) async {
     Map<String, dynamic>? headers;
 
-    if (token != null) {
+    if (token != null && token.isNotEmpty) {
       headers = {'Authorization': 'Bearer $token'};
     }
     await _dio.get(
       endPoint,
-      data: body ?? {},
+
+      ///see getRequest: a GET carrying a body is answered with a 403
+      data: body,
       queryParameters: queryParameters,
       options: Options(
         headers: headers,
@@ -72,7 +81,7 @@ class DioHelper {
       'Content-Type': 'application/json',
     };
 
-    if (token != null) {
+    if (token != null && token.isNotEmpty) {
       headers.addAll({'Authorization': 'Bearer $token'});
     }
 
@@ -98,7 +107,7 @@ class DioHelper {
       'Content-Type': 'application/json',
     };
 
-    if (token != null) {
+    if (token != null && token.isNotEmpty) {
       headers.addAll({'Authorization': 'Bearer $token'});
     }
 
@@ -124,7 +133,7 @@ class DioHelper {
       'Content-Type': 'application/json',
     };
 
-    if (token != null) {
+    if (token != null && token.isNotEmpty) {
       headers.addAll({'Authorization': 'Bearer $token'});
     }
 

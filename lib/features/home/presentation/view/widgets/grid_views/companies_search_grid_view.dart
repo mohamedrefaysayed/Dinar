@@ -35,8 +35,10 @@ class CompaniesSearchGridView extends StatelessWidget {
           physics: const NeverScrollableScrollPhysics(),
           itemCount: companies.length,
           itemBuilder: (context, index) => SearchItem(
-            imag: companies[index].logo!,
-            name: companies[index].companyName!,
+            ///a company without a logo comes back with the field absent,
+            ///which used to throw once per grid cell
+            imag: companies[index].logo ?? '',
+            name: companies[index].companyName ?? '',
             onTap: () {
               Map<String, dynamic> data = companies[index].toJson();
               Navigator.push(

@@ -5,12 +5,13 @@ import 'package:dinar_store/core/cubits/app_cubit/cubit/app_cubit_cubit.dart';
 import 'package:dinar_store/core/errors/server_failure.dart';
 import 'package:dinar_store/core/helpers/app_cache/cahch_helper.dart';
 import 'package:dinar_store/core/helpers/dio_helper.dart';
+import 'package:dinar_store/core/helpers/push_token.dart';
 import 'package:dinar_store/core/utils/constants.dart';
 import 'package:dinar_store/core/utils/genrall.dart';
+import 'package:dinar_store/core/utils/json_parse.dart';
 import 'package:dinar_store/features/auth/data/repos/log_in_repo.dart';
 import 'package:dinar_store/features/home/data/models/profile_model.dart';
 import 'package:dio/dio.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:developer';
@@ -59,15 +60,24 @@ class LogInServices implements LogInRepo {
     required String code,
   }) async {
     try {
-      fcmToken =  Platform.isIOS ? await FirebaseMessaging.instance.getAPNSToken() : await FirebaseMessaging.instance.getToken();
+      ///the fcm registration token on both platforms, see [PushToken].
+      ///this never throws and gives up quickly, so a device without push
+      ///still signs in
+      fcmToken = await PushToken.get();
+
       Map<String, dynamic> data = await _dioHelper.postRequest(
         body: {
+          ///the api documents this as 'fcm_token'; 'fcm' is kept so the
+          ///field keeps working if the backend still reads the old key
+          'fcm_token': fcmToken,
           'fcm': fcmToken,
+          'token_device': Platform.isIOS ? 'flutter-ios' : 'flutter-android',
           'verification_code': code,
         },
         endPoint: 'verify',
       );
-      role = data['user']['role'] ?? 0;
+      ///the api returns role as the string "0", not a number
+      role = asInt(data['user']?['role']);
       CahchHelper.saveData(key: 'role', value: role);
       log(data.toString());
       return right(data);

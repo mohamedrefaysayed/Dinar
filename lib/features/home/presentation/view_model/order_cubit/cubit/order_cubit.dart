@@ -115,7 +115,11 @@ class OrderCubit extends Cubit<OrderState> {
 
     List<Map<String, dynamic>> orderDetails = [];
 
-    String date = pickedTime.toString().substring(0, 18);
+    ///DateTime.toString() is 'yyyy-MM-dd HH:mm:ss.mmmmmm', and taking 18
+    ///characters cut the seconds in half ('2026-08-10 23:00:0'), which the
+    ///backend stored verbatim and DateTime.parse then rejected with
+    ///"Invalid date format" on every order row
+    final String date = _formatDeliveryTime(pickedTime);
 
     for (var cartItem in CartCubit.cartItemsModel!.cart!) {
       orderDetails.add(
@@ -131,6 +135,7 @@ class OrderCubit extends Cubit<OrderState> {
 
     sendOrderModel = SendOrderModel.fromJson(
       {
+        'status': status,
         'discount': discount.toInt(),
         'tax': tax.toInt(),
         'order_details': orderDetails,
@@ -215,24 +220,23 @@ class OrderCubit extends Cubit<OrderState> {
     });
   }
 
-  DateTime add24Hours() {
-    // TimeOfDay currentTime = TimeOfDay.now();
-    // DateTime currentDateTime = DateTime(
-    //     DateTime.now().year,
-    //     DateTime.now().month,
-    //     DateTime.now().day,
-    //     currentTime.hour,
-    //     currentTime.minute);
-    // DateTime newDateTime = currentDateTime.add(const Duration(hours: 24));
-    // newDateTime = newDateTime.add(const Duration(minutes: 30));
-    // TimeOfDay newTime =
-    //     TimeOfDay(hour: newDateTime.hour, minute: newDateTime.minute);
-    // return newTime;
+  ///'yyyy-MM-dd HH:mm:ss', the format the api stores and DateTime.parse reads
+  static String _formatDeliveryTime(DateTime? time) {
+    final DateTime value = time ?? DateTime.now();
+    String two(int n) => n.toString().padLeft(2, '0');
+    return '${value.year}-${two(value.month)}-${two(value.day)} '
+        '${two(value.hour)}:${two(value.minute)}:${two(value.second)}';
+  }
 
+  DateTime add24Hours() {
     DateTime baseTime = DateTime.now();
 
-    DateTime newDateTime = baseTime.add(const Duration(hours: 24, minutes: 30));
+    DateTime newDateTime = baseTime.add(const Duration(hours: 24, minutes: 10));
     return newDateTime;
+  }
+
+  DateTime minimumDeliveryTime() {
+    return DateTime.now().add(const Duration(hours: 24));
   }
 
   bool isTimeGreaterBy24Hour(DateTime timeToCompare) {
@@ -254,7 +258,7 @@ class OrderCubit extends Cubit<OrderState> {
 
     DateTime currentTime = DateTime.now();
     Duration difference = timeToCompare.difference(currentTime);
-    return difference.inHours >= 24;
+    return difference >= const Duration(hours: 24);
   }
 
 // Function to get status message

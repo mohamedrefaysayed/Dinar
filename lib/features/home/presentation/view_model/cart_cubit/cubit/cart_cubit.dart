@@ -182,14 +182,22 @@ class CartCubit extends Cubit<CartState> {
   }) async {
     totalPrice = 0;
     totalDiscount = 0;
-    for (var element in items) {
-      totalPrice = totalPrice + element.price!;
-      totalDiscount = totalDiscount +
-          (((element.price!) / 100) * element.product!.discount!) *
-              element.quantity!;
+    for (final CartItem element in items) {
+      final double price = (element.price ?? 0).toDouble();
+      final int quantity = element.quantity ?? 0;
+
+      ///the api sends no per product 'discount' field at all, so this was
+      ///null for every line and threw before the cart could ever be totalled
+      final double discount = (element.product?.discount ?? 0).toDouble();
+
+      totalPrice = totalPrice + price;
+      totalDiscount = totalDiscount + ((price / 100) * discount) * quantity;
     }
 
-    finalPrice = totalPrice + int.parse(deliveryFees) - totalDiscount;
+    ///delivery fees arrive as text and are not always a whole number,
+    ///int.parse threw on '0.00' and on an empty string
+    finalPrice =
+        totalPrice + (double.tryParse(deliveryFees) ?? 0) - totalDiscount;
   }
 
   Future<List<CartItem>> summedItemsFunc({

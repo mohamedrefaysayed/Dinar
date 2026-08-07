@@ -1,22 +1,57 @@
+import 'package:dinar_store/core/utils/json_parse.dart';
+
+///normalise a nested collection: the api sometimes drops the key entirely and
+///sometimes sends a single object where a list is declared. calling forEach on
+///a map passes (key, value) to a one argument closure and throws, so both
+///shapes collapse into the list the ui already force unwraps
+List<T> _asModelList<T>(
+  dynamic value,
+  T Function(Map<String, dynamic> json) fromJson,
+) {
+  if (value is List) {
+    return value.whereType<Map<String, dynamic>>().map(fromJson).toList();
+  }
+  if (value is Map<String, dynamic>) {
+    return <T>[fromJson(value)];
+  }
+  return <T>[];
+}
+
+///nested single objects arrive as a map, occasionally as a one element list,
+///and are omitted outright by the current backend
+Map<String, dynamic>? _asJsonObject(dynamic value) {
+  if (value is Map<String, dynamic>) return value;
+  if (value is List) {
+    for (final dynamic item in value) {
+      if (item is Map<String, dynamic>) return item;
+    }
+  }
+  return null;
+}
+
+///money fields are declared String but reach the ui through `double.parse`
+///(order_row.dart: `double.parse(order.total!)`). the api sends them as
+///"12.50", as 12.5 and sometimes not at all, so the raw text is kept whenever
+///it is parsable and degrades to '0' instead of throwing a FormatException
+String _asAmountString(dynamic value) {
+  final String raw = asString(value).trim();
+  if (double.tryParse(raw) != null) return raw;
+  return asDoubleOrNull(value)?.toString() ?? '0';
+}
+
 class OrdersModel {
   List<DinarOrder>? currentOrders;
   List<DinarOrder>? oldOrders;
 
   OrdersModel({this.currentOrders, this.oldOrders});
 
+  ///both buckets default to an empty list: orders_view and delevry_orders read
+  ///`ordersModel!.currentOrders!.isNotEmpty` / `oldOrders!.length` behind a
+  ///null check on the model only, so a missing key used to crash the screen
+  ///instead of showing the "no orders" state
   OrdersModel.fromJson(Map<String, dynamic> json) {
-    if (json['current_orders'] != null) {
-      currentOrders = <DinarOrder>[];
-      json['current_orders'].forEach((v) {
-        currentOrders!.add(DinarOrder.fromJson(v));
-      });
-    }
-    if (json['old_orders'] != null) {
-      oldOrders = <DinarOrder>[];
-      json['old_orders'].forEach((v) {
-        oldOrders!.add(DinarOrder.fromJson(v));
-      });
-    }
+    currentOrders = _asModelList(json['current_orders'], DinarOrder.fromJson);
+    oldOrders = _asModelList(json['old_orders'], DinarOrder.fromJson);
   }
 
   Map<String, dynamic> toJson() {
@@ -67,28 +102,34 @@ class DinarOrder {
       this.address,
       this.orderDetails});
 
+  ///`id`, `status`, `total` and `order_details` are force unwrapped by
+  ///order_row and whole_order_view, so they get real defaults here. `location`,
+  ///`address` and `delivery_time` stay nullable on purpose: those screens
+  ///branch on null to pick the fallback map position, the "لا يوجد عنوان"
+  ///label and whether to render the eta row at all
   DinarOrder.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    userId = json['user_id'];
-    orderDate = json['order_date'];
-    status = json['status'];
-    tax = json['tax'];
-    discount = json['discount'];
-    subTotal = json['sub_total'];
-    total = json['total'];
-    deletedAt = json['deleted_at'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
-    deliveryTime = json['delivery_time'];
-    paymentMethod = json['payment_method'];
-    location = json['location'];
-    address = json['address'];
-    if (json['order_details'] != null) {
-      orderDetails = <OrderDetails>[];
-      json['order_details'].forEach((v) {
-        orderDetails!.add(OrderDetails.fromJson(v));
-      });
-    }
+    id = asInt(json['id']);
+    userId = asIntOrNull(json['user_id']);
+    orderDate = asStringOrNull(json['order_date']);
+
+    ///`order.status!` and `int.parse(status!.toString())` run on every order
+    status = asInt(json['status']);
+    tax = _asAmountString(json['tax']);
+    discount = _asAmountString(json['discount']);
+    subTotal = _asAmountString(json['sub_total']);
+    total = _asAmountString(json['total']);
+
+    ///null means "not deleted", the ui must keep telling the two apart
+    deletedAt = asStringOrNull(json['deleted_at']);
+
+    ///timestamps feed DateTime.parse, where '' throws just as loudly as null
+    createdAt = asStringOrNull(json['created_at']);
+    updatedAt = asStringOrNull(json['updated_at']);
+    deliveryTime = asStringOrNull(json['delivery_time']);
+    paymentMethod = asString(json['payment_method']);
+    location = asStringOrNull(json['location']);
+    address = asStringOrNull(json['address']);
+    orderDetails = _asModelList(json['order_details'], OrderDetails.fromJson);
   }
 
   Map<String, dynamic> toJson() {
@@ -143,20 +184,29 @@ class OrderDetails {
       this.products,
       this.units});
 
+  ///`products` stays nullable because order_row and order_product_row branch on
+  ///`products != null` to decide whether to render the row at all. `units` is
+  ///the opposite case: order_product_row reads `units!.unitName` with no guard,
+  ///so an absent 'units' key now yields an empty Units instead of a crash
   OrderDetails.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    orderId = json['order_id'];
-    productId = json['product_id'];
-    unitId = json['unit_id'];
-    qty = json['qty'];
-    price = json['price'];
-    subTotal = json['sub_total'];
-    deletedAt = json['deleted_at'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
-    products =
-        json['products'] != null ? Products.fromJson(json['products']) : null;
-    units = json['units'] != null ? Units.fromJson(json['units']) : null;
+    id = asIntOrNull(json['id']);
+    orderId = asIntOrNull(json['order_id']);
+    productId = asIntOrNull(json['product_id']);
+    unitId = asIntOrNull(json['unit_id']);
+
+    ///printed straight into the product line, so it must not read "null"
+    qty = asInt(json['qty']);
+
+    ///prices come back as "12.50" as often as 12
+    price = asIntOrNull(json['price']);
+    subTotal = asIntOrNull(json['sub_total']);
+    deletedAt = asStringOrNull(json['deleted_at']);
+    createdAt = asStringOrNull(json['created_at']);
+    updatedAt = asStringOrNull(json['updated_at']);
+
+    final Map<String, dynamic>? rawProducts = _asJsonObject(json['products']);
+    products = rawProducts != null ? Products.fromJson(rawProducts) : null;
+    units = Units.fromJson(_asJsonObject(json['units']) ?? <String, dynamic>{});
   }
 
   Map<String, dynamic> toJson() {
@@ -231,30 +281,36 @@ class Products {
       this.maxWholeQuantity,
       this.maxRetailQuantity});
 
+  ///'image' keeps its null because order_product_row checks
+  ///`products!.image != null` before handing the url to the network image.
+  ///the current backend sends no 'discount' at all, so it settles on 0 - the
+  ///same value the cart already substitutes with `?? 0`
   Products.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    productName = json['product_name'];
-    description = json['description'];
-    image = json['image'];
-    wholeSalePrice = json['whole_sale_price'];
-    retailPrice = json['retail_price'];
-    vipPrice = json['vip_price'];
-    categoryId = json['category_id'];
-    companyId = json['company_id'];
-    unitGroupId = json['unit_group_id'];
-    wholeUnitId = json['whole_unit_id'];
-    retailUnitId = json['retail_unit_id'];
-    vipUnitId = json['vip_unit_id'];
-    discount = json['discount'];
-    status = json['status'];
-    deletedAt = json['deleted_at'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
-    minWholeQuantity = json['min_whole_quantity'];
-    minRetailQuantity = json['min_retail_quantity'];
-    minVipQuantity = json['min_vip_quantity'];
-    maxWholeQuantity = json['max_whole_quantity'];
-    maxRetailQuantity = json['max_retail_quantity'];
+    id = asIntOrNull(json['id']);
+    productName = asString(json['product_name'] ?? json['name']);
+    description = asString(json['description']);
+    image = asStringOrNull(json['image']);
+
+    ///prices arrive as "0.000000" strings from this backend
+    wholeSalePrice = asIntOrNull(json['whole_sale_price']);
+    retailPrice = asIntOrNull(json['retail_price']);
+    vipPrice = asIntOrNull(json['vip_price']);
+    categoryId = asIntOrNull(json['category_id']);
+    companyId = asIntOrNull(json['company_id']);
+    unitGroupId = asIntOrNull(json['unit_group_id']);
+    wholeUnitId = asIntOrNull(json['whole_unit_id']);
+    retailUnitId = asIntOrNull(json['retail_unit_id']);
+    vipUnitId = asIntOrNull(json['vip_unit_id']);
+    discount = asInt(json['discount']);
+    status = asIntOrNull(json['status']);
+    deletedAt = asStringOrNull(json['deleted_at']);
+    createdAt = asStringOrNull(json['created_at']);
+    updatedAt = asStringOrNull(json['updated_at']);
+    minWholeQuantity = asIntOrNull(json['min_whole_quantity']);
+    minRetailQuantity = asIntOrNull(json['min_retail_quantity']);
+    minVipQuantity = asIntOrNull(json['min_vip_quantity']);
+    maxWholeQuantity = asIntOrNull(json['max_whole_quantity']);
+    maxRetailQuantity = asIntOrNull(json['max_retail_quantity']);
   }
 
   Map<String, dynamic> toJson() {
@@ -306,15 +362,17 @@ class Units {
       this.createdAt,
       this.updatedAt});
 
+  ///`unit_name` lands in the product line of every order, so it defaults to ''
+  ///rather than printing "null" or throwing behind `units!.unitName`
   Units.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    unitName = json['unit_name'];
-    eq = json['eq'];
-    unitGroupId = json['unit_group_id'];
-    status = json['status'];
-    deletedAt = json['deleted_at'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
+    id = asIntOrNull(json['id']);
+    unitName = asString(json['unit_name'] ?? json['name']);
+    eq = asIntOrNull(json['eq']);
+    unitGroupId = asIntOrNull(json['unit_group_id']);
+    status = asIntOrNull(json['status']);
+    deletedAt = asStringOrNull(json['deleted_at']);
+    createdAt = asStringOrNull(json['created_at']);
+    updatedAt = asStringOrNull(json['updated_at']);
   }
 
   Map<String, dynamic> toJson() {

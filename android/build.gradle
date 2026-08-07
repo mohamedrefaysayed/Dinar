@@ -1,16 +1,5 @@
-buildscript {
-    ext.kotlin_version = '1.8.22' // Use a stable version compatible with the Android Gradle plugin
-    repositories {
-        google()
-        mavenCentral()
-    }
-
-    dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath 'com.android.tools.build:gradle:8.1.0' // Make sure this matches your Gradle version
-    }
-}
-
+// Plugin versions are declared in settings.gradle (pluginManagement / plugins block).
+// Keeping them in one place avoids AGP/Kotlin ending up on the classpath twice.
 allprojects {
     repositories {
         google()

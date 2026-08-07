@@ -3,7 +3,7 @@ description: "A new Flutter project."
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.0.18+22
+version: 1.0.19+24
 
 environment:
   sdk: '>=3.2.2 <4.0.0'
@@ -54,12 +54,23 @@ dev_dependencies:
     sdk: flutter
 
   flutter_lints: ^2.0.0
+  flutter_launcher_icons: ^0.14.4
 
+# regenerate with: dart run flutter_launcher_icons
+#
+# android is intentionally false: its launcher icons are already this artwork
+# and it has no adaptive icon, so regenerating would introduce one and change
+# how the icon looks on android 8+. ios is the platform that was still
+# shipping the retired green logo.
 flutter_launcher_icons:
   image_path: "assets/images/dinar_logo.png"
-  android: true
+  android: false
   ios: true
-  adaptive_icon_background: "#00784a"
+
+  # the app store rejects an icon with an alpha channel, and the source
+  # artwork is transparent, so it is flattened onto white
+  remove_alpha_ios: true
+  background_color_ios: "#FFFFFF"
 
 
 flutter:

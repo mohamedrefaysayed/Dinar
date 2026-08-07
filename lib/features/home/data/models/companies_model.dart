@@ -1,14 +1,26 @@
+import 'package:dinar_store/core/utils/json_parse.dart';
+
 class CompaniesModel {
   List<Companies>? companies;
 
   CompaniesModel({this.companies});
 
+  ///`companiesModel.companies!` is force unwrapped by the home grid, the all
+  ///companies screen and the search cubit, so the list is always materialised
+  ///here. the key may be absent on the current backend, and a single company
+  ///is occasionally sent as a bare object instead of a one element list - both
+  ///degrade to a (possibly empty) list rather than null
   CompaniesModel.fromJson(Map<String, dynamic> json) {
-    if (json['companies'] != null) {
+    final dynamic rawCompanies = json['companies'];
+    if (rawCompanies is List) {
+      companies = rawCompanies
+          .whereType<Map<String, dynamic>>()
+          .map(Companies.fromJson)
+          .toList();
+    } else if (rawCompanies is Map<String, dynamic>) {
+      companies = <Companies>[Companies.fromJson(rawCompanies)];
+    } else {
       companies = <Companies>[];
-      json['companies'].forEach((v) {
-        companies!.add(Companies.fromJson(v));
-      });
     }
   }
 
@@ -41,15 +53,22 @@ class Companies {
       this.createdAt,
       this.updatedAt});
 
+  ///the current backend omits 'description' on every company and 'logo' on
+  ///some of them, while the screens force unwrap both (`company.description!`,
+  ///`company.logo!` in all_company_container and companies_view). the text
+  ///fields therefore default to '' so each existing `!` stays safe, and 'id'
+  ///defaults to 0 because `company.id!` feeds the hero tag and the
+  ///getCompanyWithProduct request. 'status' and the timestamps are never
+  ///displayed, so they pass through nullable and keep toJson unchanged
   Companies.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    companyName = json['company_name'];
-    description = json['description'];
-    logo = json['logo'];
-    status = json['status']; // Parse status to int
-    deletedAt = json['deleted_at'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
+    id = asInt(json['id']);
+    companyName = asString(json['company_name'] ?? json['name']);
+    description = asString(json['description']);
+    logo = asString(json['logo'] ?? json['image']);
+    status = asIntOrNull(json['status']); // Parse status to int
+    deletedAt = asStringOrNull(json['deleted_at']);
+    createdAt = asStringOrNull(json['created_at']);
+    updatedAt = asStringOrNull(json['updated_at']);
   }
 
   Map<String, dynamic> toJson() {

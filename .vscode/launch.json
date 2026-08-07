@@ -1,0 +1,60 @@
+{
+  // Run/debug configurations for the Dinar app.
+  // Pick one from the Run and Debug panel (or press F5 for the default).
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Dinar (debug)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "flutterMode": "debug"
+    },
+    {
+      // hot reload is disabled in profile mode, use it to measure jank
+      "name": "Dinar (profile)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "flutterMode": "profile"
+    },
+    {
+      "name": "Dinar (release)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "flutterMode": "release"
+    },
+    {
+      // prompts for a device instead of using the last one, handy when both
+      // the ios simulator and an android emulator are booted
+      "name": "Dinar (pick a device)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "flutterMode": "debug",
+      "deviceId": "prompt"
+    },
+    {
+      "name": "Dinar (android emulator)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "flutterMode": "debug",
+      "deviceId": "emulator"
+    },
+    {
+      "name": "Dinar (ios simulator)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "flutterMode": "debug",
+      "deviceId": "ios"
+    },
+    {
+      "name": "Attach to running app",
+      "request": "attach",
+      "type": "dart"
+    }
+  ]
+}

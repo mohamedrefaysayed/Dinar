@@ -20,8 +20,16 @@ class CategoriesPgeView extends StatelessWidget {
       child: PageView(
         physics: const NeverScrollableScrollPhysics(),
         controller: pageController,
-        children: List.generate(categoriesModel.categories!.length, (index) {
-          Categories category = categoriesModel.categories![index];
+        children: List.generate(categoriesModel.categories?.length ?? 0,
+            (index) {
+          final Categories category = categoriesModel.categories![index];
+
+          ///this backend never nests 'sub_categories' in /categories, so the
+          ///old `category.subCategories!` threw and flutter replaced the page
+          ///with an error widget, which is what overflowed the row by ~100k px
+          final List<SubCategories> subCategories =
+              category.subCategories ?? const <SubCategories>[];
+
           return Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -29,7 +37,7 @@ class CategoriesPgeView extends StatelessWidget {
                 child: Padding(
                   padding: EdgeInsets.only(top: 40.h),
                   child: Text(
-                    category.categoryName!,
+                    category.categoryName ?? '',
                     style: TextStyles.textStyle16.copyWith(
                       fontWeight: FontWeight.w700,
                       fontSize: 16.w,
@@ -40,7 +48,7 @@ class CategoriesPgeView extends StatelessWidget {
               SizedBox(
                 height: 10.h,
               ),
-              category.subCategories!.isEmpty
+              subCategories.isEmpty
                   ? SizedBox(
                       height: 150.h,
                       child: Center(
@@ -55,11 +63,11 @@ class CategoriesPgeView extends StatelessWidget {
                         padding: EdgeInsets.symmetric(horizontal: 20.w),
                         child: ListView.builder(
                           shrinkWrap: true,
-                          itemCount: category.subCategories!.length,
+                          itemCount: subCategories.length,
                           itemBuilder: (context, index) {
                             return SubCategoryContainer(
-                              subCategory: category.subCategories![index],
-                              subCategories: category.subCategories!,
+                              subCategory: subCategories[index],
+                              subCategories: subCategories,
                             );
                           },
                         ),

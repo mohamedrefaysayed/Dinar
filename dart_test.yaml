@@ -1,0 +1,5 @@
+tags:
+  live:
+    # hits https://new.dinnari.com/api/ for real, so it is opt in:
+    #   flutter test --tags live --run-skipped
+    skip: "network test, run with: flutter test --tags live --run-skipped"

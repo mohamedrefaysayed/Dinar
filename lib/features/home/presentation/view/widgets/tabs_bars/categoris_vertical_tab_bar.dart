@@ -19,15 +19,21 @@ class CategoriesVerticalTabBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final List<Categories> categories = categoriesModel.categories ?? const [];
+
     return SizedBox(
       width: 100.w,
       child: ListView.separated(
-        itemCount: categoriesModel.categories!.length,
+        itemCount: categories.length,
         separatorBuilder: (context, index) {
           return SizedBox(height: 5.h);
         },
         itemBuilder: (context, index) {
-          Categories category = categoriesModel.categories![index];
+          final Categories category = categories[index];
+          final String? imageUrl = category.image?.trim();
+          final String categoryName = category.categoryName?.trim().isNotEmpty == true
+              ? category.categoryName!.trim()
+              : 'بدون اسم';
           return GestureDetector(
             onTap: () {
               context.read<CategoriesCubit>().changeCategory(
@@ -58,7 +64,7 @@ class CategoriesVerticalTabBar extends StatelessWidget {
                           child: MyCachedNetworkImage(
                             height: 35.w,
                             width: 35.w,
-                            url: category.image!,
+                            url: imageUrl ?? '',
                             errorIcon: Icon(
                               Icons.home_work_rounded,
                               size: 30.w,
@@ -71,7 +77,7 @@ class CategoriesVerticalTabBar extends StatelessWidget {
                           height: 10.h,
                         ),
                         Text(
-                          category.categoryName!,
+                          categoryName,
                           style: TextStyles.textStyle12
                               .copyWith(fontWeight: FontWeight.w400),
                           overflow: TextOverflow.ellipsis,

@@ -26,6 +26,33 @@ class OrderRow extends StatelessWidget {
   final bool isInOld;
   final bool isDelivery;
 
+  DateTime? _parseOrderDate(String? value) {
+    final String raw = value?.trim() ?? '';
+    if (raw.isEmpty) return null;
+
+    final DateTime? parsed = DateTime.tryParse(raw);
+    if (parsed != null) return parsed;
+
+    final Match? shortSeconds =
+        RegExp(r'^(\d{4}-\d{2}-\d{2}[ T]\d{2}:\d{2}:)(\d)$')
+            .firstMatch(raw);
+    if (shortSeconds != null) {
+      return DateTime.tryParse(
+        '${shortSeconds.group(1)}0${shortSeconds.group(2)}',
+      );
+    }
+
+    return null;
+  }
+
+  ///the delivery time of an order, or null when it is missing or unreadable.
+  ///orders placed before the send format was zero padded are stored as
+  ///'2026-08-10 23:00:0', so the seconds are repaired rather than dropping
+  ///the time from the row entirely
+  DateTime? get _deliveryTime {
+    return _parseOrderDate(order.deliveryTime);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -41,11 +68,12 @@ class OrderRow extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              if (order.deliveryTime != null)
+              ///orders placed before the delivery time was formatted properly
+              ///are stored as '2026-08-10 23:00:0', which DateTime.parse
+              ///rejects outright. tolerate them instead of failing the row
+              if (_deliveryTime != null)
                 Text(MyTimeDate.getMessageTimeArabic(
-                    time: DateTime.parse(order.deliveryTime!)
-                        .millisecondsSinceEpoch
-                        .toString())),
+                    time: _deliveryTime!.millisecondsSinceEpoch.toString())),
               SizedBox(
                 height: 5.h,
               ),
@@ -94,30 +122,31 @@ class OrderRow extends StatelessWidget {
                     SizedBox(
                       height: 5.h,
                     ),
-                    Text(
-                      "تم الطلب : ${MyTimeDate.getMessageTime(
-                        context: context,
-                        time: DateTime.parse(order.createdAt!)
-                            .toLocal()
-                            .millisecondsSinceEpoch
-                            .toString(),
-                      )}",
-                      style: TextStyles.textStyle16.copyWith(
-                        fontWeight: FontWeight.w600,
-                      ),
-                      textDirection: TextDirection.rtl,
-                    ),
-                    SizedBox(
-                      height: 10.h,
-                    ),
-                    if (order.deliveryTime != null) ...[
+                    if (_parseOrderDate(order.createdAt) != null)
                       Text(
-                        "يصل : ${MyTimeDate.getMessageTime(
+                        "تم الطلب : ${MyTimeDate.getMessageTime(
                           context: context,
-                          time: DateTime.parse(order.deliveryTime!)
+                          time: _parseOrderDate(order.createdAt)!
                               .toLocal()
                               .millisecondsSinceEpoch
                               .toString(),
+                        )}",
+                        style: TextStyles.textStyle16.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
+                        textDirection: TextDirection.rtl,
+                      ),
+                    SizedBox(
+                      height: 10.h,
+                    ),
+                    if (_parseOrderDate(order.deliveryTime) != null) ...[
+                      Text(
+                        "يصل : ${MyTimeDate.getMessageTime(
+                          context: context,
+                          time: _parseOrderDate(order.deliveryTime)!
+                            .toLocal()
+                            .millisecondsSinceEpoch
+                            .toString(),
                         )}",
                         style: TextStyles.textStyle16.copyWith(
                           fontWeight: FontWeight.w700,

@@ -1,6 +1,7 @@
 // ignore_for_file: depend_on_referenced_packages
 
 import 'package:bloc/bloc.dart';
+import 'package:dinar_store/core/cubits/app_cubit/cubit/app_cubit_cubit.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dinar_store/core/errors/server_failure.dart';
 import 'package:dinar_store/features/home/data/models/categories_model.dart';
@@ -24,7 +25,7 @@ class CategoriesCubit extends Cubit<CategoriesState> {
   getAllCategories() async {
     emit(CategoriesLoading());
     Either<ServerFailure, CategoriesModel> result =
-        await _categoriesServices.getAllCategories(token: "AppCubit.token!");
+        await _categoriesServices.getAllCategories(token: AppCubit.token ?? '');
 
     result.fold(
       //error

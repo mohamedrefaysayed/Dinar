@@ -1,14 +1,23 @@
+import 'package:dinar_store/core/utils/json_parse.dart';
+
 class ProfileModel {
   List<User>? user;
 
   ProfileModel({this.user});
 
+  ///'user' arrives as a single object from /login, /verify and /get-user, but
+  ///older builds of the api wrapped it in a list. calling forEach on a map
+  ///passes (key, value) to a one argument closure and throws, so both shapes
+  ///are normalised into the list the ui already expects
   ProfileModel.fromJson(Map<String, dynamic> json) {
-    if (json['user'] != null) {
-      user = <User>[];
-      json['user'].forEach((v) {
-        user!.add(User.fromJson(v));
-      });
+    final dynamic rawUser = json['user'];
+    if (rawUser is List) {
+      user = rawUser
+          .whereType<Map<String, dynamic>>()
+          .map(User.fromJson)
+          .toList();
+    } else if (rawUser is Map<String, dynamic>) {
+      user = <User>[User.fromJson(rawUser)];
     }
   }
 
@@ -55,20 +64,23 @@ class User {
   });
 
   User.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    name = json['name'];
-    email = json['email'];
-    phone = json['phone'];
-    emailVerifiedAt = json['email_verified_at'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
-    countryCode = json['country_code'];
-    expireAt = json['expire_at'];
-    phoneVerified = json['phone_verified'];
-    tokenDevice = json['token_device'];
-    currentDeviceId = json['current_device_id'];
-    deletedAt = json['deleted_at'];
-    store = json['store'] != null ? Store.fromJson(json['store']) : null;
+    id = asIntOrNull(json['id']);
+    name = asStringOrNull(json['name']);
+    email = asStringOrNull(json['email']);
+    phone = asStringOrNull(json['phone']);
+    emailVerifiedAt = asStringOrNull(json['email_verified_at']);
+    createdAt = asStringOrNull(json['created_at']);
+    updatedAt = asStringOrNull(json['updated_at']);
+    countryCode = asStringOrNull(json['country_code']);
+    expireAt = asStringOrNull(json['expire_at']);
+
+    ///the api sends this as a bool, not the 1/0 this field was written for
+    phoneVerified = asIntOrNull(json['phone_verified']);
+    tokenDevice = asStringOrNull(json['token_device']);
+    currentDeviceId = asStringOrNull(json['current_device_id']);
+    deletedAt = asStringOrNull(json['deleted_at']);
+    final dynamic rawStore = json['store'];
+    store = rawStore is Map<String, dynamic> ? Store.fromJson(rawStore) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -125,19 +137,21 @@ class Store {
   });
 
   Store.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    ownerName = json['owner_name'];
-    storeName = json['store_name'];
-    district = json['district'];
-    address = json['address'];
-    phone = json['phone'];
-    lng = json['lng'];
-    lat = json['lat'];
-    userId = json['user_id'];
-    status = json['status'];
-    deletedAt = json['deleted_at'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
+    id = asIntOrNull(json['id']);
+    ownerName = asStringOrNull(json['owner_name']);
+    storeName = asStringOrNull(json['store_name']);
+    district = asStringOrNull(json['district']);
+    address = asStringOrNull(json['address']);
+    phone = asStringOrNull(json['phone']);
+
+    ///lat/lng come back as numbers here but as strings from /address
+    lng = asDoubleOrNull(json['lng']);
+    lat = asDoubleOrNull(json['lat']);
+    userId = asIntOrNull(json['user_id']);
+    status = asIntOrNull(json['status']);
+    deletedAt = asStringOrNull(json['deleted_at']);
+    createdAt = asStringOrNull(json['created_at']);
+    updatedAt = asStringOrNull(json['updated_at']);
   }
 
   Map<String, dynamic> toJson() {

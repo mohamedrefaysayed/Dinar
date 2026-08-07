@@ -1,3 +1,5 @@
+import 'package:dinar_store/core/utils/json_parse.dart';
+
 class SendOrderModel {
   int? status;
   int? discount;
@@ -24,22 +26,41 @@ class SendOrderModel {
     this.notes,
   });
 
+  ///this model is the *outbound* body of POST /orders: OrderCubit.storeOrder
+  ///builds a plain map, runs it through this constructor and posts toJson().
+  ///so the failure mode here is not a missing display field but a type
+  ///mismatch - 'delivery_fees' declared String? but sent as a number, or a
+  ///price arriving as "0.000000" - which used to throw
+  ///"type 'String' is not a subtype of type 'int'" while assembling the
+  ///request. every scalar now goes through the json_parse helpers, the text
+  ///fields fall back to '' and the order lines to an empty list.
   SendOrderModel.fromJson(Map<String, dynamic> json) {
-    status = json['status'];
-    discount = json['discount'];
-    tax = json['tax'];
-    address = json['address'];
-    location = json['location'];
-    deliveryTime = json['delivery_time'];
-    paymentMethod = json['payment_method'];
-    deliveryFees = json['delivery_fees'];
-    notes = json['notes'];
-    if (json['order_details'] != null) {
-      orderDetails = <SendOrderDetails>[];
-      json['order_details'].forEach((v) {
-        orderDetails!.add(SendOrderDetails.fromJson(v));
-      });
-    }
+    ///left nullable on purpose: the caller never supplies 'status' and the
+    ///server assigns the initial order state. defaulting it to 0 would post
+    ///an explicit status and change how the order is created
+    status = asIntOrNull(json['status']);
+    discount = asInt(json['discount']);
+    tax = asInt(json['tax']);
+    address = asString(json['address']);
+    location = asString(json['location']);
+    deliveryTime = asString(json['delivery_time']);
+    paymentMethod = asString(json['payment_method']);
+    deliveryFees = asString(json['delivery_fees']);
+    notes = asString(json['notes']);
+
+    ///tolerate 'order_details' being absent, a single object instead of a
+    ///list, or holding Map<dynamic, dynamic> entries. the old
+    ///`json['order_details'].forEach` threw on all three
+    final dynamic rawOrderDetails = json['order_details'];
+    final List<dynamic> rawOrderLines = rawOrderDetails is List
+        ? rawOrderDetails
+        : rawOrderDetails is Map
+            ? <dynamic>[rawOrderDetails]
+            : const <dynamic>[];
+    orderDetails = rawOrderLines
+        .whereType<Map>()
+        .map((v) => SendOrderDetails.fromJson(Map<String, dynamic>.from(v)))
+        .toList();
   }
 
   Map<String, dynamic> toJson() {
@@ -76,12 +97,17 @@ class SendOrderDetails {
     this.unitType,
   });
 
+  ///one line of the outbound order. 'price' is declared int? but the api and
+  ///the cart both hand prices around as "0.000000" strings, so it is parsed
+  ///rather than cast. the ids stay nullable like every other identifier in
+  ///the models - a fabricated id of 0 would post a line for a product that
+  ///does not exist
   SendOrderDetails.fromJson(Map<String, dynamic> json) {
-    productId = json['product_id'];
-    unitId = json['unit_id'];
-    qty = json['qty'];
-    price = json['price'];
-    unitType = json['unit_type'];
+    productId = asIntOrNull(json['product_id']);
+    unitId = asIntOrNull(json['unit_id']);
+    qty = asInt(json['qty']);
+    price = asInt(json['price']);
+    unitType = asString(json['unit_type']);
   }
 
   Map<String, dynamic> toJson() {

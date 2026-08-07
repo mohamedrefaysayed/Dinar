@@ -1,3 +1,5 @@
+import 'package:dinar_store/core/utils/json_parse.dart';
+
 class CategoriesModel {
   List<Categories>? categories;
 
@@ -49,24 +51,32 @@ class Categories {
       this.updatedAt,
       this.subCategories});
 
+  ///the current backend omits 'description', 'sub_categories', 'level' and the
+  ///timestamps from /categories entirely. the screens force unwrap those
+  ///(`category.description!`, `category.subCategories!`) in a dozen places, so
+  ///the text fields default to '' and the children to an empty list here
+  ///instead of null. that keeps every existing `!` safe rather than leaving
+  ///a crash behind each one
   Categories.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    categoryName = json['category_name'];
-    description = json['description'];
-    image = json['image'];
-    level = json['level'];
-    parentId = json['parent_id'];
-    categorySpecificationId = json['category_specification_id'];
-    status = json['status'];
-    deletedAt = json['deleted_at'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
-    if (json['sub_categories'] != null) {
-      subCategories = <SubCategories>[];
-      json['sub_categories'].forEach((v) {
-        subCategories!.add(SubCategories.fromJson(v));
-      });
-    }
+    id = asIntOrNull(json['id']);
+    categoryName = asString(json['category_name'] ?? json['name']);
+    description = asString(json['description']);
+    image = asStringOrNull(json['image']);
+    level = asIntOrNull(json['level']);
+    parentId = asIntOrNull(json['parent_id']);
+    categorySpecificationId = asIntOrNull(json['category_specification_id']);
+    status = asIntOrNull(json['status']);
+    deletedAt = asStringOrNull(json['deleted_at']);
+    createdAt = asStringOrNull(json['created_at']);
+    updatedAt = asStringOrNull(json['updated_at']);
+
+    final dynamic rawSubCategories = json['sub_categories'];
+    subCategories = rawSubCategories is List
+        ? rawSubCategories
+            .whereType<Map<String, dynamic>>()
+            .map(SubCategories.fromJson)
+            .toList()
+        : <SubCategories>[];
   }
 
   Map<String, dynamic> toJson() {
@@ -115,18 +125,21 @@ class SubCategories {
       this.createdAt,
       this.updatedAt});
 
+  ///see Categories.fromJson: the text fields never come back null so the
+  ///`subCategory.description!` force unwraps across the sub category screens
+  ///cannot throw
   SubCategories.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    categoryName = json['category_name'];
-    description = json['description'];
-    image = json['image'];
-    level = json['level'];
-    parentId = json['parent_id'];
-    categorySpecificationId = json['category_specification_id'];
-    status = json['status'];
-    deletedAt = json['deleted_at'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
+    id = asIntOrNull(json['id']);
+    categoryName = asString(json['category_name'] ?? json['name']);
+    description = asString(json['description']);
+    image = asStringOrNull(json['image']);
+    level = asIntOrNull(json['level']);
+    parentId = asIntOrNull(json['parent_id']);
+    categorySpecificationId = asIntOrNull(json['category_specification_id']);
+    status = asIntOrNull(json['status']);
+    deletedAt = asStringOrNull(json['deleted_at']);
+    createdAt = asStringOrNull(json['created_at']);
+    updatedAt = asStringOrNull(json['updated_at']);
   }
 
   Map<String, dynamic> toJson() {

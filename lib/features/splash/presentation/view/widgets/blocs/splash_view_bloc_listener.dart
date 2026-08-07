@@ -2,6 +2,7 @@
 
 import 'package:dinar_store/core/utils/genrall.dart';
 import 'package:dinar_store/core/widgets/message_snack_bar.dart';
+import 'package:dinar_store/features/auth/presentation/view/login_data.dart';
 import 'package:dinar_store/features/auth/presentation/view/login_view.dart';
 import 'package:dinar_store/features/home/presentation/view/bottom_nav_view.dart';
 import 'package:dinar_store/features/home/presentation/view/bottom_nav_view_Delevry.dart';
@@ -24,6 +25,19 @@ class _SplashViewBlocListenerState extends State<SplashViewBlocListener> {
       listener: (context, state) {
         if (state is NavigateToLogInView) {
           Navigator.pushReplacementNamed(context, LogInView.id);
+        }
+        if (state is NavigateToLoginData) {
+          // Navigate to LoginData screen to complete missing profile information
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const LoginData(),
+            ),
+          );
+          // Show message to user
+          context.showMessageSnackBar(
+            message: "يرجى إكمال بيانات الملف الشخصي",
+          );
         }
         if (state is NavigateToNavBarView) {
           if (role == 0) {

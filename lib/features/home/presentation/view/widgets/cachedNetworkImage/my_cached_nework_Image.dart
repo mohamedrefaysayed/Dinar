@@ -29,9 +29,7 @@ class MyCachedNetworkImage extends StatelessWidget {
     return CachedNetworkImage(
       height: height,
       width: width,
-      // imageUrl: "http://just.sd/dinar/public/storage/$url",
-      imageUrl: "${appDomain.replaceAll("index.php/api", "storage")}$url",
-// "https://dinnari.com/public/index.php/api/"
+      imageUrl: buildImageUrl(url),
       fit: fit ?? BoxFit.fill,
       errorWidget: (context, url, error) {
         return errorIcon;
