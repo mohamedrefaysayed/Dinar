@@ -3,7 +3,7 @@ description: "A new Flutter project."
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.0.19+24
+version: 1.0.20+25
 
 environment:
   sdk: '>=3.2.2 <4.0.0'
@@ -47,6 +47,13 @@ dependencies:
   cloud_firestore: ^5.0.1
   open_file: ^3.5.10
   flutter_keyboard_visibility: ^6.0.0
+
+  # in-app network inspector (shake / long-press to open). only wired up in
+  # debug builds — see kDebugMode guards in main.dart and dio_helper.dart — so
+  # it never exposes tokens or payloads in a release build.
+  # pinned to 4.x: 5.x requires connectivity_plus ^6, which would force a major
+  # bump of a package the app relies on for its live internet checks
+  requests_inspector: ^4.2.0
 
 
 dev_dependencies:
