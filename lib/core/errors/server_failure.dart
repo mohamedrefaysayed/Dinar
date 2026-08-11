@@ -3,7 +3,13 @@ import 'package:dio/dio.dart';
 class ServerFailure {
   String errMessage;
 
-  ServerFailure({required this.errMessage});
+  ///the http status code behind the failure, when there is one (badResponse).
+  ///null for transport errors (timeouts, no connection) that never reached a
+  ///response. callers use it to tell an expired/rejected token (401/403) apart
+  ///from a merely incomplete profile
+  final int? statusCode;
+
+  ServerFailure({required this.errMessage, this.statusCode});
 
   factory ServerFailure._badResponse({
     required int statusCode,
@@ -16,14 +22,16 @@ class ServerFailure {
       return ServerFailure(
         errMessage: _readErrorMessage(response) ??
             'Oops unexpected error occurred, Please try again',
+        statusCode: statusCode,
       );
     }else if (statusCode == 500){
-      return ServerFailure(errMessage: 'Internal Server Error');
+      return ServerFailure(errMessage: 'Internal Server Error', statusCode: statusCode);
     } else if (statusCode == 404) {
-      return ServerFailure(errMessage: '404 Page Not Found');
+      return ServerFailure(errMessage: '404 Page Not Found', statusCode: statusCode);
     } else {
       return ServerFailure(
         errMessage: 'Oops unexpected error occurred, Please try again',
+        statusCode: statusCode,
       );
     }
   }

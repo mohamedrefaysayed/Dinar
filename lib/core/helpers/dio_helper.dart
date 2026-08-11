@@ -1,3 +1,4 @@
+import 'package:dinar_store/core/helpers/auth_interceptor.dart';
 import 'package:dinar_store/core/utils/constants.dart';
 import 'package:dio/dio.dart';
 
@@ -9,7 +10,12 @@ class DioHelper {
           baseUrl: normalizeAppDomain(appDomain),
         ),
       );
+
+      ///a token the backend rejects (expired, revoked, or issued by the retired
+      ///domain) should sign the user out instead of failing every later call
+      _dio.interceptors.add(AuthInterceptor());
     } else {
+      ///injected client (tests): left untouched so it stays hermetic
       _dio = dio;
     }
   }
