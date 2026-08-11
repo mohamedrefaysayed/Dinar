@@ -43,7 +43,10 @@ class ProfileCubit extends Cubit<ProfileState> {
       //error
       (serverFailure) {
         emit(
-          ProfileFaliuer(errMessage: serverFailure.errMessage),
+          ProfileFaliuer(
+            errMessage: serverFailure.errMessage,
+            statusCode: serverFailure.statusCode,
+          ),
         );
       },
       //success

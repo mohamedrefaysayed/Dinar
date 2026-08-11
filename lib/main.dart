@@ -51,6 +51,7 @@ class MyApp extends StatelessWidget {
         child: Directionality(
           textDirection: TextDirection.rtl,
           child: MaterialApp(
+            navigatorKey: navigatorKey,
             debugShowCheckedModeBanner: false,
             title: 'Dinar',
             theme: ThemeData(

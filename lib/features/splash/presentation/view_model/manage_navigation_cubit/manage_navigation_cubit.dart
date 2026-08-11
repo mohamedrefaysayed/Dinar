@@ -45,8 +45,30 @@ class ManageNavigationCubit extends Cubit<ManageNavigationState> {
       // Show loading state
       emit(ProfileValidationLoading());
 
-      // Fetch profile data
+      // Fetch profile data with the stored token
       await context.read<ProfileCubit>().getProfile(context: context);
+
+      final ProfileState profileState = context.read<ProfileCubit>().state;
+
+      // The profile fetch failed, so we could not confirm the session. The
+      // usual cause after the api base url changed is a token that belongs to
+      // the retired backend: the new one answers /get-user with 401
+      // "Unauthenticated". Dropping the user on the store-registration form
+      // (NavigateToLoginData) only fails again on save, so re-authenticate
+      // instead. For a 401/403 we also wipe the dead token so the next launch
+      // starts clean, exactly like a brand new install.
+      if (profileState is ProfileFaliuer) {
+        if (_isAuthFailure(profileState.statusCode)) {
+          await _clearSession();
+        }
+        if (kDebugMode) {
+          print(
+              'Profile validation failed (status ${profileState.statusCode}): '
+              '${profileState.errMessage}. Routing to login.');
+        }
+        emit(NavigateToLogInView());
+        return;
+      }
 
       // Get the profile from the cubit
       final profileModel = ProfileCubit.profileModel;
@@ -68,8 +90,20 @@ class ManageNavigationCubit extends Cubit<ManageNavigationState> {
       if (kDebugMode) {
         print('Error validating profile: $e');
       }
-      // On error, navigate to login data to be safe
-      emit(NavigateToLoginData());
+      // Session could not be confirmed. Send the user through login rather than
+      // the registration form, which needs a valid token to save.
+      emit(NavigateToLogInView());
     }
+  }
+
+  ///a 401/403 means the backend rejected the stored token (expired, revoked, or
+  ///issued by the retired domain), not that the profile is incomplete
+  bool _isAuthFailure(int? statusCode) =>
+      statusCode == 401 || statusCode == 403;
+
+  ///drop the dead token so the app stops replaying it on every launch
+  Future<void> _clearSession() async {
+    await _secureStorage.delete(key: kSecureStorageKey);
+    AppCubit.token = null;
   }
 }
