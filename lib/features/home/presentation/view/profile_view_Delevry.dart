@@ -8,7 +8,7 @@ import 'package:dinar_store/features/home/presentation/view/widgets/dividers/gin
 import 'package:dinar_store/features/home/presentation/view/widgets/rows/profile_settings_row.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:url_launcher/url_launcher_string.dart';
+import 'package:dinar_store/core/functions/contact_support.dart';
 
 class ProfileViewDelevry extends StatefulWidget {
   const ProfileViewDelevry({super.key});
@@ -68,10 +68,7 @@ class _ProfileViewDelevryState extends State<ProfileViewDelevry>
             ProfileSettingsRow(
               title: 'الدعم',
               onTap: () async {
-                await launchUrlString(
-                  "sms:+9607869636020",
-                  mode: LaunchMode.externalApplication,
-                );
+                await contactSupport();
               },
               icon: Icons.support_agent_outlined,
               wDevider: true,
