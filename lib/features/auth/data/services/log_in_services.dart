@@ -134,6 +134,64 @@ class LogInServices implements LogInRepo {
   }
 
   @override
+  Future<Either<ServerFailure, Store>> updateProfile({
+    required String token,
+    String? ownerName,
+    String? storeName,
+    String? district,
+    String? address,
+    String? storePhone,
+    required double lat,
+    required double lng,
+  }) async {
+    try {
+      Map<String, dynamic> data = await _dioHelper.postRequest(
+        token: token,
+        endPoint: 'update-profile',
+        body: {
+          ///the store owner name doubles as the account name, matching the
+          ///backend's documented update-profile payload
+          if (ownerName != null) 'name': ownerName,
+          if (ownerName != null) 'owner_name': ownerName,
+          if (storeName != null) 'store_name': storeName,
+          if (district != null) 'district': district,
+          if (address != null) 'address': address,
+
+          ///the store number must be sent as 'store_phone'. sending it as
+          ///'phone' changes the user's login number instead of the store's
+          if (storePhone != null) 'store_phone': storePhone,
+          'lat': lat,
+          'lng': lng,
+        },
+      );
+
+      ///the backend rotates the auth token on this call. keeping the old one
+      ///makes every later request 401, which signed the user out the moment
+      ///they edited their data. persist the new token before anything else runs
+      final String? newToken = asStringOrNull(data['token']);
+      if (newToken != null && newToken.isNotEmpty) {
+        await storeTokenInSecureStorage(token: newToken);
+      }
+
+      ///the response carries the updated user with the store nested inside it
+      final ProfileModel profileModel = ProfileModel.fromJson(data);
+      Store? store;
+      if (profileModel.user != null && profileModel.user!.isNotEmpty) {
+        store = profileModel.user!.first.store;
+      }
+      return right(store ?? Store());
+    } on DioException catch (error) {
+      return left(
+        ServerFailure.fromDioException(dioException: error),
+      );
+    } catch (error) {
+      return left(
+        ServerFailure(errMessage: error.toString()),
+      );
+    }
+  }
+
+  @override
   Future<Either<ServerFailure, void>> deleteAccount() async {
     try {
       await _dioHelper.postRequest(

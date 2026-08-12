@@ -22,6 +22,20 @@ abstract class LogInRepo {
     required LatLng position,
     required String token,
   });
+  ///edit the store/profile via /update-profile. the backend rotates the auth
+  ///token on this call and returns the new one, so it must be persisted or
+  ///every later request 401s and the user is signed out right after saving
+  Future<Either<ServerFailure, Store>> updateProfile({
+    required String token,
+    String? ownerName,
+    String? storeName,
+    String? district,
+    String? address,
+    String? storePhone,
+    required double lat,
+    required double lng,
+  });
+
   Future<Either<ServerFailure, void>> deleteAccount();
 
   ///use flutter secure storage to store the token
