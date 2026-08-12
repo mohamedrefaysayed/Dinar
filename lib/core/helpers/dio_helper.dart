@@ -1,6 +1,7 @@
 import 'package:dinar_store/core/helpers/auth_interceptor.dart';
 import 'package:dinar_store/core/utils/constants.dart';
 import 'package:dio/dio.dart';
+import 'package:requests_inspector/requests_inspector.dart';
 
 class DioHelper {
   DioHelper({Dio? dio}) {
@@ -10,6 +11,13 @@ class DioHelper {
           baseUrl: normalizeAppDomain(appDomain),
         ),
       );
+
+      ///feed every request/response/error to the in-app inspector (shake or
+      ///long-press to open) when [kInspectorEnabled] — always in debug, and in
+      ///release only under --dart-define=INSPECTOR=true. off in store releases
+      if (kInspectorEnabled) {
+        _dio.interceptors.add(RequestsInspectorInterceptor());
+      }
 
       ///a token the backend rejects (expired, revoked, or issued by the retired
       ///domain) should sign the user out instead of failing every later call
@@ -101,6 +109,32 @@ class DioHelper {
     );
 
     return response.data;
+  }
+
+  ///http post request whose response body is discarded, for endpoints that
+  ///only signal success (e.g. agents/change_status) and may not return json
+  Future<void> postRequestWithoutReturn({
+    required Object body,
+    required String endPoint,
+    Map<String, dynamic>? queryParameters,
+    String? token,
+  }) async {
+    Map<String, dynamic> headers = {
+      'Content-Type': 'application/json',
+    };
+
+    if (token != null && token.isNotEmpty) {
+      headers.addAll({'Authorization': 'Bearer $token'});
+    }
+
+    await _dio.post(
+      endPoint,
+      data: body,
+      queryParameters: queryParameters,
+      options: Options(
+        headers: headers,
+      ),
+    );
   }
 
   ///http delete request

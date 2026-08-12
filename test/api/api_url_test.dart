@@ -66,7 +66,7 @@ const List<List<String>> kEndPoints = <List<String>>[
   <String>['GET', 'orders/9'],
   <String>['POST', 'orders/9'],
   <String>['POST', 'orders/get_agent_orders'],
-  <String>['GET', 'agents/change_status'],
+  <String>['POST', 'agents/change_status'],
 ];
 
 void main() {

@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:requests_inspector/requests_inspector.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,7 +27,17 @@ void main() async {
     //   enabled: !kReleaseMode,
     //   builder: (context) => const MyApp(), // Wrap your app
     // ),
-    const MyApp(),
+    //
+    ///wrap the app with the in-app network inspector (shake or long-press to
+    ///open) when [kInspectorEnabled]: always in debug, and in release only when
+    ///built with --dart-define=INSPECTOR=true. store releases run the app
+    ///untouched. its Dio side is wired in [DioHelper]
+    kInspectorEnabled
+        ? const RequestsInspector(
+            showInspectorOn: ShowInspectorOn.Both,
+            child: MyApp(),
+          )
+        : const MyApp(),
   );
 }
 

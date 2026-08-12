@@ -1,5 +1,14 @@
 import 'dart:ui';
 
+import 'package:flutter/foundation.dart';
+
+///whether the in-app network inspector is wired up. always on in debug builds;
+///in a release build only when compiled with --dart-define=INSPECTOR=true, so a
+///tester can be handed a signed, performant build that still captures requests.
+///normal store releases omit the flag and ship with no inspector
+const bool kInspectorEnabled =
+    kDebugMode || bool.fromEnvironment('INSPECTOR');
+
 const String kAppearanceKey = 'appearanceKey';
 
 const String kUserModelKey = 'userModelKey';
