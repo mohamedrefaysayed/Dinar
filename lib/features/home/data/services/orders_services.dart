@@ -173,11 +173,18 @@ class OrdersServices implements OrdersRepo {
     required int orderId,
   }) async {
     try {
-      await _dioHelper.getRequestWithoutReturn(
+      ///the api expects a POST here. it was sent as a GET carrying a body,
+      ///which the backend answers with a 403 (see DioHelper.getRequest), so
+      ///the agent status change never went through
+      await _dioHelper.postRequestWithoutReturn(
         token: token,
         endPoint: 'agents/change_status',
         body: {
           'status': status,
+
+          ///the api documents this as 'order_id'; 'id' is kept so the field
+          ///keeps working if the backend still reads the old key
+          'order_id': orderId,
           'id': orderId,
         },
       );

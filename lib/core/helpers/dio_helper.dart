@@ -111,6 +111,32 @@ class DioHelper {
     return response.data;
   }
 
+  ///http post request whose response body is discarded, for endpoints that
+  ///only signal success (e.g. agents/change_status) and may not return json
+  Future<void> postRequestWithoutReturn({
+    required Object body,
+    required String endPoint,
+    Map<String, dynamic>? queryParameters,
+    String? token,
+  }) async {
+    Map<String, dynamic> headers = {
+      'Content-Type': 'application/json',
+    };
+
+    if (token != null && token.isNotEmpty) {
+      headers.addAll({'Authorization': 'Bearer $token'});
+    }
+
+    await _dio.post(
+      endPoint,
+      data: body,
+      queryParameters: queryParameters,
+      options: Options(
+        headers: headers,
+      ),
+    );
+  }
+
   ///http delete request
   Future<Map<String, dynamic>> deleteRequest({
     required String endPoint,
