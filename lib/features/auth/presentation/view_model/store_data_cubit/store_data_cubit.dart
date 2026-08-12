@@ -68,29 +68,25 @@ class StoreDataCubit extends Cubit<StoreDataState> {
   Future<void> updateData({required ProfileModel profileModel}) async {
     emit(UpdateDataLoading());
 
-    Either<ServerFailure, Store> result = await _logInServices.storeData(
-      isUpdate: true,
-      ownerName: nameController.text.isNotEmpty
-          ? nameController.text
-          : profileModel.user!.first.store!.ownerName,
+    final Store store = profileModel.user!.first.store!;
+
+    Either<ServerFailure, Store> result = await _logInServices.updateProfile(
+      token: AppCubit.token!,
+      ownerName:
+          nameController.text.isNotEmpty ? nameController.text : store.ownerName,
       storeName: marketNameController.text.isNotEmpty
           ? marketNameController.text
-          : profileModel.user!.first.store!.storeName,
-      district: govController.text.isNotEmpty
-          ? govController.text
-          : profileModel.user!.first.store!.district,
+          : store.storeName,
+      district:
+          govController.text.isNotEmpty ? govController.text : store.district,
       address: addressController.text.isNotEmpty
           ? addressController.text
-          : profileModel.user!.first.store!.address,
-      phone: marketPhoneController.text.isNotEmpty
+          : store.address,
+      storePhone: marketPhoneController.text.isNotEmpty
           ? marketPhoneController.text
-          : profileModel.user!.first.store!.phone,
-      position: LatLng(
-        profileModel.user!.first.store!.lat!,
-        profileModel.user!.first.store!.lng!,
-      ),
-      storeId: profileModel.user!.first.store!.id,
-      token: AppCubit.token!,
+          : store.phone,
+      lat: store.lat!,
+      lng: store.lng!,
     );
 
     result.fold(
@@ -119,16 +115,17 @@ class StoreDataCubit extends Cubit<StoreDataState> {
       {required LatLng position, required ProfileModel profileModel}) async {
     emit(UpdateLocationLoading());
 
-    Either<ServerFailure, Store> result = await _logInServices.storeData(
-      isUpdate: true,
-      position: position,
+    final Store store = profileModel.user!.first.store!;
+
+    Either<ServerFailure, Store> result = await _logInServices.updateProfile(
       token: AppCubit.token!,
-      ownerName: profileModel.user!.first.store!.ownerName,
-      storeName: profileModel.user!.first.store!.storeName,
-      district: profileModel.user!.first.store!.district,
-      address: profileModel.user!.first.store!.address,
-      phone: profileModel.user!.first.store!.phone,
-      storeId: profileModel.user!.first.store!.id,
+      ownerName: store.ownerName,
+      storeName: store.storeName,
+      district: store.district,
+      address: store.address,
+      storePhone: store.phone,
+      lat: position.latitude,
+      lng: position.longitude,
     );
 
     result.fold(
