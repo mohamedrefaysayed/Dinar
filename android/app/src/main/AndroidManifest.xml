@@ -3,6 +3,19 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
+    <!-- Android 11+ package visibility: lets url_launcher's canLaunchUrl see
+         WhatsApp and resolve the sms fallback for the support link -->
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="whatsapp" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="sms" />
+        </intent>
+    </queries>
+
     <application
         android:label="Dinar"
         android:name="${applicationName}"
