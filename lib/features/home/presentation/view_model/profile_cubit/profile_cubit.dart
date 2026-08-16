@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geocoding/geocoding.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:latlong2/latlong.dart';
 
 part 'profile_state.dart';
 
@@ -24,9 +24,9 @@ class ProfileCubit extends Cubit<ProfileState> {
 
   late ProfileServices _profileServices;
 
-  static LatLng? markerPosition;
-
-  static Marker? marker;
+  ///where the pin currently sits on the edit-location map — seeded with the
+  ///store's saved coordinates when the screen opens, then moved by every tap
+  static LatLng? pickedPosition;
 
   static String currentAddress = "";
 
@@ -77,12 +77,7 @@ class ProfileCubit extends Cubit<ProfileState> {
   }
 
   void addMarker(LatLng position) async {
-    markerPosition = position;
-    const markerId = MarkerId('marker_id');
-    marker = Marker(
-      markerId: markerId,
-      position: position,
-    );
+    pickedPosition = position;
     emit(ProfileUpdate());
 
     await placemarkFromCoordinates(position.latitude, position.longitude)

@@ -8,7 +8,7 @@ import 'package:dinar_store/features/home/data/services/orders_services.dart';
 import 'package:dinar_store/features/home/presentation/view_model/cart_cubit/cubit/cart_cubit.dart';
 import 'package:flutter/foundation.dart';
 import 'package:geocoding/geocoding.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:latlong2/latlong.dart';
 
 part 'order_state.dart';
 
@@ -25,7 +25,12 @@ class OrderCubit extends Cubit<OrderState> {
   static DateTime? pickedTime;
   static LatLng? markerPosition;
   static String currentAddress = "لا يوجد عنوان";
-  static Marker? marker;
+
+  ///where the user has actually tapped on the delivery map. Distinct from
+  ///[markerPosition], which the order-confirm screen pre-seeds with the
+  ///device's own location — until this is set, no pin is drawn and the map
+  ///still prompts "أختر موقع التوصيل"
+  static LatLng? pickedPosition;
 
   static OrdersModel? ordersModel;
 
@@ -205,11 +210,7 @@ class OrderCubit extends Cubit<OrderState> {
 
   void addMarker(LatLng position) async {
     markerPosition = position;
-    const markerId = MarkerId('marker_id');
-    marker = Marker(
-      markerId: markerId,
-      position: position,
-    );
+    pickedPosition = position;
     emit(OrderInitial());
 
     await placemarkFromCoordinates(position.latitude, position.longitude)
@@ -305,15 +306,33 @@ class OrderCubit extends Cubit<OrderState> {
     }
   }
 
+  ///reads the coordinates back out of the 'maps?q=lat,lng' link the api stores
+  ///against an order.
+  ///
+  ///every failure falls back rather than throwing: google's LatLng used to
+  ///clamp whatever it was handed, but latlong2 takes any double as-is and the
+  ///map layer throws on a non-finite point — so a malformed location string
+  ///would take down the whole order-details screen instead of showing the
+  ///fallback pin
   List<double> extractLatLng(String url) {
-    Uri uri = Uri.parse(url);
-    List<String> latLng = uri.queryParameters['q']?.split(',') ?? [];
-    if (latLng.length == 2) {
-      double lat = double.parse(latLng[0]);
-      double lng = double.parse(latLng[1]);
+    const List<double> fallback = [28.8993468, 76.6250249];
+    try {
+      final List<String> latLng =
+          Uri.parse(url).queryParameters['q']?.split(',') ?? const [];
+      if (latLng.length != 2) return fallback;
+
+      final double lat = double.parse(latLng[0]);
+      final double lng = double.parse(latLng[1]);
+
+      ///every comparison against NaN is false, so it has to be excluded by
+      ///itself before the range check can mean anything
+      if (!lat.isFinite || !lng.isFinite) return fallback;
+      if (lat < -90 || lat > 90 || lng < -180 || lng > 180) return fallback;
+
       return [lat, lng];
+    } catch (_) {
+      return fallback;
     }
-    return [28.8993468, 76.6250249];
   }
 
 // Usage

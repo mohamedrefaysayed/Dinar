@@ -7,13 +7,13 @@ import 'package:dinar_store/core/utils/text_styles.dart';
 import 'package:dinar_store/core/widgets/app_default_button.dart';
 import 'package:dinar_store/core/widgets/message_snack_bar.dart';
 import 'package:dinar_store/features/home/data/models/orders_model.dart';
+import 'package:dinar_store/features/home/presentation/view/widgets/maps/order_location_preview.dart';
 import 'package:dinar_store/features/home/presentation/view/widgets/rows/order_row.dart';
 import 'package:dinar_store/features/home/presentation/view_model/order_cubit/cubit/order_cubit.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class WholeOrderViewDelivry extends StatefulWidget {
@@ -90,74 +90,7 @@ class _WholeOrderViewDelivryState extends State<WholeOrderViewDelivry> {
               children: [
                 Stack(
                   children: [
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10.w),
-                      child: Container(
-                        height: 250.h,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15.w),
-                          border: Border.all(
-                            color: AppColors.primaryColor,
-                            width: 2.w,
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: AppColors.kGrey.withOpacity(0.5),
-                              spreadRadius: 5,
-                              blurRadius: 7,
-                              offset: const Offset(0, 3),
-                            )
-                          ],
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(15.w),
-                          child: GoogleMap(
-                            markers: {
-                              Marker(
-                                markerId: const MarkerId('موقع المتجر'),
-                                position: currentOrder.location != null
-                                    ? LatLng(
-                                        context
-                                            .read<OrderCubit>()
-                                            .extractLatLng(
-                                                currentOrder.location!)
-                                            .first,
-                                        context
-                                            .read<OrderCubit>()
-                                            .extractLatLng(
-                                                currentOrder.location!)
-                                            .last,
-                                      )
-                                    : const LatLng(28.8993468, 76.6250249),
-                              )
-                            },
-                            myLocationEnabled: true,
-                            liteModeEnabled: true,
-                            compassEnabled: false,
-                            zoomGesturesEnabled: false,
-                            rotateGesturesEnabled: false,
-                            scrollGesturesEnabled: false,
-                            mapToolbarEnabled: false,
-                            zoomControlsEnabled: false,
-                            initialCameraPosition: CameraPosition(
-                              zoom: 18,
-                              target: currentOrder.location != null
-                                  ? LatLng(
-                                      context
-                                          .read<OrderCubit>()
-                                          .extractLatLng(currentOrder.location!)
-                                          .first,
-                                      context
-                                          .read<OrderCubit>()
-                                          .extractLatLng(currentOrder.location!)
-                                          .last,
-                                    )
-                                  : const LatLng(28.8993468, 76.6250249),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
+                    OrderLocationPreview(location: currentOrder.location),
                     Positioned(
                       right: 10.w,
                       child: IconButton(

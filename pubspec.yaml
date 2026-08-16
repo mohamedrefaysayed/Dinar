@@ -35,11 +35,19 @@ dependencies:
   vertical_tabs_flutter: ^1.0.0
   dotted_border: ^2.1.0
   url_launcher: ^6.2.4
-  google_maps_flutter: ^2.5.3
+
+  # maps are drawn with free OpenStreetMap raster tiles instead of the google
+  # maps sdk: no api key, no billing account, no per-platform sdk. the
+  # "open in google maps" navigation links are plain url_launcher urls and are
+  # unaffected. see lib/core/widgets/maps/app_map.dart for the tile config and
+  # the attribution the osm tile policy requires
+  flutter_map: ^8.3.1
+  latlong2: ^0.10.1
+
+  # keyless too: reverse geocoding goes through the native os geocoder
+  # (android.location.Geocoder / CLGeocoder), not a google cloud api
   geocoding: ^2.1.1
   device_preview: ^1.2.0
-  google_places_flutter: ^2.0.8
-  map_location_picker: ^1.2.8+3
   firebase_core: ^3.13.0
   firebase_messaging: ^15.2.5
   flutter_local_notifications: ^17.1.1

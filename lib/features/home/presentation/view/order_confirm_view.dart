@@ -21,7 +21,7 @@ import 'package:dinar_store/features/home/presentation/view_model/order_cubit/cu
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:latlong2/latlong.dart';
 
 class OrderConfirmView extends StatefulWidget {
   const OrderConfirmView({super.key});
@@ -287,6 +287,12 @@ class _OrderConfirmViewState extends State<OrderConfirmView> {
                             context.read<CartCubit>().getAllItems();
                             context.read<OrderCubit>().getAllOrders();
                             OrderCubit.markerPosition = null;
+
+                            ///without this the next order's picker opens with
+                            ///the pin from the order that was just sent, next
+                            ///to the "أختر عنوان" prompt that says nothing has
+                            ///been picked yet
+                            OrderCubit.pickedPosition = null;
                             OrderCubit.pickedTime = null;
                             OrderCubit.currentAddress = "أختر عنوان";
                             Navigator.push(

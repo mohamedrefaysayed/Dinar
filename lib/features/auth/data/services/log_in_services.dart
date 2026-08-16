@@ -13,7 +13,7 @@ import 'package:dinar_store/features/auth/data/repos/log_in_repo.dart';
 import 'package:dinar_store/features/home/data/models/profile_model.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:latlong2/latlong.dart';
 import 'dart:developer';
 
 class LogInServices implements LogInRepo {

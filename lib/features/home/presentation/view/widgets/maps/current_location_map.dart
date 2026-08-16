@@ -1,6 +1,9 @@
+import 'package:dinar_store/core/widgets/maps/app_map.dart';
+import 'package:dinar_store/features/home/presentation/view/widgets/place_holders/map_place_holder.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:latlong2/latlong.dart';
 
 class CurrentLocationMap extends StatelessWidget {
   const CurrentLocationMap({
@@ -14,6 +17,12 @@ class CurrentLocationMap extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final LatLng? target = safeLatLng(lat, lng);
+
+    ///a store whose saved coordinates are unusable gets the same placeholder as
+    ///one whose profile has not loaded yet, rather than a thrown marker
+    if (target == null) return const MapPlaceHolder();
+
     return Container(
       height: 200.h,
       width: 300.w,
@@ -27,28 +36,19 @@ class CurrentLocationMap extends StatelessWidget {
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(15.w),
-        child: GoogleMap(
-          markers: {
-            Marker(
-              markerId: const MarkerId('موقع المتجر'),
-              position: LatLng(lat, lng),
-            )
-          },
-          myLocationEnabled: true,
-          liteModeEnabled: true,
-          compassEnabled: false,
-          zoomGesturesEnabled: false,
-          rotateGesturesEnabled: false,
-          scrollGesturesEnabled: false,
-          mapToolbarEnabled: false,
-          zoomControlsEnabled: false,
-          initialCameraPosition: CameraPosition(
-            zoom: 18,
-            target: LatLng(
-              lat,
-              lng,
-            ),
+        child: FlutterMap(
+          options: MapOptions(
+            initialCenter: target,
+            initialZoom: 18,
+            maxZoom: kOsmMaxZoom,
+            interactionOptions: kPreviewInteractionOptions,
           ),
+          children: [
+            const AppTileLayer(),
+            const MyLocationLayer(),
+            MarkerLayer(markers: [AppMapMarker(point: target)]),
+            const AppMapAttribution(),
+          ],
         ),
       ),
     );

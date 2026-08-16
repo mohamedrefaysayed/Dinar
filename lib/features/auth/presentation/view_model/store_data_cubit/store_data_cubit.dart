@@ -7,7 +7,7 @@ import 'package:dinar_store/features/home/data/models/profile_model.dart';
 import 'package:dinar_store/features/home/presentation/view_model/profile_cubit/profile_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:latlong2/latlong.dart';
 
 part 'store_data_state.dart';
 

@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:dinar_store/core/errors/server_failure.dart';
 import 'package:dinar_store/features/home/data/models/profile_model.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:latlong2/latlong.dart';
 
 abstract class LogInRepo {
   Future<Either<ServerFailure, dynamic>> register({

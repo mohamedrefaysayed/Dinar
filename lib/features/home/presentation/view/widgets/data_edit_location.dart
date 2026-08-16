@@ -5,25 +5,54 @@ import 'package:dinar_store/core/utils/text_styles.dart';
 import 'package:dinar_store/core/widgets/app_default_button.dart';
 import 'package:dinar_store/core/widgets/app_loading_button.dart';
 import 'package:dinar_store/core/widgets/defult_scaffold.dart';
+import 'package:dinar_store/core/widgets/maps/app_map.dart';
 import 'package:dinar_store/core/widgets/message_snack_bar.dart';
 import 'package:dinar_store/features/auth/presentation/view_model/store_data_cubit/store_data_cubit.dart';
 import 'package:dinar_store/features/home/presentation/view_model/profile_cubit/profile_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:latlong2/latlong.dart';
 
-class DataEditLocation extends StatelessWidget {
+class DataEditLocation extends StatefulWidget {
   const DataEditLocation({super.key, required this.position});
 
   final LatLng position;
+
+  @override
+  State<DataEditLocation> createState() => _DataEditLocationState();
+}
+
+class _DataEditLocationState extends State<DataEditLocation> {
+  ///the store's saved coordinates come straight from the api. If they are not
+  ///a drawable point the screen still has to open — correcting them is exactly
+  ///what the owner came here to do
+  late final LatLng _initialPosition =
+      safeLatLng(widget.position.latitude, widget.position.longitude) ??
+          kFallbackMapCenter;
+
+  @override
+  void initState() {
+    super.initState();
+
+    ///the google map seeded the pin from onMapCreated; flutter_map's onMapReady
+    ///runs inside the map's initState, so emitting from there would rebuild the
+    ///tree mid-build. Seeding after the first frame keeps the same behaviour —
+    ///the store's saved location is already pinned when the screen opens.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        context.read<ProfileCubit>().addMarker(_initialPosition);
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return PopScope(
       canPop: true,
       onPopInvoked: (_) {
-        ProfileCubit.markerPosition = null;
+        ProfileCubit.pickedPosition = null;
       },
       child: DefultScaffold(
         canPop: true,
@@ -42,26 +71,38 @@ class DataEditLocation extends StatelessWidget {
                   borderRadius: BorderRadius.circular(14.w),
                   child: BlocBuilder<ProfileCubit, ProfileState>(
                     builder: (context, state) {
-                      return GoogleMap(
-                        onTap: (position) {
-                          context.read<ProfileCubit>().addMarker(position);
-                        },
-                        mapToolbarEnabled: false,
-                        minMaxZoomPreference:
-                            const MinMaxZoomPreference(14, 17),
-                        markers: {
-                          if (ProfileCubit.marker != null) ProfileCubit.marker!,
-                        },
-                        compassEnabled: false,
-                        zoomControlsEnabled: false,
-                        myLocationEnabled: true,
-                        initialCameraPosition: CameraPosition(
-                          zoom: 18,
-                          target: position,
+                      return FlutterMap(
+                        options: MapOptions(
+                          onTap: (_, LatLng point) {
+                            context.read<ProfileCubit>().addMarker(point);
+                          },
+                          initialCenter: _initialPosition,
+
+                          ///the google map clamped its zoom-18 camera to the
+                          ///14..17 range below, so 17 is the zoom this screen
+                          ///has always actually opened at
+                          initialZoom: 17,
+                          minZoom: 14,
+                          maxZoom: 17,
+                          interactionOptions: kPickerInteractionOptions,
                         ),
-                        onMapCreated: (GoogleMapController controller) {
-                          context.read<ProfileCubit>().addMarker(position);
-                        },
+                        children: [
+                          const AppTileLayer(),
+
+                          ///the owner is placing their shop's pin, so the dot
+                          ///showing where they are standing is the reference
+                          ///they are placing it against — worth a fresh fix
+                          const MyLocationLayer(requestFix: true),
+                          MarkerLayer(
+                            markers: [
+                              AppMapMarker(
+                                point: ProfileCubit.pickedPosition ??
+                                    _initialPosition,
+                              ),
+                            ],
+                          ),
+                          const AppMapAttribution(),
+                        ],
                       );
                     },
                   ),
@@ -97,9 +138,9 @@ class DataEditLocation extends StatelessWidget {
                 return AppDefaultButton(
                   color: AppColors.primaryColor,
                   onPressed: () {
-                    if (ProfileCubit.markerPosition != null) {
+                    if (ProfileCubit.pickedPosition != null) {
                       context.read<StoreDataCubit>().updateLocation(
-                            position: ProfileCubit.markerPosition!,
+                            position: ProfileCubit.pickedPosition!,
                             profileModel: ProfileCubit.profileModel!,
                           );
                     }
