@@ -6,6 +6,8 @@ import 'package:dinar_store/core/widgets/app_default_button.dart';
 import 'package:dinar_store/core/widgets/app_loading_button.dart';
 import 'package:dinar_store/core/widgets/defult_scaffold.dart';
 import 'package:dinar_store/core/widgets/maps/app_map.dart';
+import 'package:dinar_store/core/widgets/maps/map_search_bar.dart';
+import 'package:dinar_store/core/widgets/maps/my_location_button.dart';
 import 'package:dinar_store/core/widgets/message_snack_bar.dart';
 import 'package:dinar_store/features/auth/presentation/view_model/store_data_cubit/store_data_cubit.dart';
 import 'package:dinar_store/features/home/presentation/view_model/profile_cubit/profile_cubit.dart';
@@ -25,6 +27,11 @@ class DataEditLocation extends StatefulWidget {
 }
 
 class _DataEditLocationState extends State<DataEditLocation> {
+  final MapController _mapController = MapController();
+
+  ///the fix the my-location button last got, so the blue dot follows it
+  LatLng? _myLocation;
+
   ///the store's saved coordinates come straight from the api. If they are not
   ///a drawable point the screen still has to open — correcting them is exactly
   ///what the owner came here to do
@@ -45,6 +52,12 @@ class _DataEditLocationState extends State<DataEditLocation> {
         context.read<ProfileCubit>().addMarker(_initialPosition);
       }
     });
+  }
+
+  @override
+  void dispose() {
+    _mapController.dispose();
+    super.dispose();
   }
 
   @override
@@ -69,42 +82,75 @@ class _DataEditLocationState extends State<DataEditLocation> {
                 ]),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(14.w),
-                  child: BlocBuilder<ProfileCubit, ProfileState>(
-                    builder: (context, state) {
-                      return FlutterMap(
-                        options: MapOptions(
-                          onTap: (_, LatLng point) {
-                            context.read<ProfileCubit>().addMarker(point);
-                          },
-                          initialCenter: _initialPosition,
+                  child: Stack(
+                    children: [
+                      BlocBuilder<ProfileCubit, ProfileState>(
+                        builder: (context, state) {
+                          return FlutterMap(
+                            mapController: _mapController,
+                            options: MapOptions(
+                              onTap: (_, LatLng point) {
+                                context.read<ProfileCubit>().addMarker(point);
+                              },
+                              initialCenter: _initialPosition,
 
-                          ///the google map clamped its zoom-18 camera to the
-                          ///14..17 range below, so 17 is the zoom this screen
-                          ///has always actually opened at
-                          initialZoom: 17,
-                          minZoom: 14,
-                          maxZoom: 17,
-                          interactionOptions: kPickerInteractionOptions,
-                        ),
-                        children: [
-                          const AppTileLayer(),
+                              ///the google map clamped its zoom-18 camera to
+                              ///the 14..17 range below, so 17 is the zoom this
+                              ///screen has always actually opened at
+                              initialZoom: 17,
+                              minZoom: 14,
+                              maxZoom: 17,
+                              interactionOptions: kPickerInteractionOptions,
+                            ),
+                            children: [
+                              const AppTileLayer(),
 
-                          ///the owner is placing their shop's pin, so the dot
-                          ///showing where they are standing is the reference
-                          ///they are placing it against — worth a fresh fix
-                          const MyLocationLayer(requestFix: true),
-                          MarkerLayer(
-                            markers: [
-                              AppMapMarker(
-                                point: ProfileCubit.pickedPosition ??
-                                    _initialPosition,
+                              ///the owner is placing their shop's pin, so the
+                              ///dot showing where they are standing is the
+                              ///reference they are placing it against — worth
+                              ///a fresh fix
+                              MyLocationLayer(
+                                requestFix: true,
+                                point: _myLocation,
                               ),
+                              MarkerLayer(
+                                markers: [
+                                  AppMapMarker(
+                                    point: ProfileCubit.pickedPosition ??
+                                        _initialPosition,
+                                  ),
+                                ],
+                              ),
+                              const AppMapAttribution(),
                             ],
-                          ),
-                          const AppMapAttribution(),
-                        ],
-                      );
-                    },
+                          );
+                        },
+                      ),
+
+                      ///a searched place becomes the pin, same as a tap: the
+                      ///owner can still nudge it afterwards
+                      MapSearchBar(
+                        mapController: _mapController,
+                        onPicked: (place) {
+                          context.read<ProfileCubit>().addMarker(place.point);
+                        },
+
+                        ///the scaffold's back arrow sits at the top start
+                        ///corner; leave it room
+                        padding: EdgeInsetsDirectional.fromSTEB(
+                          56.w,
+                          8.h,
+                          12.w,
+                          0,
+                        ),
+                      ),
+                      MyLocationButton(
+                        mapController: _mapController,
+                        onLocated: (point) {
+                          setState(() => _myLocation = point);
+                        },
+                      ),
+                    ],
                   ),
                 ),
               ),

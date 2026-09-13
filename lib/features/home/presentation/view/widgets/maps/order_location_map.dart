@@ -2,6 +2,8 @@ import 'package:dinar_store/core/utils/app_colors.dart';
 import 'package:dinar_store/core/utils/text_styles.dart';
 import 'package:dinar_store/core/widgets/app_default_button.dart';
 import 'package:dinar_store/core/widgets/maps/app_map.dart';
+import 'package:dinar_store/core/widgets/maps/map_search_bar.dart';
+import 'package:dinar_store/core/widgets/maps/my_location_button.dart';
 import 'package:dinar_store/features/auth/presentation/view_model/location_cubit/cubit/location_cubit.dart';
 import 'package:dinar_store/features/home/presentation/view_model/order_cubit/cubit/order_cubit.dart';
 import 'package:flutter/material.dart';
@@ -20,10 +22,22 @@ class OrderLocationMap extends StatefulWidget {
 }
 
 class _OrderLocationMapState extends State<OrderLocationMap> {
+  final MapController _mapController = MapController();
+
+  ///the fix the my-location button last got. Until then the blue dot sits on
+  ///the position the location cubit resolved when the screen opened
+  LatLng? _myLocation;
+
   @override
   void initState() {
     context.read<LocationCubit>().getCurrentLocation(context: context);
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _mapController.dispose();
+    super.dispose();
   }
 
   @override
@@ -51,33 +65,61 @@ class _OrderLocationMapState extends State<OrderLocationMap> {
                         ]),
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(14.w),
-                          child: FlutterMap(
-                            options: MapOptions(
-                              onTap: (_, LatLng point) {
-                                context.read<OrderCubit>().addMarker(point);
-                              },
-                              initialCenter: myLocation,
-
-                              ///the google map clamped its zoom-18 camera to
-                              ///the 14..17 range below, so 17 is the zoom this
-                              ///screen has always actually opened at
-                              initialZoom: 17,
-                              minZoom: 14,
-                              maxZoom: 17,
-                              interactionOptions: kPickerInteractionOptions,
-                            ),
+                          child: Stack(
                             children: [
-                              const AppTileLayer(),
-                              MarkerLayer(
-                                markers: [
-                                  MyLocationMarker(point: myLocation),
-                                  if (OrderCubit.pickedPosition != null)
-                                    AppMapMarker(
-                                      point: OrderCubit.pickedPosition!,
-                                    ),
+                              FlutterMap(
+                                mapController: _mapController,
+                                options: MapOptions(
+                                  onTap: (_, LatLng point) {
+                                    context
+                                        .read<OrderCubit>()
+                                        .addMarker(point);
+                                  },
+                                  initialCenter: myLocation,
+
+                                  ///the google map clamped its zoom-18 camera
+                                  ///to the 14..17 range below, so 17 is the
+                                  ///zoom this screen has always actually
+                                  ///opened at
+                                  initialZoom: 17,
+                                  minZoom: 14,
+                                  maxZoom: 17,
+                                  interactionOptions:
+                                      kPickerInteractionOptions,
+                                ),
+                                children: [
+                                  const AppTileLayer(),
+                                  MarkerLayer(
+                                    markers: [
+                                      MyLocationMarker(
+                                        point: _myLocation ?? myLocation,
+                                      ),
+                                      if (OrderCubit.pickedPosition != null)
+                                        AppMapMarker(
+                                          point: OrderCubit.pickedPosition!,
+                                        ),
+                                    ],
+                                  ),
+                                  const AppMapAttribution(),
                                 ],
                               ),
-                              const AppMapAttribution(),
+
+                              ///a searched place becomes the delivery pin,
+                              ///same as a tap: the user can still nudge it
+                              MapSearchBar(
+                                mapController: _mapController,
+                                onPicked: (place) {
+                                  context
+                                      .read<OrderCubit>()
+                                      .addMarker(place.point);
+                                },
+                              ),
+                              MyLocationButton(
+                                mapController: _mapController,
+                                onLocated: (point) {
+                                  setState(() => _myLocation = point);
+                                },
+                              ),
                             ],
                           ),
                         ),

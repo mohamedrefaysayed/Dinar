@@ -132,6 +132,50 @@ class AppMapMarker extends Marker {
         );
 }
 
+/// The device's own position, or null when it cannot be had.
+///
+/// Best effort throughout: a refused permission, disabled location services or
+/// a device that has never had a fix all come back as null, never as an error.
+///
+/// [requestPermission] asks the OS for location permission when it has not
+/// been granted yet — right after the user tapped a "my location" button,
+/// wrong for a layer decorating a preview card. [requestFix] spins up GPS for a
+/// fresh position instead of settling for the OS's cached one; the cached one
+/// is still the fallback when the fix times out.
+Future<LatLng?> resolveMyLocation({
+  bool requestPermission = false,
+  bool requestFix = false,
+}) async {
+  try {
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied && requestPermission) {
+      permission = await Geolocator.requestPermission();
+    }
+    if (permission != LocationPermission.whileInUse &&
+        permission != LocationPermission.always) {
+      return null;
+    }
+
+    Position? position;
+    if (requestFix) {
+      try {
+        position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high,
+          timeLimit: const Duration(seconds: 15),
+        );
+      } catch (_) {
+        // no fix in time — the cached position below is better than nothing
+      }
+    }
+    position ??= await Geolocator.getLastKnownPosition();
+
+    if (position == null) return null;
+    return safeLatLng(position.latitude, position.longitude);
+  } catch (_) {
+    return null;
+  }
+}
+
 /// Draws the device's own position — the blue dot Google's `myLocationEnabled`
 /// drew for free.
 ///
@@ -140,12 +184,17 @@ class AppMapMarker extends Marker {
 /// checkout and registration flows, so a map that relied on it showed no dot at
 /// all on the profile and store-location screens.
 class MyLocationLayer extends StatefulWidget {
-  const MyLocationLayer({super.key, this.requestFix = false});
+  const MyLocationLayer({super.key, this.requestFix = false, this.point});
 
-  /// Ask the OS for a fresh fix when it has no cached position. Worth it where
+  /// Ask the OS for a fresh fix as well as its cached position. Worth it where
   /// the dot is the reference the user is picking against; not worth spinning
   /// up GPS to decorate a preview card.
   final bool requestFix;
+
+  /// A position the screen already holds — the fix its [MyLocationButton] just
+  /// got. Drawn as-is when set, so the dot follows the button instead of
+  /// staying on whatever this layer resolved when it was created.
+  final LatLng? point;
 
   @override
   State<MyLocationLayer> createState() => _MyLocationLayerState();
@@ -160,36 +209,27 @@ class _MyLocationLayerState extends State<MyLocationLayer> {
     _resolve();
   }
 
-  ///best effort throughout: the dot is a convenience, so a refused permission
-  ///or a device that has never had a fix means no dot, never an error. Nothing
-  ///here prompts — the app already asks for location permission at launch, and
-  ///a preview card is no place to start asking again
+  ///nothing here prompts — the app already asks for location permission at
+  ///launch, and a preview card is no place to start asking again. The cached
+  ///position goes up first so the dot appears at once; the fresh fix, when
+  ///asked for, moves it once GPS answers
   Future<void> _resolve() async {
-    try {
-      final LocationPermission permission = await Geolocator.checkPermission();
-      if (permission != LocationPermission.whileInUse &&
-          permission != LocationPermission.always) {
-        return;
-      }
+    final LatLng? cached = await resolveMyLocation();
+    if (cached != null) _show(cached);
 
-      Position? position = await Geolocator.getLastKnownPosition();
-      position ??= widget.requestFix
-          ? await Geolocator.getCurrentPosition(
-              desiredAccuracy: LocationAccuracy.high,
-            )
-          : null;
+    if (!widget.requestFix) return;
+    final LatLng? fresh = await resolveMyLocation(requestFix: true);
+    if (fresh != null) _show(fresh);
+  }
 
-      final Position? fix = position;
-      if (fix == null || !mounted) return;
-      setState(() => _point = LatLng(fix.latitude, fix.longitude));
-    } catch (_) {
-      // the map is perfectly usable without the dot
-    }
+  void _show(LatLng point) {
+    if (!mounted) return;
+    setState(() => _point = point);
   }
 
   @override
   Widget build(BuildContext context) {
-    final LatLng? point = _point;
+    final LatLng? point = widget.point ?? _point;
     if (point == null) return const SizedBox.shrink();
     return MarkerLayer(markers: [MyLocationMarker(point: point)]);
   }
