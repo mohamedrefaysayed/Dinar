@@ -34,7 +34,7 @@ def keystoreProperties = new Properties()
 
 android {
     namespace "com.iraq.dinar"
-    compileSdk 35  
+    compileSdk 36
     compileSdkVersion flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
 
@@ -69,7 +69,7 @@ android {
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         multiDexEnabled true    
-        targetSdk 35
+        targetSdk 36
 
     }
 
